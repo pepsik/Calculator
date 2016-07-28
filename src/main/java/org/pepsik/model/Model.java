@@ -19,12 +19,15 @@ public class Model {
 
     private Deque<Stage> history = new LinkedList<>();
     private Stage activeStage;
+    private String displayField;
+    //add textField ?
 
     public void addInputNumber(String number) {
         if (activeStage == null) {
             activeStage = new Stage();
         }
         activeStage.addToRightOperand(number);
+        displayField = activeStage.getRightOperand();
     }
 
     public void addOperator(String operator) {
@@ -51,8 +54,8 @@ public class Model {
         throw new IllegalArgumentException("Unknown operator! " + operator);
     }
 
-    public String getInput() {
-        return activeStage.getRightOperand();
+    public String getDisplay() {
+        return displayField;
     }
 
     private boolean isBinaryOperator(String operator) {
@@ -77,8 +80,16 @@ public class Model {
         return false;
     }
 
+    public void clearEntry() {
+        if (activeStage == null) {
+            return;
+        } else {
+            activeStage.setRightOperand("0");
+        }
+    }
+
     private void calculateActiveStage() {
-        String rightOperand = activeStage.getRightOperand();//todo types
+        String rightOperand = activeStage.getRightOperand();
         List<String> unaryOperators = activeStage.getUnaryOperators();
 
         if (unaryOperators.size() != 0) {

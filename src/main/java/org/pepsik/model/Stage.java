@@ -9,7 +9,7 @@ import java.util.List;
 public class Stage {
     private String binaryOperator = "";
     private List<String> unaryOperators = new ArrayList<String>();
-    private String rightOperand;
+    private String rightOperand = "";
     private String resultOperation;
     private boolean isComplete = false;
 
@@ -34,7 +34,8 @@ public class Stage {
     }
 
     public void addToRightOperand(String number) {
-        this.rightOperand += number;
+        StringBuilder sb = new StringBuilder(rightOperand);
+        rightOperand = sb.append(number).toString();
     }
 
     public void setRightOperand(String rightOperand) {
