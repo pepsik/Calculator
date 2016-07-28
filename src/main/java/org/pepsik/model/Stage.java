@@ -9,9 +9,8 @@ import java.util.List;
 public class Stage {
     private String binaryOperator = "";
     private List<String> unaryOperators = new ArrayList<String>();
-    private String rightOperand = "";
-    private String resultOperation;
-    private boolean isComplete = false;
+    private String operand = "";
+    private String resultOperation = "";
 
     public void setBinaryOperator(String binaryOperator) {
         this.binaryOperator = binaryOperator;
@@ -29,17 +28,21 @@ public class Stage {
         return unaryOperators;
     }
 
-    public String getRightOperand() {
-        return rightOperand;
+    public String getOperand() {
+        return operand;
     }
 
-    public void addToRightOperand(String number) {
-        StringBuilder sb = new StringBuilder(rightOperand);
-        rightOperand = sb.append(number).toString();
+    public void addDigitToOperand(String number) {
+        if (operand.equals("0")) {
+            operand = number;
+        } else {
+            StringBuilder sb = new StringBuilder(operand);
+            operand = sb.append(number).toString();
+        }
     }
 
-    public void setRightOperand(String rightOperand) {
-        this.rightOperand = rightOperand;
+    public void setOperand(String operand) {
+        this.operand = operand;
     }
 
     public String getResultOperation() {
