@@ -172,7 +172,7 @@ public class ModelTest {
         operateOnNewObj(0, "+", "=");
         operateOnNewObj(0, "-", "=");
         operateOnNewObj(0, "*", "=");
-        operateOnNewObj(0, "/", "=");
+        operateOnNewObj(Double.NaN, "/", "=");
 
         model = new Model();
         operate(0, "+", "=");
@@ -182,6 +182,9 @@ public class ModelTest {
         operate(0, "-", "=");
         operate(0, "*", "=");
         operate(Double.NaN, "/", "=");
+        operate(Double.NaN, "*", "=");
+        operate(Double.NaN, "+", "=");
+        operate(Double.NaN, "-", "=");
 
         operateOnNewObj(0, 0, "=");
         operateOnNewObj(1, 1, "=");
@@ -256,20 +259,25 @@ public class ModelTest {
         operateOnNewObj(45, 5, "+", "=", "=", "=", "=", "=", "=", "=", "=");
         operateOnNewObj(0, 5, "+", "=", "=", "=", "=", "=", "=", "-", "=");
 
-        //---
+//        //---
         model = new Model();
         operate(1, 1, "=", "+");
         operate(4, 1, "=", "+", "=");
         operate(12, 1, "=", "+", "=", "+", "=");
         operate(56, 1, "=", "+", "=", "+", "=", "+", "=");
-        operate(16, 1, "=", "+", "=", "+", "=", "+", "=", "+", "=");
+        operate(29, 1, "=", "+");
 
+        operate(28, -1, "=", "+");
+        operate(54, -1, "=", "+", "=");
+
+        model = new Model();
         operate(-1, -1, "=", "+");
-        operate(-2, -1, "=", "+", "=");
-        operate(-4, -1, "=", "+", "=", "+", "=");
-        operate(-8, -1, "=", "+", "=", "+", "=", "+", "=");
-        operate(-16, -1, "=", "+", "=", "+", "=", "+", "=", "+", "=");
+        operate(-4, -1, "=", "+", "=");
+        operate(-12, -1, "=", "+", "=", "+", "=");
+        operate(-56, -1, "=", "+", "=", "+", "=", "+", "=");
+        operate(-464, -1, "=", "+", "=", "+", "=", "+", "=", "+", "=");
 
+        model = new Model();
         operate(1, 1, "=", "-");
         operate(0, 1, "=", "-", "=");
         operate(0, 1, "=", "-", "=", "-", "=");

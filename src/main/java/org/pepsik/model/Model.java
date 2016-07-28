@@ -1,6 +1,7 @@
 package org.pepsik.model;
 
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -29,6 +30,7 @@ public class Model {
         if (activeStage == null) {
             activeStage = new Stage();
         }
+
         activeStage.addDigitToOperand(number);
         displayField = activeStage.getOperand();
     }
@@ -52,17 +54,25 @@ public class Model {
 
 //        if (isBinaryOperator(operator)) {
 
-
+        // create new stage with operator
         if (activeStage == null) {
             activeStage = new Stage();
             activeStage.setBinaryOperator(operator);
             return;
         }
 
+        //if get Stage only with operand add to history (its input first stage)
+        if (activeStage.getBinaryOperator().equals(EMPTY) && !activeStage.getOperand().equals(EMPTY)) {
+            activeStage.setResultOperation(activeStage.getOperand());
+            history.addLast(activeStage);
+            activeStage = new Stage();
+        }
+
+        //stage with operator
         if (activeStage.getOperand().equals(EMPTY)) {
             activeStage.setBinaryOperator(operator);
-        } else {
-            calculate();
+        } else { //stage with operator and operand
+            calculateBinary();
             activeStage = new Stage();
             activeStage.setBinaryOperator(operator);
         }
@@ -108,7 +118,7 @@ public class Model {
         }
     }
 
-    private void calculate() {
+    private void calculateBinary() {
 //        List<String> unaryOperators = activeStage.getUnaryOperators();
 
 //        for (String unaryOperator : unaryOperators) {
@@ -116,26 +126,26 @@ public class Model {
 //            activeStage.setOperand(result);
 //        }
 
-        String rightOperand = activeStage.getOperand();
+        final String rightOperand = activeStage.getOperand(); //todo rename operand to activeStageoperand
         String binaryOperator = activeStage.getBinaryOperator();
 
-        // empty 5
-        if (binaryOperator.equals(EMPTY)) {
-            activeStage.setResultOperation(activeStage.getOperand());
-            history.addLast(activeStage);
-            activeStage = null;
-            return;
+        //throw if get Stage without operator or operand
+        if (binaryOperator.equals(EMPTY) || rightOperand.equals(EMPTY)) {
+            throw new IllegalStateException("Unexpected state! " + activeStage);
         }
 
-        String leftOperand = ZERO;
-        if (!history.isEmpty()) {
+        String leftOperand;
+        //create non input first Stage with ZERO if history empty
+        if (history.isEmpty()) {
+            Stage firstStage = new Stage();
+            firstStage.setOperand(ZERO);
+            firstStage.setResultOperation(ZERO);
+            history.addFirst(firstStage);
+            leftOperand = ZERO;
+        } else { //get last stage for left operand
             Stage lastCompletedStage = history.getLast();
             leftOperand = lastCompletedStage.getResultOperation();
         }
-
-//        if (rightOperand.equals(EMPTY)) {
-//            rightOperand = leftOperand;
-//        }
 
         String result = doOperation(binaryOperator, leftOperand, rightOperand);
         activeStage.setResultOperation(result);
@@ -145,118 +155,142 @@ public class Model {
     }
 
     private void calculateEqual() {
-        // "+" empty
-        if (!activeStage.getBinaryOperator().equals(EMPTY) && activeStage.getOperand().equals(EMPTY)) {
+        final String binaryOperator = activeStage.getBinaryOperator(); //todo: add final to local fields
+        final String activeStageOperand = activeStage.getOperand();     //todo: hide in if?
+
+        // operator - exist;  operand - exist
+        if (!binaryOperator.equals(EMPTY) && !activeStageOperand.equals(EMPTY)) {
+            calculateBinary();
+
+            //after calculation add result stage to history with only operand (this stage represent EQUAL operation)
+            Stage lastStage = history.getLast();
+            Stage stage = new Stage();
+            stage.setOperand(lastStage.getResultOperation());
+            stage.setResultOperation(lastStage.getResultOperation());
+            history.addLast(stage);
+
+            displayField = stage.getResultOperation();
+            activeStage = null;
+            return;
+        }
+
+        // operator - exist; operand - empty
+        if (!binaryOperator.equals(EMPTY) && activeStageOperand.equals(EMPTY)) {
             if (history.isEmpty()) {
                 activeStage.setOperand(ZERO);
                 activeStage.setResultOperation(ZERO);
+                calculateBinary();
             } else {
                 Stage lastCompleteStage = history.getLast();
-
-                String operator = activeStage.getBinaryOperator();
-                String rightOperand = lastCompleteStage.getResultOperation();
-                activeStage.setOperand(rightOperand);
-                String leftOperand = rightOperand;
-
-                String result = doOperation(operator, leftOperand, rightOperand);
-                activeStage.setResultOperation(result);
+                activeStage.setOperand(lastCompleteStage.getOperand());
+                calculateBinary();
             }
 
-            displayField = activeStage.getResultOperation();
+            //add result stage to history
+            Stage lastStage = history.getLast();
+            Stage stage = new Stage();
+            stage.setOperand(lastStage.getResultOperation());
+            stage.setResultOperation(lastStage.getResultOperation());
+            history.addLast(stage);
 
-            history.addLast(activeStage);
+            displayField = stage.getResultOperation();
             activeStage = null;
             return;
         }
 
-        // "+" 5
-        if (!activeStage.getBinaryOperator().equals(EMPTY) && !activeStage.getOperand().equals(EMPTY)) {
-            Stage lastCompleteStage = history.getLast();
-
-            String operator = activeStage.getBinaryOperator();
-            String rightOperand = activeStage.getOperand();
-            String leftOperand = lastCompleteStage.getOperand();
-
-            String result = doOperation(operator, leftOperand, rightOperand);
-            activeStage.setResultOperation(result);
-
-            displayField = result;
-
-            history.addLast(activeStage);
-            activeStage = null;
-            return;
-        }
-
-        //ignore operand if has lastStage, use lastStage operand
-        // empty "5"
-        if (activeStage.getBinaryOperator().equals(EMPTY) && !activeStage.getOperand().equals(EMPTY)) {
-            if (history.isEmpty()) {
-                String operand = activeStage.getOperand();
-                activeStage.setResultOperation(operand);
-            } else { // 2 situations : 1) lastStage has only operand, 2) last stage has operand and operator
-                Stage lastCompleteStage = history.getLast();
-
-                //1
-                String operator = lastCompleteStage.getBinaryOperator();
-                if (operator.equals(EMPTY)) {
-                    activeStage.setResultOperation(activeStage.getOperand());
-                    displayField = activeStage.getResultOperation();
-                    history.addLast(activeStage);
-                    activeStage = null;
-                    return;
-                }
-
-                String rightOperand = lastCompleteStage.getOperand();
-                String leftOperand = activeStage.getOperand();
-                String result = doOperation(operator, leftOperand, rightOperand);
-                activeStage.setResultOperation(result);
-                activeStage.setBinaryOperator(operator);
-
-                displayField = activeStage.getResultOperation();
-
+        // operator - empty ; operand - exist
+        if (binaryOperator.equals(EMPTY) && !activeStageOperand.equals(EMPTY)) {
+            if (getBinaryOperationStage() != null) {
+                Stage stage = getBinaryOperationStage();
+                activeStage.setResultOperation(activeStageOperand);
                 history.addLast(activeStage);
+
+                Stage clone = new Stage();
+                clone.setOperand(stage.getOperand());
+                clone.setBinaryOperator(stage.getBinaryOperator());
+                activeStage = clone;
+                calculateBinary();
+
+                Stage result = new Stage();
+                Stage last = history.getLast();
+                result.setOperand(last.getResultOperation());
+                result.setResultOperation(last.getResultOperation());
+                history.addLast(result);
+
+                displayField = result.getResultOperation();
+                activeStage = null;
+                return;
+            } else { //if history is empty or binary operation stage not found then copy and add active Stage
+                activeStage.setResultOperation(activeStageOperand);
+                history.addLast(activeStage);
+
+                //copy and add result stage to history
+                Stage stage = new Stage();
+                stage.setOperand(activeStageOperand);
+                stage.setResultOperation(activeStageOperand);
+                history.addLast(stage);
+
+                displayField = stage.getResultOperation();
                 activeStage = null;
                 return;
             }
         }
 
-        // empty empty
-        if (activeStage.getBinaryOperator().equals(EMPTY) && activeStage.getOperand().equals(EMPTY)) {
+        // operator - empty ; operand - empty
+        if (binaryOperator.equals(EMPTY) && activeStageOperand.equals(EMPTY)) {
             if (history.isEmpty()) {
                 activeStage.setOperand(ZERO);
                 activeStage.setResultOperation(ZERO);
 
+                Stage firstStage = new Stage();
+                firstStage.setOperand(ZERO);
+                firstStage.setResultOperation(ZERO);
+                history.addFirst(firstStage);
+
+                displayField = ZERO;
+
                 history.addLast(activeStage);
                 activeStage = null;
+                return;
+            }
+
+            if (getBinaryOperationStage() != null) {
+                Stage stage = getBinaryOperationStage();
+                activeStage.setOperand(stage.getOperand());
+                //activeStage.setResultOperation(stage.getResultOperation());
+                activeStage.setBinaryOperator(stage.getBinaryOperator());
+
+                calculateBinary();
+
+                Stage lastStage = history.getLast();
+                Stage result = new Stage();
+                result.setOperand(lastStage.getResultOperation());
+                result.setResultOperation(lastStage.getResultOperation());
+                history.addLast(result);
+
+                displayField = result.getResultOperation();
+                activeStage = null;
             } else {
-                Stage lastCompleteStage = history.getLast();
-
-                String operator = lastCompleteStage.getBinaryOperator();
-
-                if (operator.equals(EMPTY)) {
-                    String result = lastCompleteStage.getResultOperation();
-                    activeStage.setOperand(result);
-                    activeStage.setResultOperation(result);
-                    displayField = activeStage.getResultOperation();
-                    history.addLast(activeStage);
-                    activeStage = null;
-                    return;
-                }
-
-                String leftOperand = lastCompleteStage.getOperand();
-                String rightOperand = lastCompleteStage.getResultOperation();
-
-                String result = doOperation(operator, leftOperand, rightOperand);
-                activeStage.setOperand(leftOperand);
-                activeStage.setBinaryOperator(operator);
-                activeStage.setResultOperation(result);
-
-                displayField = result;
-
+                Stage last = history.getLast();
+                activeStage.setOperand(last.getResultOperation());
+                activeStage.setResultOperation(last.getResultOperation());
                 history.addLast(activeStage);
+
+                displayField = activeStage.getResultOperation();
                 activeStage = null;
             }
         }
+    }
+
+    private Stage getBinaryOperationStage() {
+        Iterator<Stage> iterator = history.descendingIterator();
+        while (iterator.hasNext()) {
+            Stage stage = iterator.next();
+            if (!stage.getBinaryOperator().equals(EMPTY)) {
+                return stage;
+            }
+        }
+        return null;
     }
 
     private String doOperation(String operator, String operand) {

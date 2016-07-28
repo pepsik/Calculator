@@ -10,7 +10,9 @@ public class Stage {
     private String binaryOperator = "";
     private List<String> unaryOperators = new ArrayList<String>();
     private String operand = "";
-    private String resultOperation = "";
+    private String resultOperation = ""; //todo: migrate to model?
+
+    //todo create constructors with operand or operator? to avoid invalid state with empty operator and operand
 
     public void setBinaryOperator(String binaryOperator) {
         this.binaryOperator = binaryOperator;
@@ -52,4 +54,14 @@ public class Stage {
     public void setResultOperation(String resultOperation) {
         this.resultOperation = resultOperation;
     }
+
+//    @Override
+//    public String toString() {
+//        return "Stage{" +
+//                "binaryOperator='" + binaryOperator + '\'' +
+//                ", unaryOperators=" + unaryOperators +
+//                ", operand='" + operand + '\'' +
+//                ", resultOperation='" + resultOperation + '\'' +
+//                '}';
+//    }
 }
