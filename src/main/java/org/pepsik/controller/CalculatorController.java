@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.pepsik.model.Model;
 
@@ -13,7 +14,10 @@ import java.util.ResourceBundle;
 public class CalculatorController implements Initializable {
 
     @FXML
-    private TextField displayField;
+    private Label displayField;
+
+    @FXML
+    private Label displayHistory;
 
     private Model model = new Model();
 
@@ -29,6 +33,7 @@ public class CalculatorController implements Initializable {
         String operation = ((Button) event.getSource()).getText();
         model.addOperator(operation);
         displayField.setText(model.getDisplay());
+        displayHistory.setText(model.getHistory());
     }
 
     @FXML

@@ -16,7 +16,7 @@ public class Model {
 
     private static final String SUM = "+";
     private static final String SUBTRACT = "-";
-    private static final String MULTIPLY = "*";
+    private static final String MULTIPLY = "x";
     private static final String DIVIDE = "/";
 
     private static final String EMPTY = "";
@@ -85,7 +85,15 @@ public class Model {
     }
 
     public String getDisplay() {
+        double result = Double.parseDouble(displayField);
+        if (result % 1 == 0) {
+            return String.valueOf((int) result);
+        }
         return displayField;
+    }
+
+    public String getHistory() {
+        return history.toString();
     }
 
     private boolean isBinaryOperator(String operator) {

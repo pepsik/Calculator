@@ -55,13 +55,8 @@ public class Stage {
         this.resultOperation = resultOperation;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Stage{" +
-//                "binaryOperator='" + binaryOperator + '\'' +
-//                ", unaryOperators=" + unaryOperators +
-//                ", operand='" + operand + '\'' +
-//                ", resultOperation='" + resultOperation + '\'' +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return binaryOperator + operand;
+    }
 }
