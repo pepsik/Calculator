@@ -20,9 +20,10 @@ public class Model {
     private static final String EMPTY = " ";
     private static final String ZERO = "0";
 
-    private Deque<Stage> lastHistory = new LinkedList<>();
-    private List<Deque<Stage>> allHistory = new ArrayList<>();
-    private Stage activeStage;
+    private Deque<Stage> lastExpression = new ArrayDeque<>();
+    private List<Deque<Stage>> history = new ArrayList<>();
+    private Stage activeStage = new Stage();
+    private Stage lastBinaryStage;
     private String displayField = ZERO;
 
     public void addInputDigit(String number) {
@@ -52,10 +53,10 @@ public class Model {
             return;
         }
 
-        //if Stage consists only operand then add it to lastHistory (its first stage)
+        //if Stage consists only operand then add it to lastExpression (its first stage)
         if (activeStage.getBinaryOperator().equals(EMPTY) && !activeStage.getOperand().equals(EMPTY)) {
             activeStage.setResultOperation(activeStage.getOperand());
-            lastHistory.addLast(activeStage);
+            lastExpression.addLast(activeStage);
             activeStage = new Stage();
         }
 
@@ -83,8 +84,8 @@ public class Model {
         return displayField;
     }
 
-    public String getLastHistory() {
-        return lastHistory.toString();
+    public String getLastExpression() {
+        return lastExpression.toString();
     }
 
     private boolean isBinaryOperator(String operator) {
@@ -126,23 +127,17 @@ public class Model {
             throw new IllegalStateException("Unexpected state! " + activeStage);
         }
 
-        String leftOperand;
-        //create non input first Stage with ZERO if lastHistory empty
-        if (lastHistory.isEmpty()) {
-            Stage firstStage = new Stage();
-            firstStage.setOperand(ZERO);
-            firstStage.setResultOperation(ZERO);
-            lastHistory.addFirst(firstStage);
-            leftOperand = ZERO;
-        } else { //get last stage for left operand
-            Stage lastCompletedStage = lastHistory.getLast();
-            leftOperand = lastCompletedStage.getResultOperation();
+        Stage lastCompletedStage = getLastStage();
+        String leftOperand = lastCompletedStage.getResultOperation();
+        if (lastExpression.isEmpty()) {
+            lastExpression.addFirst(lastCompletedStage);
         }
 
         String result = doOperation(binaryOperator, leftOperand, activeStageOperand);
         activeStage.setResultOperation(result);
         displayField = result;
-        lastHistory.addLast(activeStage);
+        lastExpression.addLast(activeStage);
+        lastBinaryStage = activeStage;
         activeStage = null;
     }
 
@@ -164,7 +159,7 @@ public class Model {
 
         // operator - exist; operand - empty
         if (!binaryOperator.equals(EMPTY) && activeStageOperand.equals(EMPTY)) {
-            if (lastHistory.isEmpty()) {
+            if (lastExpression.isEmpty()) {
 
             } else {
 
@@ -175,10 +170,10 @@ public class Model {
 
         // operator - empty ; operand - exist
         if (binaryOperator.equals(EMPTY) && !activeStageOperand.equals(EMPTY)) {
-            if (getLastBinaryOperationStage() != null) {
+            if (lastBinaryStage != null) {
 
                 return;
-            } else { //if lastHistory is empty or binary operation stage not found then copy and add active Stage
+            } else { //if lastExpression is empty or binary operation stage not found then copy and add active Stage
 
                 return;
             }
@@ -186,12 +181,12 @@ public class Model {
 
         // operator - empty ; operand - empty
         if (binaryOperator.equals(EMPTY) && activeStageOperand.equals(EMPTY)) {
-            if (lastHistory.isEmpty()) {
+            if (lastExpression.isEmpty()) {
 
                 return;
             }
 
-            if (getLastBinaryOperationStage() != null) {
+            if (lastBinaryStage != null) {
 
             } else {
 
@@ -207,60 +202,50 @@ public class Model {
         if (!binaryOperator.equals(EMPTY) && !activeStageOperand.equals(EMPTY)) {
             calculateBinary();
 
-            //after calculation add result stage to lastHistory with only operand (this stage represent EQUAL operation)
-            Stage lastStage = lastHistory.getLast();
+            //after calculation add result stage to lastExpression with only operand (this stage represent EQUAL operation)
+            Stage lastStage = getLastStage();
             Stage result = new Stage();
             result.setOperand(lastStage.getResultOperation());
             result.setResultOperation(lastStage.getResultOperation());
-            lastHistory.addLast(result);
+            lastExpression.addLast(result);
 
-            allHistory.add(lastHistory);
-            lastHistory = new LinkedList<>();
-            activeStage = new Stage();
-            activeStage.setOperand(result.getOperand());
-            activeStage.setResultOperation(result.getResultOperation());
-            lastHistory.add(activeStage);
+            history.add(lastExpression);
+            lastExpression = new ArrayDeque<>();
 
-            displayField = activeStage.getResultOperation();
+            displayField = lastStage.getResultOperation();
+            activeStage = null;
             return;
         }
 
         // operator - exist; operand - empty
         if (!binaryOperator.equals(EMPTY) && activeStageOperand.equals(EMPTY)) {
-            if (lastHistory.isEmpty()) {
-                activeStage.setOperand(ZERO);
-                activeStage.setResultOperation(ZERO);
-                calculateBinary();
-            } else {
-                Stage lastCompleteStage = lastHistory.getLast();
-                activeStage.setOperand(lastCompleteStage.getOperand());
-                calculateBinary();
-            }
 
-            //add result stage to lastHistory
-            Stage lastStage = lastHistory.getLast();
+            Stage lastCompleteStage = getLastStage();
+            activeStage.setOperand(lastCompleteStage.getResultOperation());
+            calculateBinary();
+
+
+            //add result stage to lastExpression
+            Stage lastStage = getLastStage();
             Stage result = new Stage();
             result.setOperand(lastStage.getResultOperation());
             result.setResultOperation(lastStage.getResultOperation());
-            lastHistory.addLast(result);
+            lastExpression.addLast(result);
 
-            allHistory.add(lastHistory);
-            lastHistory = new LinkedList<>();
-            activeStage = new Stage();
-            activeStage.setOperand(result.getOperand());
-            activeStage.setResultOperation(result.getResultOperation());
-            lastHistory.add(activeStage);
+            history.add(lastExpression);
+            lastExpression = new ArrayDeque<>();
 
-            displayField = activeStage.getResultOperation();
+            displayField = lastStage.getResultOperation();
+            activeStage = null;
             return;
         }
 
         // operator - empty ; operand - exist
         if (binaryOperator.equals(EMPTY) && !activeStageOperand.equals(EMPTY)) {
-            if (getLastBinaryOperationStage() != null) {
-                Stage stage = getLastBinaryOperationStage();
+            if (lastBinaryStage != null) {
+                Stage stage = lastBinaryStage;
                 activeStage.setResultOperation(activeStageOperand);
-                lastHistory.addLast(activeStage);
+                lastExpression.addLast(activeStage);
 
                 Stage clone = new Stage();
                 clone.setOperand(stage.getOperand());
@@ -269,77 +254,64 @@ public class Model {
                 calculateBinary();
 
                 Stage result = new Stage();
-                Stage last = lastHistory.getLast();
+                Stage last = getLastStage();
                 result.setOperand(last.getResultOperation());
                 result.setResultOperation(last.getResultOperation());
-                allHistory.add(lastHistory);
-                lastHistory = new LinkedList<>();
-                activeStage = new Stage();
-                activeStage.setOperand(result.getOperand());
-                activeStage.setResultOperation(result.getResultOperation());
-                lastHistory.add(activeStage);
 
-                displayField = activeStage.getResultOperation();
+                history.add(lastExpression);
+                lastExpression = new ArrayDeque<>();
+
+                displayField = result.getResultOperation();
+                activeStage = null;
                 return;
-            } else { //if lastHistory is empty or binary operation stage not found then copy and add active Stage
+            } else { //if lastExpression is empty or binary operation stage not found then copy and add active Stage
                 activeStage.setResultOperation(activeStageOperand);
-                lastHistory.addLast(activeStage);
+                lastExpression.addLast(activeStage);
 
-                //copy and add result stage to lastHistory
+                //copy and add result stage to lastExpression
                 Stage result = new Stage();
                 result.setOperand(activeStageOperand);
                 result.setResultOperation(activeStageOperand);
-                allHistory.add(lastHistory);
-                lastHistory = new LinkedList<>();
-                activeStage = new Stage();
-                activeStage.setOperand(result.getOperand());
-                activeStage.setResultOperation(result.getResultOperation());
-                lastHistory.add(activeStage);
+                lastExpression.addLast(result);
 
-                displayField = activeStage.getResultOperation();
+                history.add(lastExpression);
+                lastExpression = new ArrayDeque<>();
+
+                displayField = result.getResultOperation();
+                activeStage = null;
                 return;
             }
         }
 
         // operator - empty ; operand - empty
         if (binaryOperator.equals(EMPTY) && activeStageOperand.equals(EMPTY)) {
-            if (lastHistory.isEmpty()) {
-                activeStage.setOperand(ZERO);
-                activeStage.setResultOperation(ZERO);
+            Stage firstStage = getLastStage();
+            lastExpression.addFirst(firstStage);
 
-                Stage firstStage = new Stage();
-                firstStage.setOperand(ZERO);
-                firstStage.setResultOperation(ZERO);
-                lastHistory.addFirst(firstStage);
-
-                displayField = ZERO;
-
-                lastHistory.addLast(activeStage);
-                activeStage = null;
-                return;
-            }
-
-            if (getLastBinaryOperationStage() != null) {
-                Stage stage = getLastBinaryOperationStage();
-                activeStage.setOperand(stage.getOperand());
-                //activeStage.setResultOperation(stage.getResultOperation());
-                activeStage.setBinaryOperator(stage.getBinaryOperator());
-
+            if (lastBinaryStage != null) {
+                activeStage.setOperand(lastBinaryStage.getOperand());
+                activeStage.setBinaryOperator(lastBinaryStage.getBinaryOperator());
                 calculateBinary();
 
-                Stage lastStage = lastHistory.getLast();
                 Stage result = new Stage();
-                result.setOperand(lastStage.getResultOperation());
-                result.setResultOperation(lastStage.getResultOperation());
-                lastHistory.addLast(result);
+                Stage lastCompleteStage = getLastStage();
+                result.setOperand(lastCompleteStage.getResultOperation());
+                result.setResultOperation(lastCompleteStage.getResultOperation());
+                lastExpression.addLast(result);
+
+                history.add(lastExpression);
+                lastExpression = new ArrayDeque<>();
 
                 displayField = result.getResultOperation();
                 activeStage = null;
             } else {
-                Stage last = lastHistory.getLast();
+                Stage last = getLastStage();
                 activeStage.setOperand(last.getResultOperation());
                 activeStage.setResultOperation(last.getResultOperation());
-                lastHistory.addLast(activeStage);
+                lastExpression.addLast(activeStage);
+
+                history.add(lastExpression);
+                lastExpression = new ArrayDeque<>();
 
                 displayField = activeStage.getResultOperation();
                 activeStage = null;
@@ -347,15 +319,19 @@ public class Model {
         }
     }
 
-    private Stage getLastBinaryOperationStage() {
-        Iterator<Stage> iterator = lastHistory.descendingIterator();
-        while (iterator.hasNext()) {
-            Stage stage = iterator.next();
-            if (!stage.getBinaryOperator().equals(EMPTY)) {
+    private Stage getLastStage() {
+        if (lastExpression.isEmpty()) {
+            if (history.size() > 0) {
+                return history.get(history.size() - 1).getLast();
+            } else {
+                Stage stage = new Stage();
+                stage.setOperand(ZERO);
+                stage.setResultOperation(ZERO);
                 return stage;
             }
+        } else {
+            return lastExpression.getLast();
         }
-        return null;
     }
 
     private String doOperation(String operator, String operand) {
@@ -372,7 +348,7 @@ public class Model {
                 number = 1 / number;
                 break;
             case PERCENT:
-                Double lastResult = Double.valueOf(lastHistory.getLast().getResultOperation());
+                Double lastResult = Double.valueOf(lastExpression.getLast().getResultOperation());
                 number = lastResult * (number / 100);
                 break;
             default:
