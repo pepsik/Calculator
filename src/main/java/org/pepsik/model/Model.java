@@ -8,7 +8,7 @@ import java.util.*;
  * Created by pepsik on 7/27/2016.
  */
 public class Model {
-    private static final String SQUARE = "X2";
+    private static final String SQUARE = "X²";
     private static final String SQUARE_ROOT = "√";
     private static final String PERCENT = "%";
     private static final String FRACTION = "1/X";
@@ -48,29 +48,37 @@ public class Model {
         //EQUAL operator is unique and calculated separately
         if (inputOperator.equals(EQUAL)) {
             calculateEqual();
-            displayField = getLastStage().getResultOperation();
+            displayField = getLastCompleteStage().getResultOperation();
             return;
         }
 
         final String operand = currentStage.getOperand();
         final String binaryOperator = currentStage.getBinaryOperator();
 
-        //Calculates if stage consist operator and operand {+, 7}
+        //Calculates stage with operator and operand {+, 7}
         if (!binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
             calculateBinary();
+            currentExpression.addLast(currentStage);
         }
 
-        //If active stage consist only operand {empty, 5} then adds it as first stage in expression
+        //Calculates stage with operand {empty, 5}
         if (binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
             currentStage.setResultOperation(operand);
             currentExpression.addFirst(currentStage);
-            currentStage = new Stage(); //todo add to expression
+            currentStage = new Stage();
+            currentExpression.addLast(currentStage);
         }
 
-        //in other cases adds operator to active stage
+        //Calculates empty stage {empty, empty}
+        if (binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
+            currentExpression.addFirst(getLastCompleteStage());
+            currentExpression.addLast(currentStage);
+        }
+
+        //in other cases adds operator to active stage {"+", empty}
         currentStage.setBinaryOperator(inputOperator);
 
-        displayField = getLastStage().getResultOperation();
+        displayField = getLastCompleteStage().getResultOperation();
     }
 
     /**
@@ -92,18 +100,14 @@ public class Model {
         final String rightOperand = currentStage.getOperand();
         final String binaryOperator = currentStage.getBinaryOperator();
 
-        //throw if get Stage without operator or operand
-        if (binaryOperator.equals(EMPTY) || rightOperand.equals(EMPTY)) {
-            throw new IllegalStateException("Unexpected state! " + currentStage);
-        }
-
         //gets last stage to get left operand (result of last completed stage)
-        String leftOperand = getLastStage().getResultOperation();
+        String leftOperand = getLastCompleteStage().getResultOperation();
         String result = doOperation(binaryOperator, leftOperand, rightOperand);
-        currentStage.setResultOperation(result);
 
-        currentExpression.addLast(currentStage);
+        currentStage.setResultOperation(result);
         lastBinaryStage = currentStage;
+
+        //after calculation erase current stage
         currentStage = new Stage();
     }
 
@@ -167,14 +171,12 @@ public class Model {
      * Calculates EQUAL operation and adds to expression history.
      */
     private void calculateEqual() {
-        final String operand = currentStage.getOperand();     //todo: hide in if?
-        final String binaryOperator = currentStage.getBinaryOperator(); //todo need final?
-        final Stage result = new Stage(); //result stage
-        result.setBinaryOperator(EQUAL);
+        final String operand = currentStage.getOperand();
+        final String binaryOperator = currentStage.getBinaryOperator();
 
         // operator - exist; operand - empty
         if (!binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            currentStage.setOperand(getLastStage().getResultOperation());
+            currentStage.setOperand(getLastCompleteStage().getResultOperation());
             calculateBinary();
         }
 
@@ -189,49 +191,57 @@ public class Model {
                 currentStage.setResultOperation(operand);
                 currentExpression.addLast(currentStage);
 
-                Stage binaryStage = lastBinaryStage;
-                currentStage = new Stage(binaryStage);
+                currentStage = new Stage(lastBinaryStage);
+                currentExpression.addLast(currentStage);
                 calculateBinary();
             } else {
                 currentStage.setResultOperation(operand);
                 currentExpression.addLast(currentStage);
+                currentStage = new Stage();
             }
         }
 
         // operator - empty ; operand - empty
         if (binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            currentExpression.addFirst(getLastStage());
+            currentExpression.addFirst(getLastCompleteStage());
 
             if (lastBinaryStage != null) {
                 currentStage.setOperand(lastBinaryStage.getOperand());
                 currentStage.setBinaryOperator(lastBinaryStage.getBinaryOperator());
+                currentExpression.addLast(currentStage);
                 calculateBinary();
             }
         }
 
-        Stage last = getLastStage();
-        currentStage = new Stage();
+        Stage last = getLastCompleteStage();
+        currentStage.setBinaryOperator(EQUAL);
         currentStage.setOperand(last.getResultOperation());
         currentStage.setResultOperation(last.getResultOperation());
 
         currentExpression.addLast(currentStage);
         history.add(currentExpression);
+
         currentExpression = new ArrayDeque<>();
         currentStage = new Stage();
     }
 
-    private Stage getLastStage() {
-        if (currentExpression.isEmpty()) {
-            if (history.size() > 0) {
-                return history.get(history.size() - 1).getLast();
-            } else {
-                Stage stage = new Stage();
-                stage.setOperand(ZERO);
-                stage.setResultOperation(ZERO);
+    private Stage getLastCompleteStage() {
+        //todo simplify
+        Iterator<Stage> iterator = currentExpression.descendingIterator();
+        while (iterator.hasNext()) {
+            Stage stage = iterator.next();
+            if (!stage.getResultOperation().equals(EMPTY)) {
                 return stage;
             }
+        }
+
+        if (history.isEmpty()) {
+            Stage stage = new Stage();
+            stage.setOperand(ZERO);
+            stage.setResultOperation(ZERO);
+            return stage;
         } else {
-            return currentExpression.getLast();
+            return history.get(history.size() - 1).getLast();
         }
     }
 
@@ -314,9 +324,7 @@ public class Model {
      * @return calculator history view
      */
     public String getCurrentExpression() {
-        //todo history display
         return HistoryFormatter.format(currentExpression);
-
     }
 
     /**
