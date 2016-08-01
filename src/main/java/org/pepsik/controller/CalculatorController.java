@@ -32,7 +32,7 @@ public class CalculatorController implements Initializable {
         String operation = ((Button) event.getSource()).getText();
         model.addBinaryOperator(operation);
         displayField.setText(model.getDisplay());
-        displayHistory.setText(model.getLastExpression());
+        displayHistory.setText(model.getCurrentExpression());
     }
 
     @FXML
@@ -40,7 +40,7 @@ public class CalculatorController implements Initializable {
         String operator = ((Button) event.getSource()).getText();
         model.addUnaryOperator(operator);
         displayField.setText(model.getDisplay());
-        displayHistory.setText(model.getLastExpression());
+        displayHistory.setText(model.getCurrentExpression());
     }
 
     @FXML

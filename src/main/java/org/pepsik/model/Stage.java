@@ -24,6 +24,15 @@ public class Stage {
 
     //todo create constructors with operand or operator? to avoid invalid state with empty operator and operand
 
+
+    public Stage() {
+    }
+
+    public Stage(Stage stage) {
+        operand = stage.getOperand();
+        binaryOperator = stage.getBinaryOperator();
+    }
+
     public void setBinaryOperator(String binaryOperator) {
         this.binaryOperator = binaryOperator;
     }
@@ -56,15 +65,6 @@ public class Stage {
                 return;
             }
         }
-
-//        if (input.equals(OCTOTHORPE)) {
-//            if (operand.contains(MINUS)) { //todo unary
-//                operand = operand.replaceAll(MINUS, "");
-//            } else {
-//                operand = MINUS + operand;
-//            }
-//            return;
-//        }
 
         if (operand.equals(ZERO) || operand.equals(EMPTY)) {
             operand = input;
