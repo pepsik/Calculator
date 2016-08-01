@@ -27,6 +27,7 @@ public class Model {
     private Stage currentStage = new Stage();
     private Stage lastBinaryStage;
     private String displayField = ZERO;
+    private String unaryResult = EMPTY;
 
     /**
      * Adds input digit or point to active stage and show expression on display field
@@ -39,7 +40,7 @@ public class Model {
         displayField = currentStage.getOperand();
     }
 
-    public void addInputPoint(String point){
+    public void addInputPoint(String point) {
         currentStage.addPointToOperand(point);
 
         displayField = currentStage.getOperand();
@@ -78,6 +79,12 @@ public class Model {
             currentExpression.addFirst(getLastCompleteStage());
         }
 
+        if (!binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
+            currentStage.setBinaryOperator(inputOperator);
+            displayField = getLastCompleteStage().getResultOperation(); //todo: something
+            return;
+        }
+
         //in other cases adds operator to active stage {"+", empty}
         currentStage.setBinaryOperator(inputOperator);
         currentExpression.addLast(currentStage);
@@ -94,7 +101,7 @@ public class Model {
         currentStage.addUnaryOperator(operator);
         calculateUnary();
 
-//        displayField = currentStage;
+        displayField = unaryResult;
     }
 
     /**
@@ -124,50 +131,50 @@ public class Model {
 
         // operator - exist;  operand - exist
         if (!binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
-            String temp = currentStage.getOperand();
+            String temp = operand;
 
             for (String unary : currentStage.getUnaryOperators()) {
                 temp = doUnaryOperation(unary, temp);
             }
 
-            displayField = temp;
+            unaryResult = temp;
             return;
         }
 
         // operator - exist; operand - empty
         if (!binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            if (currentExpression.isEmpty()) {
+            currentStage.setOperand(getLastCompleteStage().getResultOperation());
 
-            } else {
-
+            String temp = operand;
+            for (String unary : currentStage.getUnaryOperators()) {
+                temp = doUnaryOperation(unary, temp);
             }
 
+            unaryResult = temp;
             return;
         }
 
         // operator - empty ; operand - exist
         if (binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
-            if (lastBinaryStage != null) {
-
-                return;
-            } else { //if currentExpression is empty or binary operation stage not found then copy and add active Stage
-
-                return;
+            String temp = operand;
+            for (String unary : currentStage.getUnaryOperators()) {
+                temp = doUnaryOperation(unary, temp);
             }
+
+            unaryResult = temp;
+            return;
         }
 
         // operator - empty ; operand - empty
         if (binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            if (currentExpression.isEmpty()) {
+            currentStage.setOperand(getLastCompleteStage().getResultOperation());
 
-                return;
+            String temp = operand;
+            for (String unary : currentStage.getUnaryOperators()) {
+                temp = doUnaryOperation(unary, temp);
             }
 
-            if (lastBinaryStage != null) {
-
-            } else {
-
-            }
+            unaryResult = temp;
         }
     }
 

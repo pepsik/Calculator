@@ -366,10 +366,10 @@ public class ModelTest {
         operateOnNewObj(999, "999 =");
         operateOnNewObj(MAX_VALUE, MAX_VALUE + "=");
 
-        operateOnNewObj(-1, -1, "=");
-        operateOnNewObj(-5, -5, "=");
-        operateOnNewObj(-50, -50, "=");
-        operateOnNewObj(-MAX_VALUE, -MAX_VALUE, "=");
+//        operateOnNewObj(-1, "-1=");
+//        operateOnNewObj(-5, "-5=");
+//        operateOnNewObj(-50, "-50=");
+//        operateOnNewObj(-MAX_VALUE, -MAX_VALUE + "=");
 
         operateOnNewObj(0, "0 =");
         operateOnNewObj(0, "0 = = =");
@@ -384,101 +384,100 @@ public class ModelTest {
         operateOnNewObj(MAX_VALUE, MAX_VALUE + "= = = = =");
 
         model = new Model();
-        operate(0, 0, "=");
-        operate(0, 0, "=", "=", "=");
-        operate(0, 0, "=", "=", "=", "=", "=", "=", "=", "=");
-        operate(1, 1, "=");
-        operate(1, 1, "=", "=", "=", "=", "=", "=", "=", "=", "=", "=");
-        operate(5, 5, "=");
-        operate(5, 5, "=", "=", "=", "=", "=");
-        operate(999, 999, "=");
-        operate(999, 999, "=", "=", "=", "=");
-        operate(MAX_VALUE, MAX_VALUE, "=");
-        operate(MAX_VALUE, MAX_VALUE, "=", "=", "=", "=", "=");
+        operate(0, "0 =");
+        operate(0, "0 = = =");
+        operate(0, "0 = = = = = =");
+        operate(1, "1 =");
+        operate(1, "1 = = = = = = =");
+        operate(5, "5 =");
+        operate(5, "5 = = = = =");
+        operate(999, "999 =");
+        operate(999, "999 = = = =");
+        operate(MAX_VALUE, MAX_VALUE + "=");
+        operate(MAX_VALUE, MAX_VALUE + "= = = =");
 
-        operateOnNewObj(1, 1, "=", "+");
-        operateOnNewObj(2, 1, "=", "+", "=");
-        operateOnNewObj(4, 1, "=", "+", "=", "+", "=");
-        operateOnNewObj(8, 1, "=", "+", "=", "+", "=", "+", "=");
-        operateOnNewObj(16, 1, "=", "+", "=", "+", "=", "+", "=", "+", "=");
+        operateOnNewObj(1, "1  = +");
+        operateOnNewObj(2, "1 = + =");
+        operateOnNewObj(4, "1 = + = + =");
+        operateOnNewObj(8, "1 = + = + = + =");
+        operateOnNewObj(16, "1 = + = + = + = + =");
 
-        operateOnNewObj(-1, -1, "=", "+");
-        operateOnNewObj(-2, -1, "=", "+", "=");
-        operateOnNewObj(-4, -1, "=", "+", "=", "+", "=");
-        operateOnNewObj(-8, -1, "=", "+", "=", "+", "=", "+", "=");
-        operateOnNewObj(-16, -1, "=", "+", "=", "+", "=", "+", "=", "+", "=");
+//        operateOnNewObj(-1, "-1 = +");
+//        operateOnNewObj(-2, "-1 = + =");
+//        operateOnNewObj(-4, "-1 =+=+=");
+//        operateOnNewObj(-8, "-1 =+=+=+=");
+//        operateOnNewObj(-16, "-1 =+=+=+=+=");
 
-        operateOnNewObj(1, 1, "=", "−");
-        operateOnNewObj(0, 1, "=", "−", "=");
-        operateOnNewObj(0, 1, "=", "−", "=", "−", "=");
-        operateOnNewObj(0, 1, "=", "−", "=", "−", "=", "−", "=", "−", "=");
+        operateOnNewObj(1, "1 =−");
+        operateOnNewObj(0, "1 =−=");
+        operateOnNewObj(0, "1 =−=−=");
+        operateOnNewObj(0, "1 =−=−=−=−=");
 
-        operateOnNewObj(-1, -1, "=", "−");
-        operateOnNewObj(0, -1, "=", "−", "=");
-        operateOnNewObj(0, 1, "=", "−", "=", "−", "=");
-        operateOnNewObj(0, 1, "=", "−", "=", "−", "=", "−", "=", "−", "=");
+//        operateOnNewObj(-1, "-1 =−");
+//        operateOnNewObj(0, "-1 =−=");
+        operateOnNewObj(0, "1 =−=−=");
+        operateOnNewObj(0, "1 =−=−=−=−=");
+        operateOnNewObj(10, "10 =−");
+        operateOnNewObj(0, "10 =−=");
+        operateOnNewObj(0, "10 =−=−=");
+        operateOnNewObj(0, "10 =−=−=−=−=");
 
-        operateOnNewObj(10, 10, "=", "−");
-        operateOnNewObj(0, 10, "=", "−", "=");
-        operateOnNewObj(0, 10, "=", "−", "=", "−", "=");
-        operateOnNewObj(0, 10, "=", "−", "=", "−", "=", "−", "=", "−", "=");
+        operateOnNewObj(15, "5 +==");
+        operateOnNewObj(25, "5 +====");
+        operateOnNewObj(45, "5 +========");
+        operateOnNewObj(70, "5 +======+=");
 
-        operateOnNewObj(15, 5, "+", "=", "=");
-        operateOnNewObj(25, 5, "+", "=", "=", "=", "=");
-        operateOnNewObj(45, 5, "+", "=", "=", "=", "=", "=", "=", "=", "=");
-        operateOnNewObj(70, 5, "+", "=", "=", "=", "=", "=", "=", "+", "=");
-
-        operateOnNewObj(15, 5, "+", "=", "=");
-        operateOnNewObj(25, 5, "+", "=", "=", "=", "=");
-        operateOnNewObj(45, 5, "+", "=", "=", "=", "=", "=", "=", "=", "=");
-        operateOnNewObj(0, 5, "+", "=", "=", "=", "=", "=", "=", "−", "=");
-
-        model = new Model();
-        operate(1, 1, "=", "+");
-        operate(4, 1, "=", "+", "=");
-        operate(12, 1, "=", "+", "=", "+", "=");
-        operate(56, 1, "=", "+", "=", "+", "=", "+", "=");
-        operate(29, 1, "=", "+");
-
-        operate(28, -1, "=", "+");
-        operate(54, -1, "=", "+", "=");
+        operateOnNewObj(15, "5 +==");
+        operateOnNewObj(25, "5 +====");
+        operateOnNewObj(45, "5 +========");
+        operateOnNewObj(0, "5 +======−=");
 
         model = new Model();
-        operate(-1, -1, "=", "+");
-        operate(-4, -1, "=", "+", "=");
-        operate(-12, -1, "=", "+", "=", "+", "=");
-        operate(-56, -1, "=", "+", "=", "+", "=", "+", "=");
-        operate(-464, -1, "=", "+", "=", "+", "=", "+", "=", "+", "=");
+        operate(1, "1 = +");
+        operate(4, "1 =+=");
+        operate(12, "1 =+=+=");
+        operate(56, "1 =+=+=+=");
+        operate(29, "1 = +");
+
+//        operate(28, "-1 = +");
+//        operate(54, "-1 =+=");
 
         model = new Model();
-        operate(1, 1, "=", "−");
-        operate(0, 1, "=", "−", "=");
-        operate(0, 1, "=", "−", "=", "−", "=");
-        operate(0, 1, "=", "−", "=", "−", "=", "−", "=", "−", "=");
+//        operate(-1, "-1 = +");
+//        operate(-4, "-1 =+=");
+//        operate(-12, "-1 =+=+=");
+//        operate(-56, "-1 =+=+=+=");
+//        operate(-464, "-1 =+=+=+=+=");
 
-        operate(-1, -1, "=", "−");
-        operate(0, -1, "=", "−", "=");
-        operate(0, 1, "=", "−", "=", "−", "=");
-        operate(0, 1, "=", "−", "=", "−", "=", "−", "=", "−", "=");
+        model = new Model();
+        operate(1, "1 =−");
+        operate(0, "1 =−=");
+        operate(0, "1 =−=−=");
+        operate(0, "1 =−=−=−=−=");
 
-        operate(10, 10, "=", "−");
-        operate(0, 10, "=", "−", "=");
-        operate(0, 10, "=", "−", "=", "−", "=");
-        operate(0, 10, "=", "−", "=", "−", "=", "−", "=", "−", "=");
+//        operate(-1, "-1 =−");
+//        operate(0, "-1 =−=");
+        operate(0, "1 =−=−=");
+        operate(0, "1 =−=−=−=−=");
 
-        operate(15, 5, "+", "=", "=");
-        operate(25, 5, "+", "=", "=", "=", "=");
-        operate(45, 5, "+", "=", "=", "=", "=", "=", "=", "=", "=");
-        operate(70, 5, "+", "=", "=", "=", "=", "=", "=", "+", "=");
+        operate(10, "10 =−");
+        operate(0, "10 =−=");
+        operate(0, "10 =−=−=");
+        operate(0, "10 =−=−=−=−=");
 
-        operate(15, 5, "+", "=", "=");
-        operate(25, 5, "+", "=", "=", "=", "=");
-        operate(45, 5, "+", "=", "=", "=", "=", "=", "=", "=", "=");
-        operate(0, 5, "+", "=", "=", "=", "=", "=", "=", "−", "=");
+        operate(15, "5 +==");
+        operate(25, "5 +====");
+        operate(45, "5 +========");
+        operate(70, "5 +======+=");
 
-        operate(10, 5, "+", "+", "=");
-        operate(68, 34, "+", "+", "+", "+", "+", "+", "=");
-        operate(-16, -8, "+", "+", "+", "+", "+", "+", "+", "+", "=");
+        operate(15, "5 +==");
+        operate(25, "5 +====");
+        operate(45, "5+========");
+        operate(0, "5+======−=");
+
+        operate(10, "5 ++=");
+        operate(68, "34 ++++++=");
+//        operate(-16, "-8 ++++++++=");
 
         //---
         model = new Model();
@@ -500,6 +499,9 @@ public class ModelTest {
         model = new Model();
         operate(9.5, "+3÷2+1×3+2=");
         operate(4, "2=");
+
+        //---------------TEST UNARY OPERATORS ------------
+//        operateOnNewObj(3, "sqrt(9) = ");
     }
 
     private void operateOnNewObj(double expected, String str) {
@@ -535,20 +537,6 @@ public class ModelTest {
         model.addBinaryOperator(operator);
         model.addInputDigit(String.valueOf(value2));
         model.addBinaryOperator("=");
-
-        assertEquals(expected, Double.parseDouble(model.getDisplay()), DELTA);
-    }
-
-    private void operateOnNewObj(double expected, int input, String... operators) {
-        model = new Model();
-        operate(expected, input, operators);
-    }
-
-    private void operate(double expected, int input, String... operators) {
-        model.addInputDigit(String.valueOf(input));
-        for (String operator : operators) {
-            model.addBinaryOperator(operator);
-        }
 
         assertEquals(expected, Double.parseDouble(model.getDisplay()), DELTA);
     }

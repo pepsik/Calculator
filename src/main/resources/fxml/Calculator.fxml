@@ -35,22 +35,22 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-background-color: #f2f2f2; -fx-font-size: 14pt;" text="√" textAlignment="CENTER" GridPane.columnIndex="1">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-font-size: 14pt;" styleClass="top-level" text="√" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-background-color: #f2f2f2; -fx-font-size: 14pt;" text="\%" textAlignment="CENTER">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-font-size: 14pt;" styleClass="top-level" text="\%" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-background-color: #f2f2f2; -fx-font-size: 14pt;" text="X²" textAlignment="CENTER" GridPane.columnIndex="2">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-font-size: 14pt;" styleClass="top-level" text="X²" textAlignment="CENTER" GridPane.columnIndex="2">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-background-color: #f2f2f2; -fx-font-size: 14pt;" text="1/x" textAlignment="CENTER" GridPane.columnIndex="3">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" style="-fx-font-size: 14pt;" styleClass="top-level" stylesheets="@JMetroLightTheme.css" text="1/x" textAlignment="CENTER" GridPane.columnIndex="3">
                <font>
                   <Font size="24.0" />
                </font>
@@ -145,7 +145,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleDigitAction" style="-fx-font-size: 18pt;" text="." textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handlePointAction" style="-fx-font-size: 18pt;" text="." textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <font>
                   <Font size="24.0" />
                </font>
@@ -174,11 +174,11 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt; -fx-background-color: f2f2f2;" text="M+" GridPane.columnIndex="2" />
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt; -fx-background-color: f2f2f2;" text="MR" GridPane.columnIndex="1" />
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt; -fx-background-color: f2f2f2;" text="M-" GridPane.columnIndex="3" />
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt; -fx-background-color: f2f2f2;" text="MS" GridPane.columnIndex="4" />
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt; -fx-background-color: f2f2f2;" text="MC" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt;" styleClass="top-level" text="M+" GridPane.columnIndex="2" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt;" styleClass="top-level" text="MR" GridPane.columnIndex="1" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt;" styleClass="top-level" text="M-" GridPane.columnIndex="3" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt;" styleClass="top-level" text="MS" GridPane.columnIndex="4" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-padding: 5; -fx-font-size: 10pt;" styleClass="top-level" text="MC" />
          </children>
       </GridPane>
       <Label fx:id="displayField" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #f2f2f2; -fx-font-size: 48px;" GridPane.rowIndex="2">

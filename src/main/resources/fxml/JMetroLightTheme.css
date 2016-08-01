@@ -627,6 +627,10 @@
     -fx-opacity: .4;
 }
 
+.top-level{
+    -fx-background-color: #f2f2f2;
+}
+
 
 
 
