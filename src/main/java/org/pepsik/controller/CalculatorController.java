@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import org.pepsik.model.Model;
 
 import java.net.URL;
@@ -31,19 +30,23 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleOperationAction(ActionEvent event) {
         String operation = ((Button) event.getSource()).getText();
-        model.addOperator(operation);
+        model.addBinaryOperator(operation);
         displayField.setText(model.getDisplay());
-        displayHistory.setText(model.getHistory());
+        displayHistory.setText(model.getLastHistory());
+    }
+
+    @FXML
+    private void handleUnaryOperationAction(ActionEvent event) {
+        String operator = ((Button) event.getSource()).getText();
+        model.addUnaryOperator(operator);
+        displayField.setText(model.getDisplay());
+        displayHistory.setText(model.getLastHistory());
     }
 
     @FXML
     private void handleClearEntryAction(ActionEvent event) {
-        String entry = displayField.getText();
-        StringBuilder sb = new StringBuilder(entry);
-        if (sb.length() != 0) {
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        displayField.setText(sb.toString());
+        model.clearEntry();
+        displayField.setText(model.getDisplay());
     }
 
     @FXML
@@ -53,5 +56,6 @@ public class CalculatorController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        displayField.setText(model.getDisplay());
     }
 }

@@ -1,5 +1,8 @@
 package org.pepsik.model;
 
+import com.sun.org.apache.xpath.internal.operations.Minus;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +10,17 @@ import java.util.List;
  * Created by pepsik on 7/27/2016.
  */
 public class Stage {
-    private String binaryOperator = "";
+
+    private static final String EMPTY = " ";
+    private static final String ZERO = "0";
+    public static final String POINT = ".";
+    public static final String OCTOTHORPE = "±";
+    public static final String MINUS = "-";
+
+    private String binaryOperator = EMPTY;
     private List<String> unaryOperators = new ArrayList<String>();
-    private String operand = "";
-    private String resultOperation = ""; //todo: migrate to model?
+    private String operand = EMPTY;
+    private String resultOperation = EMPTY; //todo: migrate to model?
 
     //todo create constructors with operand or operator? to avoid invalid state with empty operator and operand
 
@@ -34,12 +44,32 @@ public class Stage {
         return operand;
     }
 
-    public void addDigitToOperand(String number) {
-        if (operand.equals("0")) {
-            operand = number;
+    public void addDigitToOperand(String input) {
+        if (input.equals(POINT)) {
+            if (operand.contains(EMPTY)) {
+                operand = ZERO + POINT;
+                return;
+            }
+
+            if (!operand.contains(POINT)) {
+                operand += input;
+                return;
+            }
+        }
+
+//        if (input.equals(OCTOTHORPE)) {
+//            if (operand.contains(MINUS)) { //todo unary
+//                operand = operand.replaceAll(MINUS, "");
+//            } else {
+//                operand = MINUS + operand;
+//            }
+//            return;
+//        }
+
+        if (operand.equals(ZERO) || operand.equals(EMPTY)) {
+            operand = input;
         } else {
-            StringBuilder sb = new StringBuilder(operand);
-            operand = sb.append(number).toString();
+            operand += input;
         }
     }
 
@@ -53,6 +83,12 @@ public class Stage {
 
     public void setResultOperation(String resultOperation) {
         this.resultOperation = resultOperation;
+        checkValues();
+    }
+
+    private void checkValues() {
+        operand = operand.replaceAll("(\\.|(\\.(\\d*[1-9])?))0+\\b", "$2");
+        resultOperation = resultOperation.replaceAll("(\\.|(\\.(\\d*[1-9])?))0+\\b", "$2");
     }
 
     @Override
