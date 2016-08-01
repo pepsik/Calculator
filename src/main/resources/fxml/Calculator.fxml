@@ -55,7 +55,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClearEntryAction" style="-fx-font-size: 14pt;" text="CE" textAlignment="CENTER" GridPane.rowIndex="1">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClearAction" style="-fx-font-size: 14pt;" text="CE" textAlignment="CENTER" GridPane.rowIndex="1">
                <font>
                   <Font size="24.0" />
                </font>

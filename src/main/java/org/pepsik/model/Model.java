@@ -12,12 +12,12 @@ public class Model {
     private static final String SQUARE_ROOT = "√";
     private static final String PERCENT = "%";
     private static final String FRACTION = "1/X";
-    private static final String EQUAL = "=";
-
     private static final String SUM = "+";
+
     private static final String SUBTRACT = "−";
     private static final String MULTIPLY = "×";
     private static final String DIVIDE = "÷";
+    private static final String EQUAL = "=";
 
     private static final String EMPTY = " ";
     private static final String ZERO = "0";
@@ -35,6 +35,12 @@ public class Model {
      */
     public void addInputDigit(String number) {
         currentStage.addDigitToOperand(number);
+
+        displayField = currentStage.getOperand();
+    }
+
+    public void addInputPoint(String point){
+        currentStage.addPointToOperand(point);
 
         displayField = currentStage.getOperand();
     }
@@ -58,7 +64,6 @@ public class Model {
         //Calculates stage with operator and operand {+, 7}
         if (!binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
             calculateBinary();
-            currentExpression.addLast(currentStage);
         }
 
         //Calculates stage with operand {empty, 5}
@@ -66,17 +71,16 @@ public class Model {
             currentStage.setResultOperation(operand);
             currentExpression.addFirst(currentStage);
             currentStage = new Stage();
-            currentExpression.addLast(currentStage);
         }
 
         //Calculates empty stage {empty, empty}
         if (binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
             currentExpression.addFirst(getLastCompleteStage());
-            currentExpression.addLast(currentStage);
         }
 
         //in other cases adds operator to active stage {"+", empty}
         currentStage.setBinaryOperator(inputOperator);
+        currentExpression.addLast(currentStage);
 
         displayField = getLastCompleteStage().getResultOperation();
     }
@@ -102,7 +106,7 @@ public class Model {
 
         //gets last stage to get left operand (result of last completed stage)
         String leftOperand = getLastCompleteStage().getResultOperation();
-        String result = doOperation(binaryOperator, leftOperand, rightOperand);
+        String result = doBinaryOperation(binaryOperator, leftOperand, rightOperand);
 
         currentStage.setResultOperation(result);
         lastBinaryStage = currentStage;
@@ -123,7 +127,7 @@ public class Model {
             String temp = currentStage.getOperand();
 
             for (String unary : currentStage.getUnaryOperators()) {
-                temp = doOperation(unary, temp);
+                temp = doUnaryOperation(unary, temp);
             }
 
             displayField = temp;
@@ -191,6 +195,7 @@ public class Model {
                 currentStage.setResultOperation(operand);
                 currentExpression.addLast(currentStage);
 
+                //clone
                 currentStage = new Stage(lastBinaryStage);
                 currentExpression.addLast(currentStage);
                 calculateBinary();
@@ -225,8 +230,13 @@ public class Model {
         currentStage = new Stage();
     }
 
+    /**
+     * Finds and returns last complete stage in current expression or history. Otherwise returns stage with ZERO operand and result.
+     *
+     * @return last complete stage
+     */
     private Stage getLastCompleteStage() {
-        //todo simplify
+        //todo simplify or use field variable for last complete stage
         Iterator<Stage> iterator = currentExpression.descendingIterator();
         while (iterator.hasNext()) {
             Stage stage = iterator.next();
@@ -252,7 +262,7 @@ public class Model {
      * @param operand  operand deal with
      * @return operation result
      */
-    private String doOperation(String operator, String operand) {
+    private String doUnaryOperation(String operator, String operand) {
         Double number = Double.parseDouble(operand);
 
         switch (operator) {
@@ -284,7 +294,7 @@ public class Model {
      * @param rightOperand right operand of operation
      * @return result of operation
      */
-    private String doOperation(String operator, String leftOperand, String rightOperand) {
+    private String doBinaryOperation(String operator, String leftOperand, String rightOperand) {
         Double left = Double.parseDouble(leftOperand);
         Double right = Double.parseDouble(rightOperand);
         Double result;

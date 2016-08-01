@@ -28,6 +28,13 @@ public class CalculatorController implements Initializable {
     }
 
     @FXML
+    private void handlePointAction(ActionEvent event) {
+        String point = ((Button) event.getSource()).getText();
+        model.addInputPoint(point);
+        displayField.setText(model.getDisplay());
+    }
+
+    @FXML
     private void handleOperationAction(ActionEvent event) {
         String operation = ((Button) event.getSource()).getText();
         model.addBinaryOperator(operation);
@@ -43,15 +50,20 @@ public class CalculatorController implements Initializable {
         displayHistory.setText(model.getCurrentExpression());
     }
 
+    //todo add EQUAL handler
+
     @FXML
-    private void handleClearEntryAction(ActionEvent event) {
+    private void handleClearAction(ActionEvent event) {
         model.clearEntry();
         displayField.setText(model.getDisplay());
     }
 
     @FXML
     private void handleClearAllAction(ActionEvent event) {
-        displayField.setText("");
+        //todo add Clear All in model
+        model = new Model();
+        displayField.setText(model.getDisplay());
+        displayHistory.setText("");
     }
 
     @Override

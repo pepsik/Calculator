@@ -14,20 +14,16 @@ public class Stage {
     private static final String EMPTY = " ";
     private static final String ZERO = "0";
     public static final String POINT = ".";
-    public static final String OCTOTHORPE = "±";
-    public static final String MINUS = "-";
 
     private String binaryOperator = EMPTY;
     private List<String> unaryOperators = new ArrayList<String>();
     private String operand = EMPTY;
     private String resultOperation = EMPTY; //todo: migrate to model?
 
-    //todo create constructors with operand or operator? to avoid invalid state with empty operator and operand
-
-
     public Stage() {
     }
 
+    //clone constr
     public Stage(Stage stage) {
         operand = stage.getOperand();
         binaryOperator = stage.getBinaryOperator();
@@ -54,22 +50,20 @@ public class Stage {
     }
 
     public void addDigitToOperand(String input) {
-        if (input.equals(POINT)) {
-            if (operand.contains(EMPTY)) {
-                operand = ZERO + POINT;
-                return;
-            }
-
-            if (!operand.contains(POINT)) {
-                operand += input;
-                return;
-            }
-        }
-
         if (operand.equals(ZERO) || operand.equals(EMPTY)) {
             operand = input;
         } else {
             operand += input;
+        }
+    }
+
+    public void addPointToOperand(String input) {
+        if (!operand.contains(EMPTY)) {
+            if (!operand.contains(POINT)) {
+                operand += input;
+            }
+        } else {
+            operand = ZERO + POINT;
         }
     }
 

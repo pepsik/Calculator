@@ -14,6 +14,7 @@ public class ModelTest {
 
     private static final double DELTA = 0.0001;
     public static final int ITERATE_COUNT = 100;
+    private static final String POINT = ".";
 
     private Model model;
     private Random r = new Random();
@@ -44,6 +45,46 @@ public class ModelTest {
         operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
         operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
         for (int i = 0; i < ITERATE_COUNT; i++) { //todo: Long
+            int random = r.nextInt(MAX_VALUE);
+            operateOnNewObj(random, String.valueOf(random));
+        }
+
+        operateOnNewObj(1, "1.0");
+        operateOnNewObj(9.9, "9.9");
+        operateOnNewObj(1, "1.00");
+        operateOnNewObj(1, "1.0.0");
+        operateOnNewObj(1.11, "1.11");
+        operateOnNewObj(1.11, "1.1.1");
+        operateOnNewObj(11.1, "11.1");
+        operateOnNewObj(12.3, "12.3");
+        operateOnNewObj(9.99, "9.99");
+        operateOnNewObj(10, "10.00");
+        operateOnNewObj(123456, "1 2 3 4 5 6.");
+        operateOnNewObj(1.234567890, "1 .2 .3 4 5. 6 .7 8. 9. 0");
+        operateOnNewObj(0.1234567890, ".1 2 3 4 5 6 7 8 9 0");
+
+        operateOnNewObj(0, "");
+        operateOnNewObj(0, "0");
+        operateOnNewObj(1, "1");
+        operateOnNewObj(2, "2");
+        operateOnNewObj(3, "3");
+        operateOnNewObj(4, "4");
+        operateOnNewObj(5, "5");
+        operateOnNewObj(6, "6");
+        operateOnNewObj(7, "7");
+        operateOnNewObj(8, "8");
+        operateOnNewObj(9, "9");
+        operateOnNewObj(10, "10");
+        operateOnNewObj(99, "99");
+        operateOnNewObj(100, "100");
+        operateOnNewObj(111, "111");
+        operateOnNewObj(123, "12 3");
+        operateOnNewObj(999, "999");
+        operateOnNewObj(1000, "1000");
+        operateOnNewObj(123456, "1 2 3 4 5 6");
+        operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
+        operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
+        for (int i = 0; i < ITERATE_COUNT; i++) {
             int random = r.nextInt(MAX_VALUE);
             operateOnNewObj(random, String.valueOf(random));
         }
@@ -473,7 +514,9 @@ public class ModelTest {
             char symbol = data.charAt(i);
 
             if (Character.isDigit(symbol)) {
-                model.addInputDigit(String.valueOf(symbol)); //todo char input
+                model.addInputDigit(String.valueOf(symbol));
+            } else if (symbol == '.') {
+                model.addInputPoint(String.valueOf(symbol));
             } else {
                 model.addBinaryOperator(String.valueOf(symbol));
             }
