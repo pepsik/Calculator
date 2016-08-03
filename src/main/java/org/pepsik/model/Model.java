@@ -2,21 +2,24 @@ package org.pepsik.model;
 
 import org.pepsik.util.HistoryFormatter;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 /**
  * Created by pepsik on 7/27/2016.
  */
 public class Model {
-    private static final String SQUARE = "X²";
+    private static final String SQUARE = "x²";
     private static final String SQUARE_ROOT = "√";
     private static final String PERCENT = "%";
-    private static final String FRACTION = "1/X";
-    private static final String SUM = "+";
+    private static final String FRACTION = "1/x";
+    private static final String NEGATE = "+-";
 
-    private static final String SUBTRACT = "−";
-    private static final String MULTIPLY = "×";
-    private static final String DIVIDE = "÷";
+    private static final String SUM = "+";
+    private static final String SUBTRACT = "-";
+    private static final String MULTIPLY = "*";
+    private static final String DIVIDE = "/";
     private static final String EQUAL = "=";
 
     private static final String EMPTY = " ";
@@ -27,7 +30,9 @@ public class Model {
     private Stage currentStage = new Stage();
     private Stage lastBinaryStage;
     private String displayField = ZERO;
-    private String unaryResult = EMPTY;
+
+    private BigDecimal memory = new BigDecimal(BigInteger.ZERO);
+
 
     /**
      * Adds input digit or point to active stage and show expression on display field
@@ -62,30 +67,30 @@ public class Model {
         final String operand = currentStage.getOperand();
         final String binaryOperator = currentStage.getBinaryOperator();
 
-        //Calculates stage with operator and operand {+, 7}
+        //operator - exist;  operand - empty
+        if (!binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
+            currentStage.setBinaryOperator(inputOperator);
+            displayField = getLastCompleteStage().getResultOperation();
+            return;
+        }
+
+        //operator - exist;  operand - exist
         if (!binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
             calculateBinary();
         }
 
-        //Calculates stage with operand {empty, 5}
+        //operator - empty;  operand - exist
         if (binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
-            currentStage.setResultOperation(operand);
+            currentStage.setResultOperation(calculateUnary());
             currentExpression.addFirst(currentStage);
             currentStage = new Stage();
         }
 
-        //Calculates empty stage {empty, empty}
+        //operator - empty;  operand - empty
         if (binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
             currentExpression.addFirst(getLastCompleteStage());
         }
 
-        if (!binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            currentStage.setBinaryOperator(inputOperator);
-            displayField = getLastCompleteStage().getResultOperation(); //todo: something
-            return;
-        }
-
-        //in other cases adds operator to active stage {"+", empty}
         currentStage.setBinaryOperator(inputOperator);
         currentExpression.addLast(currentStage);
 
@@ -99,16 +104,15 @@ public class Model {
      */
     public void addUnaryOperator(String operator) {
         currentStage.addUnaryOperator(operator);
-        calculateUnary();
 
-        displayField = unaryResult;
+        displayField = calculateUnary();
     }
 
     /**
      * Calculates result of active stage and adds to expression history
      */
     private void calculateBinary() {
-        final String rightOperand = currentStage.getOperand();
+        final String rightOperand = calculateUnary();
         final String binaryOperator = currentStage.getBinaryOperator();
 
         //gets last stage to get left operand (result of last completed stage)
@@ -125,57 +129,25 @@ public class Model {
     /**
      * Calculates unary operation in active stage
      */
-    private void calculateUnary() {
+    private String calculateUnary() {
         final String operand = currentStage.getOperand();
-        final String binaryOperator = currentStage.getBinaryOperator();
+        String temp = operand;
 
-        // operator - exist;  operand - exist
-        if (!binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
-            String temp = operand;
-
-            for (String unary : currentStage.getUnaryOperators()) {
-                temp = doUnaryOperation(unary, temp);
-            }
-
-            unaryResult = temp;
-            return;
-        }
-
+        // operator - empty ; operand - empty
         // operator - exist; operand - empty
-        if (!binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            currentStage.setOperand(getLastCompleteStage().getResultOperation());
-
-            String temp = operand;
-            for (String unary : currentStage.getUnaryOperators()) {
-                temp = doUnaryOperation(unary, temp);
-            }
-
-            unaryResult = temp;
-            return;
+        if (operand.equals(EMPTY)) {
+            String result = getLastCompleteStage().getResultOperation();
+            currentStage.setOperand(result);
+            temp = result;
         }
 
         // operator - empty ; operand - exist
-        if (binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
-            String temp = operand;
-            for (String unary : currentStage.getUnaryOperators()) {
-                temp = doUnaryOperation(unary, temp);
-            }
-
-            unaryResult = temp;
-            return;
+        //operator - exist;  operand - exist
+        for (String unary : currentStage.getUnaryOperators()) {
+            temp = doUnaryOperation(unary, temp);
         }
 
-        // operator - empty ; operand - empty
-        if (binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            currentStage.setOperand(getLastCompleteStage().getResultOperation());
-
-            String temp = operand;
-            for (String unary : currentStage.getUnaryOperators()) {
-                temp = doUnaryOperation(unary, temp);
-            }
-
-            unaryResult = temp;
-        }
+        return temp;
     }
 
     /**
@@ -199,7 +171,7 @@ public class Model {
         // operator - empty ; operand - exist
         if (binaryOperator.equals(EMPTY) && !operand.equals(EMPTY)) {
             if (lastBinaryStage != null) {
-                currentStage.setResultOperation(operand);
+                currentStage.setResultOperation(calculateUnary());
                 currentExpression.addLast(currentStage);
 
                 //clone
@@ -207,7 +179,7 @@ public class Model {
                 currentExpression.addLast(currentStage);
                 calculateBinary();
             } else {
-                currentStage.setResultOperation(operand);
+                currentStage.setResultOperation(calculateUnary());
                 currentExpression.addLast(currentStage);
                 currentStage = new Stage();
             }
@@ -215,11 +187,11 @@ public class Model {
 
         // operator - empty ; operand - empty
         if (binaryOperator.equals(EMPTY) && operand.equals(EMPTY)) {
-            currentExpression.addFirst(getLastCompleteStage());
+            Stage binaryStage = new Stage(getLastCompleteStage());//clone
+            currentExpression.addFirst(binaryStage);
 
             if (lastBinaryStage != null) {
-                currentStage.setOperand(lastBinaryStage.getOperand());
-                currentStage.setBinaryOperator(lastBinaryStage.getBinaryOperator());
+                currentStage = new Stage(lastBinaryStage); //clone
                 currentExpression.addLast(currentStage);
                 calculateBinary();
             }
@@ -274,7 +246,7 @@ public class Model {
 
         switch (operator) {
             case SQUARE:
-                number *= 2;
+                number *= number;
                 break;
             case SQUARE_ROOT:
                 number = Math.sqrt(number);
@@ -285,6 +257,9 @@ public class Model {
             case PERCENT:
                 Double lastResult = Double.valueOf(currentExpression.getLast().getResultOperation());
                 number = lastResult * (number / 100);
+                break;
+            case NEGATE:
+                number = -number;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown unary operator! " + operator);
@@ -351,5 +326,66 @@ public class Model {
         currentStage.setOperand(ZERO);
 
         displayField = ZERO;
+    }
+
+    public void backspace() {
+        String operand = currentStage.getOperand();
+
+        if (operand.length() > 1) {
+            currentStage.setOperand(operand.substring(0, operand.length() - 1));
+            displayField = currentStage.getOperand();
+            return;
+        }
+
+        if (operand.length() == 1){
+            currentStage.setOperand(ZERO);
+            displayField = currentStage.getOperand();
+        }
+    }
+
+
+    public void addToMemory() {
+        if (memory == null) {
+            memory = new BigDecimal("0");
+        }
+
+        if (!currentStage.getOperand().equals(EMPTY)) {
+            memory = memory.add(new BigDecimal(currentStage.getOperand()));
+        } else {
+            memory = memory.add(new BigDecimal(getLastCompleteStage().getResultOperation()));
+        }
+    }
+
+    public void substructFromMemory(BigDecimal value) {
+        if (memory == null || currentStage.getOperand().equals(EMPTY)) {
+            memory = new BigDecimal("0");
+        }
+
+        if (!currentStage.getOperand().equals(EMPTY)) {
+            memory = memory.add(new BigDecimal(currentStage.getOperand()));
+        } else {
+            memory = memory.add(new BigDecimal(getLastCompleteStage().getResultOperation()));
+        }
+    }
+
+    public void setMemory() {
+        if (!currentStage.getOperand().equals(EMPTY)) {
+            memory = new BigDecimal(currentStage.getOperand());
+        } else {
+            memory = new BigDecimal(getLastCompleteStage().getResultOperation());
+        }
+    }
+
+    public void getMemory() {
+        if (memory != null) {
+            currentStage.setOperand(memory.toString());
+            currentStage.clearUnaryOperators();
+
+            displayField = memory.toString();
+        }
+    }
+
+    public void clearMemory() {
+        memory = null;
     }
 }

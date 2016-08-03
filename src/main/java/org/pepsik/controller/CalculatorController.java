@@ -22,22 +22,25 @@ public class CalculatorController implements Initializable {
 
     @FXML
     private void handleDigitAction(ActionEvent event) {
-        String digit = ((Button) event.getSource()).getText();
+        Button button = ((Button) event.getSource());
+        String digit = CalculatorButton.valueOf(button);
         model.addInputDigit(digit);
         displayField.setText(model.getDisplay());
     }
 
     @FXML
     private void handlePointAction(ActionEvent event) {
-        String point = ((Button) event.getSource()).getText();
+        Button button = ((Button) event.getSource());
+        String point = CalculatorButton.valueOf(button);
         model.addInputPoint(point);
         displayField.setText(model.getDisplay());
     }
 
     @FXML
     private void handleOperationAction(ActionEvent event) {
-        String operation = ((Button) event.getSource()).getText();
-        model.addBinaryOperator(operation);
+        Button button = ((Button) event.getSource());
+        String operator = CalculatorButton.valueOf(button);
+        model.addBinaryOperator(operator);
         displayField.setText(model.getDisplay());
         displayHistory.setText(model.getCurrentExpression());
     }

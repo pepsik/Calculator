@@ -80,6 +80,10 @@ public class Stage {
         checkValues();
     }
 
+    public void clearUnaryOperators(){
+        unaryOperators.clear();
+    }
+
     private void checkValues() {
         operand = operand.replaceAll("(\\.|(\\.(\\d*[1-9])?))0+\\b", "$2");
         resultOperation = resultOperation.replaceAll("(\\.|(\\.(\\d*[1-9])?))0+\\b", "$2");

@@ -1,7 +1,11 @@
 package org.pepsik.model;
 
 import org.junit.Test;
+import org.pepsik.model.operation.BinaryOperation;
+import org.pepsik.model.operation.UnaryOperation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static java.lang.Integer.MAX_VALUE;
@@ -11,10 +15,8 @@ import static org.junit.Assert.*;
  * Created by pepsik on 7/27/2016.
  */
 public class ModelTest {
-
     private static final double DELTA = 0.0001;
     public static final int ITERATE_COUNT = 100;
-    private static final String POINT = ".";
 
     private Model model;
     private Random r = new Random();
@@ -247,129 +249,134 @@ public class ModelTest {
         }
 
         //test subtract 2 numbers
-        operateOnNewObj(0, 0, "−", 0);
-        operateOnNewObj(1, 1, "−", 0);
-        operateOnNewObj(99, 99, "−", 0);
-        operateOnNewObj(-1, 0, "−", 1);
-        operateOnNewObj(-99, 0, "−", 99);
-        operateOnNewObj(0, 1, "−", 1);
-        operateOnNewObj(-2, 1, "−", 3);
-        operateOnNewObj(4, 7, "−", 3);
-        operateOnNewObj(50, 100, "−", 50);
-        operateOnNewObj(-50, 50, "−", 100);
+        operateOnNewObj(0, 0, "-", 0);
+        operateOnNewObj(1, 1, "-", 0);
+        operateOnNewObj(99, 99, "-", 0);
+        operateOnNewObj(-1, 0, "-", 1);
+        operateOnNewObj(-99, 0, "-", 99);
+        operateOnNewObj(0, 1, "-", 1);
+        operateOnNewObj(-2, 1, "-", 3);
+        operateOnNewObj(4, 7, "-", 3);
+        operateOnNewObj(50, 100, "-", 50);
+        operateOnNewObj(-50, 50, "-", 100);
 
-        operateOnNewObj(0, MAX_VALUE / 2, "−", MAX_VALUE / 2);
-        operateOnNewObj(MAX_VALUE, MAX_VALUE, "−", 0);
-        operateOnNewObj(-MAX_VALUE, 0, "−", MAX_VALUE);
+        operateOnNewObj(0, MAX_VALUE / 2, "-", MAX_VALUE / 2);
+        operateOnNewObj(MAX_VALUE, MAX_VALUE, "-", 0);
+        operateOnNewObj(-MAX_VALUE, 0, "-", MAX_VALUE);
 
         model = new Model();
-        operate(0, 0, "−", 0);
-        operate(1, 1, "−", 0);
-        operate(99, 99, "−", 0);
-        operate(-1, 0, "−", 1);
-        operate(-99, 0, "−", 99);
-        operate(0, 1, "−", 1);
-        operate(-2, 1, "−", 3);
-        operate(4, 7, "−", 3);
-        operate(50, 100, "−", 50);
-        operate(-50, 50, "−", 100);
+        operate(0, 0, "-", 0);
+        operate(1, 1, "-", 0);
+        operate(99, 99, "-", 0);
+        operate(-1, 0, "-", 1);
+        operate(-99, 0, "-", 99);
+        operate(0, 1, "-", 1);
+        operate(-2, 1, "-", 3);
+        operate(4, 7, "-", 3);
+        operate(50, 100, "-", 50);
+        operate(-50, 50, "-", 100);
 
-        operate(0, MAX_VALUE / 2, "−", MAX_VALUE / 2);
-        operate(MAX_VALUE, MAX_VALUE, "−", 0);
-        operate(-MAX_VALUE, 0, "−", MAX_VALUE);
+        operate(0, MAX_VALUE / 2, "-", MAX_VALUE / 2);
+        operate(MAX_VALUE, MAX_VALUE, "-", 0);
+        operate(-MAX_VALUE, 0, "-", MAX_VALUE);
+
+        operateOnNewObj(-20, "10 - 10 - 10 - 10 =");
+        operate(-52, " - 10 - 10 - 10 -2 =");
 
         //test multiply 2 numbers
-        operateOnNewObj(0, 0, "×", 0);
-        operateOnNewObj(0, 1, "×", 0);
-        operateOnNewObj(0, 99, "×", 0);
-        operateOnNewObj(0, 0, "×", 1);
-        operateOnNewObj(0, 0, "×", 99);
-        operateOnNewObj(1, 1, "×", 1);
-        operateOnNewObj(3, 1, "×", 3);
-        operateOnNewObj(21, 7, "×", 3);
-        operateOnNewObj(5000, 100, "×", 50);
-        operateOnNewObj(5000, 50, "×", 100);
+        operateOnNewObj(0, 0, "*", 0);
+        operateOnNewObj(0, 1, "*", 0);
+        operateOnNewObj(0, 99, "*", 0);
+        operateOnNewObj(0, 0, "*", 1);
+        operateOnNewObj(0, 0, "*", 99);
+        operateOnNewObj(1, 1, "*", 1);
+        operateOnNewObj(3, 1, "*", 3);
+        operateOnNewObj(21, 7, "*", 3);
+        operateOnNewObj(5000, 100, "*", 50);
+        operateOnNewObj(5000, 50, "*", 100);
 
-        operateOnNewObj(0, MAX_VALUE / 2, "−", MAX_VALUE / 2);
-        operateOnNewObj(MAX_VALUE, MAX_VALUE, "−", 0);
-        operateOnNewObj(-MAX_VALUE, 0, "−", MAX_VALUE);
+        operateOnNewObj(0, MAX_VALUE / 2, "-", MAX_VALUE / 2);
+        operateOnNewObj(MAX_VALUE, MAX_VALUE, "-", 0);
+        operateOnNewObj(-MAX_VALUE, 0, "-", MAX_VALUE);
 
         model = new Model();
-        operate(0, 0, "×", 0);
-        operate(0, 1, "×", 0);
-        operate(0, 99, "×", 0);
-        operate(0, 0, "×", 1);
-        operate(0, 0, "×", 99);
-        operate(1, 1, "×", 1);
-        operate(3, 1, "×", 3);
-        operate(21, 7, "×", 3);
-        operate(5000, 100, "×", 50);
-        operate(5000, 50, "×", 100);
+        operate(0, 0, "*", 0);
+        operate(0, 1, "*", 0);
+        operate(0, 99, "*", 0);
+        operate(0, 0, "*", 1);
+        operate(0, 0, "*", 99);
+        operate(1, 1, "*", 1);
+        operate(3, 1, "*", 3);
+        operate(21, 7, "*", 3);
+        operate(5000, 100, "*", 50);
+        operate(5000, 50, "*", 100);
 
-        operate(0, MAX_VALUE / 2, "−", MAX_VALUE / 2);
-        operate(MAX_VALUE, MAX_VALUE, "−", 0);
-        operate(-MAX_VALUE, 0, "−", MAX_VALUE);
+        operate(0, MAX_VALUE / 2, "-", MAX_VALUE / 2);
+        operate(MAX_VALUE, MAX_VALUE, "-", 0);
+        operate(-MAX_VALUE, 0, "-", MAX_VALUE);
 
         //test divide 2 numbers
-        operateOnNewObj(Double.NaN, 0, "÷", 0);
-        operateOnNewObj(Double.POSITIVE_INFINITY, 1, "÷", 0);
-        operateOnNewObj(Double.POSITIVE_INFINITY, 99, "÷", 0);
-        operateOnNewObj(0, 0, "÷", 1);
-        operateOnNewObj(0, 0, "÷", 99);
-        operateOnNewObj(1, 1, "÷", 1);
-        operateOnNewObj(0.3333, 1, "÷", 3);
-        operateOnNewObj(2.3333, 7, "÷", 3);
-        operateOnNewObj(2, 100, "÷", 50);
-        operateOnNewObj(0.5, 50, "÷", 100);
+        operateOnNewObj(Double.NaN, 0, "/", 0);
+        operateOnNewObj(Double.POSITIVE_INFINITY, 1, "/", 0);
+        operateOnNewObj(Double.POSITIVE_INFINITY, 99, "/", 0);
+        operateOnNewObj(0, 0, "/", 1);
+        operateOnNewObj(0, 0, "/", 99);
+        operateOnNewObj(1, 1, "/", 1);
+        operateOnNewObj(0.3333, 1, "/", 3);
+        operateOnNewObj(2.3333, 7, "/", 3);
+        operateOnNewObj(2, 100, "/", 50);
+        operateOnNewObj(0.5, 50, "/", 100);
 
-        operateOnNewObj(1, MAX_VALUE / 2, "÷", MAX_VALUE / 2);
-        operateOnNewObj(Double.POSITIVE_INFINITY, MAX_VALUE, "÷", 0);
-        operateOnNewObj(0, 0, "÷", MAX_VALUE);
+        operateOnNewObj(1, MAX_VALUE / 2, "/", MAX_VALUE / 2);
+        operateOnNewObj(Double.POSITIVE_INFINITY, MAX_VALUE, "/", 0);
+        operateOnNewObj(0, 0, "/", MAX_VALUE);
 
         model = new Model();
-        operate(Double.NaN, 0, "÷", 0);
-        operate(Double.POSITIVE_INFINITY, 1, "÷", 0);
-        operate(Double.POSITIVE_INFINITY, 99, "÷", 0);
-        operate(0, 0, "÷", 1);
-        operate(0, 0, "÷", 99);
-        operate(1, 1, "÷", 1);
-        operate(0.3333, 1, "÷", 3);
-        operate(2.3333, 7, "÷", 3);
-        operate(2, 100, "÷", 50);
-        operate(0.5, 50, "÷", 100);
+        operate(Double.NaN, 0, "/", 0);
+        operate(Double.POSITIVE_INFINITY, 1, "/", 0);
+        operate(Double.POSITIVE_INFINITY, 99, "/", 0);
+        operate(0, 0, "/", 1);
+        operate(0, 0, "/", 99);
+        operate(1, 1, "/", 1);
+        operate(0.3333, 1, "/", 3);
+        operate(2.3333, 7, "/", 3);
+        operate(2, 100, "/", 50);
+        operate(0.5, 50, "/", 100);
 
-        operate(1, MAX_VALUE / 2, "÷", MAX_VALUE / 2);
-        operate(Double.POSITIVE_INFINITY, MAX_VALUE, "÷", 0);
-        operate(0, 0, "÷", MAX_VALUE);
+        operate(1, MAX_VALUE / 2, "/", MAX_VALUE / 2);
+        operate(Double.POSITIVE_INFINITY, MAX_VALUE, "/", 0);
+        operate(0, 0, "/", MAX_VALUE);
         // ----------- END Integer INPUT ---------
 
+        //equals and binary combo
         operateOnNewObj(0, "+=");
-        operateOnNewObj(0, "−=");
-        operateOnNewObj(0, "×=");
-        operateOnNewObj(Double.NaN, "÷=");
+        operateOnNewObj(0, "-=");
+        operateOnNewObj(0, "*=");
+        operateOnNewObj(Double.NaN, "/=");
 
         model = new Model();
         operate(0, "+=");
-        operate(0, "−=");
-        operate(0, "×=");
+        operate(0, "-=");
+        operate(0, "*=");
         operate(0, "+=");
-        operate(0, "−=");
-        operate(0, "×=");
-        operate(Double.NaN, "÷=");
-        operate(Double.NaN, "×=");
+        operate(0, "-=");
+        operate(0, "*=");
+        operate(Double.NaN, "/=");
+        operate(Double.NaN, "*=");
         operate(Double.NaN, "+=");
-        operate(Double.NaN, "−=");
+        operate(Double.NaN, "-=");
 
+        //equals
         operateOnNewObj(0, "0 =");
         operateOnNewObj(1, "1 =");
         operateOnNewObj(5, "5 =");
         operateOnNewObj(999, "999 =");
         operateOnNewObj(MAX_VALUE, MAX_VALUE + "=");
 
-//        operateOnNewObj(-1, "-1=");
-//        operateOnNewObj(-5, "-5=");
-//        operateOnNewObj(-50, "-50=");
-//        operateOnNewObj(-MAX_VALUE, -MAX_VALUE + "=");
+        operateOnNewObj(-1, "negate(1)=");
+        operateOnNewObj(-5, "negate(5)=");
+        operateOnNewObj(-50, "negate(50)=");
+        operateOnNewObj(-MAX_VALUE, -MAX_VALUE + "=");
 
         operateOnNewObj(0, "0 =");
         operateOnNewObj(0, "0 = = =");
@@ -396,31 +403,32 @@ public class ModelTest {
         operate(MAX_VALUE, MAX_VALUE + "=");
         operate(MAX_VALUE, MAX_VALUE + "= = = =");
 
+        //equals and subtract combo
         operateOnNewObj(1, "1  = +");
         operateOnNewObj(2, "1 = + =");
         operateOnNewObj(4, "1 = + = + =");
         operateOnNewObj(8, "1 = + = + = + =");
         operateOnNewObj(16, "1 = + = + = + = + =");
 
-//        operateOnNewObj(-1, "-1 = +");
-//        operateOnNewObj(-2, "-1 = + =");
-//        operateOnNewObj(-4, "-1 =+=+=");
-//        operateOnNewObj(-8, "-1 =+=+=+=");
-//        operateOnNewObj(-16, "-1 =+=+=+=+=");
+        operateOnNewObj(-1, "negate(1) = +");
+        operateOnNewObj(-2, "negate(1) = + =");
+        operateOnNewObj(-4, "negate(1) =+=+=");
+        operateOnNewObj(-8, "negate(1) =+=+=+=");
+        operateOnNewObj(-16, "negate(1) =+=+=+=+=");
 
-        operateOnNewObj(1, "1 =−");
-        operateOnNewObj(0, "1 =−=");
-        operateOnNewObj(0, "1 =−=−=");
-        operateOnNewObj(0, "1 =−=−=−=−=");
+        operateOnNewObj(1, "1 =-");
+        operateOnNewObj(0, "1 =-=");
+        operateOnNewObj(0, "1 =-=-=");
+        operateOnNewObj(0, "1 =-=-=-=-=");
 
-//        operateOnNewObj(-1, "-1 =−");
-//        operateOnNewObj(0, "-1 =−=");
-        operateOnNewObj(0, "1 =−=−=");
-        operateOnNewObj(0, "1 =−=−=−=−=");
-        operateOnNewObj(10, "10 =−");
-        operateOnNewObj(0, "10 =−=");
-        operateOnNewObj(0, "10 =−=−=");
-        operateOnNewObj(0, "10 =−=−=−=−=");
+        operateOnNewObj(-1, "negate(1) =-");
+        operateOnNewObj(0, "negate(1) =-=");
+        operateOnNewObj(0, "1 =-=-=");
+        operateOnNewObj(0, "1 =-=-=-=-=");
+        operateOnNewObj(10, "10 =-");
+        operateOnNewObj(0, "10 =-=");
+        operateOnNewObj(0, "10 =-=-=");
+        operateOnNewObj(0, "10 =-=-=-=-=");
 
         operateOnNewObj(15, "5 +==");
         operateOnNewObj(25, "5 +====");
@@ -430,7 +438,7 @@ public class ModelTest {
         operateOnNewObj(15, "5 +==");
         operateOnNewObj(25, "5 +====");
         operateOnNewObj(45, "5 +========");
-        operateOnNewObj(0, "5 +======−=");
+        operateOnNewObj(0, "5 +======-=");
 
         model = new Model();
         operate(1, "1 = +");
@@ -438,32 +446,31 @@ public class ModelTest {
         operate(12, "1 =+=+=");
         operate(56, "1 =+=+=+=");
         operate(29, "1 = +");
-
-//        operate(28, "-1 = +");
-//        operate(54, "-1 =+=");
-
-        model = new Model();
-//        operate(-1, "-1 = +");
-//        operate(-4, "-1 =+=");
-//        operate(-12, "-1 =+=+=");
-//        operate(-56, "-1 =+=+=+=");
-//        operate(-464, "-1 =+=+=+=+=");
+        operate(28, "negate(1) = +");
+        operate(54, "negate(1) =+=");
 
         model = new Model();
-        operate(1, "1 =−");
-        operate(0, "1 =−=");
-        operate(0, "1 =−=−=");
-        operate(0, "1 =−=−=−=−=");
+        operate(-1, "negate(1) = +");
+        operate(-4, "negate(1) =+=");
+        operate(-12, "negate(1) =+=+=");
+        operate(-56, "negate(1) =+=+=+=");
+        operate(-464, "negate(1) =+=+=+=+=");
 
-//        operate(-1, "-1 =−");
-//        operate(0, "-1 =−=");
-        operate(0, "1 =−=−=");
-        operate(0, "1 =−=−=−=−=");
+        model = new Model();
+        operate(1, "1 =-");
+        operate(0, "1 =-=");
+        operate(0, "1 =-=-=");
+        operate(0, "1 =-=-=-=-=");
 
-        operate(10, "10 =−");
-        operate(0, "10 =−=");
-        operate(0, "10 =−=−=");
-        operate(0, "10 =−=−=−=−=");
+        operate(-1, "negate(1) =-");
+        operate(0, "negate(1) =-=");
+        operate(0, "1 =-=-=");
+        operate(0, "1 =-=-=-=-=");
+
+        operate(10, "10 =-");
+        operate(0, "10 =-=");
+        operate(0, "10 =-=-=");
+        operate(0, "10 =-=-=-=-=");
 
         operate(15, "5 +==");
         operate(25, "5 +====");
@@ -473,35 +480,266 @@ public class ModelTest {
         operate(15, "5 +==");
         operate(25, "5 +====");
         operate(45, "5+========");
-        operate(0, "5+======−=");
+        operate(0, "5+======-=");
 
         operate(10, "5 ++=");
         operate(68, "34 ++++++=");
-//        operate(-16, "-8 ++++++++=");
+        operate(-16, "negate(8)++++++++=");
 
         //---
         model = new Model();
         operate(8, "3+5=");
         operate(8, "3+5=");
-        operate(100, "31+5÷2÷9+1×11+67=");
+        operate(100, "31+5/2/9+1*11+67=");
         operate(167, "=");
         operate(301, "= =");
-        operate(222, "= = − 11 ÷2 + 5 = =");
-        operate(0, "+ 1 = + = + = − =");
-        operate(-4, "− 1 = + = + =");
-        operate(-1.3333, "÷3+");
-        operate(-4, "×3=");
+        operate(222, "= = - 11 /2 + 5 = =");
+        operate(0, "+ 1 = + = + = - =");
+        operate(-4, "- 1 = + = + =");
+        operate(-1.3333, "/3+");
+        operate(-4, "*3=");
 
         model = new Model();
-        operate(11, "×3++++++++++11=");
-        operate(44, "×3++++++++++11=");
+        operate(11, "*3++++++++++11=");
+        operate(44, "*3++++++++++11=");
 
         model = new Model();
-        operate(9.5, "+3÷2+1×3+2=");
+        operate(9.5, "+3/2+1*3+2=");
         operate(4, "2=");
 
-        //---------------TEST UNARY OPERATORS ------------
-//        operateOnNewObj(3, "sqrt(9) = ");
+        //---------------TEST UNARY OPERATORS------------
+        // ----- NEGATE -----
+        operateOnNewObj(0, "negate(0) = ");
+        operateOnNewObj(0, "negate(negate(0) = ");
+        operateOnNewObj(0, "negate(negate(negate(negate(0) = ");
+        operateOnNewObj(-1, "negate(1) = ");
+        operateOnNewObj(1, "negate(negate(1) = ");
+        operateOnNewObj(-1, "negate(negate(negate(1) = ");
+        operateOnNewObj(-9, "negate(9) = ");
+        operateOnNewObj(9, "negate(negate(9) = ");
+        operateOnNewObj(0, "negate() =");
+
+        operateOnNewObj(0, "negate()");
+
+        operateOnNewObj(0, "negate() = negate()");
+        operateOnNewObj(0, "negate(negate() = negate()");
+        operateOnNewObj(0, "negate(negate() = negate(negate()");
+        operateOnNewObj(0, "negate(negate() = negate(negate(negate()");
+        operateOnNewObj(0, "negate(negate(negate(negate() = negate(negate(negate()");
+
+        operateOnNewObj(9, "negate(9) = negate()");
+        operateOnNewObj(-9, "negate(9) = negate(negate()");
+        operateOnNewObj(0, "negate() + negate() = negate()");
+        operateOnNewObj(0, "negate(negate() + negate() = negate()");
+        operateOnNewObj(0, "negate(negate() + negate(negate(negate() = negate()");
+        operateOnNewObj(0, "negate(negate() + negate(negate(negate() = negate(negate(negate()");
+        operateOnNewObj(7, "negate(9) + 2 = negate()");
+        operateOnNewObj(-7, "negate(9) + 2 = negate(negate()");
+        operateOnNewObj(11, "negate(negate(9) + 2 = negate(negate()");
+        operateOnNewObj(-11, "negate(negate(9) + 2 = negate(negate(negate()");
+
+        operateOnNewObj(-3, "negate(1) = negate(3)");
+        operateOnNewObj(2, "negate(9) = negate(negate(2)");
+        operateOnNewObj(4, "negate(1) + negate(3) = negate()");
+        operateOnNewObj(-5, "negate(negate(11) + negate(2) = negate(5)");
+        operateOnNewObj(-3, "negate(negate(4) + negate(negate(negate(4) = negate(3)");
+        operateOnNewObj(-1, "negate(negate(2) + negate(negate(negate(2) = negate(negate(negate(1)");
+        operateOnNewObj(-5, "negate(9) + 2 = negate(5)");
+        // -----END NEGATE -----
+
+        //---- SQRT ---
+        operateOnNewObj(3, "sqrt(9) = ");
+        operateOnNewObj(9, "sqrt(81) = ");
+        operateOnNewObj(3, "sqrt(sqrt(81) = ");
+        operateOnNewObj(3, "sqrt(81) = sqrt()");
+
+        operateOnNewObj(3, "sqrt(sqrt(81) + negate(0) = ");
+        operateOnNewObj(3, "sqrt(sqrt(81) + 0 = ");
+        operateOnNewObj(4, "sqrt(sqrt(81) + 1 = ");
+        operateOnNewObj(5, "sqrt(sqrt(81) + 2 = ");
+        operateOnNewObj(7.5, "sqrt(sqrt(81) + 2 + 10/2 = ");
+        operateOnNewObj(10, "sqrt(sqrt(81) + 2*2 = ");
+
+        operateOnNewObj(3, "sqrt(sqrt(81) - 0 = ");
+        operateOnNewObj(2, "sqrt(sqrt(81) - 1 = ");
+        operateOnNewObj(2, "sqrt(sqrt(81) - 2*2 = ");
+        operateOnNewObj(1, "sqrt(sqrt(81) - 2 = ");
+        operateOnNewObj(0, "sqrt(sqrt(81) - 3 = ");
+        operateOnNewObj(-1, "sqrt(sqrt(81) - 4 = ");
+        operateOnNewObj(-4.5, "sqrt(sqrt(81) - 2 - 10/2 = ");
+
+        operateOnNewObj(-6, "sqrt(sqrt(81) * negate(2) = ");
+        operateOnNewObj(-3, "sqrt(sqrt(81) * negate(1) = ");
+        operateOnNewObj(0, "sqrt(sqrt(81) * 0 = ");
+        operateOnNewObj(3, "sqrt(sqrt(81) * 1 = ");
+        operateOnNewObj(6, "sqrt(sqrt(81) * 2 = ");
+        operateOnNewObj(12, "sqrt(sqrt(81) * 2*2 = ");
+
+        operateOnNewObj(1.5, "sqrt(sqrt(81) / 2 = ");
+        operateOnNewObj(3, "sqrt(sqrt(81) / 2*2 = ");
+
+        operateOnNewObj(5, "sqrt(sqrt(81) + sqrt(4) = ");
+        operateOnNewObj(5, " + sqrt(sqrt(81) + sqrt(4) = ");
+        //---- END SQRT ---
+
+        //-----SQUARE -----
+        operateOnNewObj(9, "square(3) = ");
+        operateOnNewObj(81, "square(square(3) = ");
+        operateOnNewObj(83, "square(square(3) + 2 = ");
+        operateOnNewObj(79, "square(square(3) - 2 = ");
+
+        operateOnNewObj(0, "square(0) = ");
+        operateOnNewObj(0, "square(square(0) = ");
+        operateOnNewObj(0, "square(square(square(square(0) = ");
+        operateOnNewObj(1, "square(1) = ");
+        operateOnNewObj(1, "square(square(1) = ");
+        operateOnNewObj(1, "square(square(square(1) = ");
+        operateOnNewObj(81, "square(9) = ");
+        operateOnNewObj(6561, "square(square(9) = ");
+
+        operateOnNewObj(0, "square() = square()");
+        operateOnNewObj(0, "square(square() = square()");
+        operateOnNewObj(0, "square(square() = square(square()");
+        operateOnNewObj(0, "square(square() = square(square(square()");
+        operateOnNewObj(0, "square(square(square(square() = square(square(square()");
+
+        operateOnNewObj(6561, "square(9) = square()");
+        operateOnNewObj(256, "square(2) = square(square()");
+        operateOnNewObj(0, "square() + square() = square()");
+        operateOnNewObj(0, "square(square() + square() = square()");
+        operateOnNewObj(0, "square(square() + square(square(square() = square()");
+        operateOnNewObj(0, "square(square() + square(square(square() = square(square(square()");
+        operateOnNewObj(36, "square(2) + 2 = square()");
+        operateOnNewObj(81, "square(1) + 2 = square(square()");
+        operateOnNewObj(16, "square(square(0) + 2 = square(square()");
+        operateOnNewObj(11019960576.0, "square(square(2) + 2 = square(square(square()");
+        //--------- END SQUARE --------
+
+        //--------- FRACTION --------
+        operateOnNewObj(Double.POSITIVE_INFINITY, "fraction(0) = ");
+        operateOnNewObj(0.1, "fraction(10) = ");
+        operateOnNewObj(0.02, "fraction(50) = ");
+        operateOnNewObj(2, "fraction(fraction(2) = ");
+        operateOnNewObj(50, "fraction(50) = fraction()");
+        operateOnNewObj(0.2, "fraction(50) = fraction(5)");
+
+        operateOnNewObj(Double.NEGATIVE_INFINITY, "fraction(negate(0) = ");
+        operateOnNewObj(-0.1, "fraction(negate(10) = ");
+        operateOnNewObj(-0.02, "fraction(negate(50) = ");
+        operateOnNewObj(-2, "fraction(fraction(negate(2) = ");
+        operateOnNewObj(-50, "fraction(negate(50) = fraction()");
+        operateOnNewObj(0.2, "fraction(negate(50) = fraction(5)");
+        operateOnNewObj(-0.2, "fraction(negate(50) = fraction(negate(5)");
+
+        operateOnNewObj(1, "fraction(fraction(1) + negate(0) = ");
+        operateOnNewObj(3, "fraction(fraction(2) + 1 = ");
+        operateOnNewObj(2.3333, "fraction(3) + 2 = ");
+        operateOnNewObj(6.05, "fraction(10) + 2 + 10/2 = ");
+        operateOnNewObj(4.5, "fraction(4) + 2*2 = ");
+
+        operateOnNewObj(1, "fraction(fraction(1) - 0 = ");
+        operateOnNewObj(0, "fraction(fraction(1) - 1 = ");
+        operateOnNewObj(-2, "fraction(fraction(1) - 2*2 = ");
+        operateOnNewObj(-1, "fraction(fraction(1) - 2 = ");
+        operateOnNewObj(-2, "fraction(fraction(1) - 3 = ");
+        operateOnNewObj(-3, "fraction(fraction(1) - 4 = ");
+        operateOnNewObj(-5.5, "fraction(fraction(1) - 2 - 10/2 = ");
+
+        operateOnNewObj(-0.4, "fraction(fraction(fraction(5) * negate(2) = ");
+        operateOnNewObj(-0.05, "fraction(fraction(fraction(20) * negate(1) = ");
+        operateOnNewObj(0, "fraction(fraction(fraction(100) * 0 = ");
+        operateOnNewObj(0.01, "fraction(fraction(fraction(100) * 1 = ");
+        operateOnNewObj(0.66666, "fraction(fraction(fraction(3) * 2 = ");
+        operateOnNewObj(1.33333, "fraction(fraction(fraction(3) * 2*2 = ");
+
+        operateOnNewObj(0.0151515151515152, "fraction(33) / 2 = ");
+        operateOnNewObj(0.0303030303030303, "   fraction(33) / 2*2 = ");
+
+        operateOnNewObj(1.5, "fraction(fraction(1) + fraction(2) = ");
+        operateOnNewObj(-1.5, " + negate(fraction(fraction(1) + negate(fraction(2) = ");
+        //--------- END FRACTION --------
+
+        //--------- MEMORY ----------
+        operateOnNewObj(10, "5 + 10");
+        model.addToMemory();
+        operate(15, " + ");
+        model.getMemory();
+        operate(25, " = ");
+
+        // add
+        model.getMemory();
+        operate(10, "");
+        model.addToMemory();
+        model.addToMemory();
+        model.addToMemory();
+        model.getMemory();
+        operate(40, "");
+
+        // get
+        operateOnNewObj(0, "");
+        model.addToMemory();
+        model.getMemory();
+        operate(0, "");
+        model.getMemory();
+        operate(0, "");
+        model.getMemory();
+        operate(0, "");
+
+        //add get
+        operate(1, "1 = ");
+        model.addToMemory();
+        model.getMemory();
+        operate(1, "");
+        operate(1355, "333 + 22 =");
+        model.getMemory();
+        operate(1, "");
+
+        //set
+        operateOnNewObj(54, "52 + 2 =");
+        model.setMemory();
+        operate(54, "");
+        model.setMemory();
+        model.getMemory();
+        operate(54, "");
+        model.addToMemory();
+        model.addToMemory();
+        model.addToMemory();
+        model.getMemory();
+        model.getMemory();
+        operate(216, "");
+
+        //clear
+        operateOnNewObj(20, "20 = ");
+        model.setMemory();
+        operate(10, "10");
+        model.getMemory();
+        operate(20, "");
+        model.clearMemory();
+        operate(20, "=");
+        operate(5, "5");
+        model.addToMemory();
+        model.getMemory();
+        operate(5, "");
+        //---------END MEMORY ----------
+
+        //------ BACKSPACE ------
+        operateOnNewObj(55, "55");
+        model.backspace();
+        operate(5, "");
+        model.backspace();
+        operate(0, "");
+        model.backspace();
+        operate(0, "");
+
+        operate(5, "10 + 5");
+        model.backspace();
+        operate(10, "=");
+
+        operate(5, "10 + 5");
+        model.backspace();
+        model.backspace();
+        model.backspace();
+        operate(10, "=");
     }
 
     private void operateOnNewObj(double expected, String str) {
@@ -512,16 +750,47 @@ public class ModelTest {
     private void operate(double expected, String str) {
         String data = str.replaceAll("\\s+", "");
 
+        StringBuilder sb = new StringBuilder();
+        List<UnaryOperation> listUnary = new ArrayList<>();
+
         for (int i = 0; i < data.length(); i++) {
             char symbol = data.charAt(i);
 
             if (Character.isDigit(symbol)) {
                 model.addInputDigit(String.valueOf(symbol));
-            } else if (symbol == '.') {
-                model.addInputPoint(String.valueOf(symbol));
-            } else {
-                model.addBinaryOperator(String.valueOf(symbol));
+                continue;
             }
+
+            if (symbol == '.') {
+                model.addInputPoint(String.valueOf(symbol));
+                continue;
+            }
+
+            if (BinaryOperation.isExist(String.valueOf(symbol))) {
+                model.addBinaryOperator(String.valueOf(symbol));
+                continue;
+            }
+
+            if (Character.isAlphabetic(symbol)) {
+                sb.append(symbol);
+                continue;
+            }
+
+            if (symbol == '(') {
+                listUnary.add(UnaryOperation.valueOf(sb.toString().toUpperCase()));
+                sb = new StringBuilder();
+                continue;
+            }
+
+            if (symbol == ')') {
+                for (UnaryOperation aListUnary : listUnary) {
+                    model.addUnaryOperator(aListUnary.getOperator());
+                }
+                listUnary.clear();
+                continue;
+            }
+
+            throw new RuntimeException("UNEXPECTED symbol " + symbol);
         }
 
         assertEquals(expected, Double.valueOf(model.getDisplay()), DELTA);
