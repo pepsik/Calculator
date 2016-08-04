@@ -12,6 +12,17 @@ import java.util.Set;
 
 public class MainApp extends Application {
 
+    private static final int MIN_HEIGHT = 365;
+    private static final int MIN_WIDTH = 215;
+    private static final int PREF_HEIGHT = 365;
+    private static final int PREF_WIDTH = 215;
+
+
+    /**
+     * Calculator display for resize
+     */
+    private Label display;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Calculator.fxml"));
@@ -19,41 +30,56 @@ public class MainApp extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-//        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
 
-        primaryStage.setMinHeight(365);
-        primaryStage.setMinWidth(215);
+        primaryStage.setHeight(PREF_HEIGHT);
+        primaryStage.setWidth(PREF_WIDTH);
 
-        primaryStage.setHeight(365);
-        primaryStage.setWidth(215);
+        //add all button nodes to enum
+        CalculatorButton.setButtons((Set) root.lookupAll((".button"))); //generific
 
-        CalculatorButton.setButtons((Set) root.lookupAll((".button")));
-        Label display = (Label) root.lookup("#display");
+        //get display label for font resizing
+        display = (Label) root.lookup("#display");
 
+        //listeners for resizing buttons font
+        initResizeListeners(scene);
+
+        primaryStage.show();
+
+    }
+
+    /**
+     * Resize calculator display
+     *
+     * @param width  new display width
+     * @param height new display height
+     */
+    private void resizeDisplayFont(double width, double height) {
+        if (Double.compare(width, 270) > 0
+                && Double.compare(height, 450) > 0) {
+            display.setStyle("-fx-font: 48px arial;");
+        } else {
+            display.setStyle("-fx-font: 24px arial;");
+        }
+    }
+
+    /**
+     * Resize buttons font
+     * @param scene current scene
+     */
+    private void initResizeListeners(Scene scene) {
         scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
             CalculatorButton.resizeButtons(newSceneWidth.doubleValue(), scene.getHeight());
 
-            if (Double.compare(newSceneWidth.doubleValue(), 270) > 0
-                    && Double.compare(scene.getHeight(), 450) > 0) {
-                display.setStyle("-fx-font: 48px arial;");
-            } else {
-                display.setStyle("-fx-font: 24px arial;");
-            }
+            resizeDisplayFont(newSceneWidth.doubleValue(), scene.getHeight());
         });
 
         scene.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {
             CalculatorButton.resizeButtons(scene.getWidth(), newSceneHeight.doubleValue());
 
-            if (Double.compare(scene.getWidth(), 270) > 0
-                    && Double.compare(newSceneHeight.doubleValue(), 450) > 0) {
-                display.setStyle("-fx-font: 48px arial;");
-            } else {
-                display.setStyle("-fx-font: 24px arial;");
-            }
+            resizeDisplayFont(scene.getWidth(), newSceneHeight.doubleValue());
         });
-
-        primaryStage.show();
-
     }
 
     public static void main(String[] args) {

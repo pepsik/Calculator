@@ -6,8 +6,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import org.pepsik.model.Model;
+import org.pepsik.util.TextFormatter;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class CalculatorController implements Initializable {
@@ -37,7 +39,7 @@ public class CalculatorController implements Initializable {
     }
 
     @FXML
-    private void handleOperationAction(ActionEvent event) {
+    private void handleBinaryOperationAction(ActionEvent event) {
         Button button = ((Button) event.getSource());
         String operator = CalculatorButton.valueOf(button);
         model.addBinaryOperator(operator);
@@ -47,7 +49,8 @@ public class CalculatorController implements Initializable {
 
     @FXML
     private void handleUnaryOperationAction(ActionEvent event) {
-        String operator = ((Button) event.getSource()).getText();
+        Button button = ((Button) event.getSource());
+        String operator = CalculatorButton.valueOf(button);
         model.addUnaryOperator(operator);
         displayField.setText(model.getDisplay());
         displayHistory.setText(model.getCurrentExpression());

@@ -1,19 +1,19 @@
 package org.pepsik.model;
 
-import org.pepsik.util.HistoryFormatter;
+import org.pepsik.util.TextFormatter;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
 /**
- * Created by pepsik on 7/27/2016.
+ * This class represents a calculator logic. It consist and operate with Stage class.
  */
 public class Model {
-    private static final String SQUARE = "x²";
+    private static final String SQUARE = "X²";
     private static final String SQUARE_ROOT = "√";
     private static final String PERCENT = "%";
-    private static final String FRACTION = "1/x";
+    private static final String FRACTION = "1/X";
     private static final String NEGATE = "+-";
 
     private static final String SUM = "+";
@@ -27,6 +27,7 @@ public class Model {
 
     private Deque<Stage> currentExpression = new ArrayDeque<>();
     private List<Deque<Stage>> history = new ArrayList<>();
+
     private Stage currentStage = new Stage();
     private Stage lastBinaryStage;
     private String displayField = ZERO;
@@ -307,7 +308,7 @@ public class Model {
      * @return calculator display view
      */
     public String getDisplay() {
-        return displayField;
+        return TextFormatter.display(displayField);
     }
 
     /**
@@ -316,7 +317,7 @@ public class Model {
      * @return calculator history view
      */
     public String getCurrentExpression() {
-        return HistoryFormatter.format(currentExpression);
+        return TextFormatter.history(currentExpression);
     }
 
     /**

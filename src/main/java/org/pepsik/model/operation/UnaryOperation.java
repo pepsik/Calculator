@@ -7,7 +7,7 @@ import java.math.MathContext;
  * Created by Berezovyi Aleksandr on 8/2/2016.
  */
 public enum UnaryOperation { //todo finish
-    SQUARE("x²") {
+    SQUARE("X²") {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return value.multiply(value);
@@ -25,7 +25,7 @@ public enum UnaryOperation { //todo finish
             throw new RuntimeException("UNSUPPORTED % OPERATION!");
         }
     },
-    FRACTION("1/x") {
+    FRACTION("1/X") {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return new BigDecimal("1").divide(value);

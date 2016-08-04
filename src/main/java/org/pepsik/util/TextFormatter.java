@@ -2,15 +2,16 @@ package org.pepsik.util;
 
 import org.pepsik.model.Stage;
 
+import java.text.DecimalFormat;
 import java.util.Deque;
 import java.util.Iterator;
 
 /**
  * Created by Berezovyi Aleksandr on 8/1/2016.
  */
-public class HistoryFormatter {
+public class TextFormatter {
 
-    public static String format(Deque<Stage> expression) {
+    public static String history(Deque<Stage> expression) {
         StringBuilder sb = new StringBuilder();
         Iterator<Stage> iterator = expression.iterator();
 
@@ -28,5 +29,14 @@ public class HistoryFormatter {
         }
 
         return sb.toString();
+    }
+
+    public static String display(String input) {
+        double d = Double.valueOf(input);
+        if (d % 1 == 0) {
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+            input = decimalFormat.format(d);
+        }
+        return input;
     }
 }

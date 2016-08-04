@@ -45,7 +45,7 @@ public class ModelTest {
         operateOnNewObj(123456, "1 2 3 4 5 6");
         operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
         operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
-        for (int i = 0; i < ITERATE_COUNT; i++) { //todo: Long
+        for (int i = 0; i < ITERATE_COUNT; i++) {
             int random = r.nextInt(MAX_VALUE);
             operateOnNewObj(random, String.valueOf(random));
         }
@@ -63,32 +63,6 @@ public class ModelTest {
         operateOnNewObj(123456, "1 2 3 4 5 6.");
         operateOnNewObj(1.234567890, "1 .2 .3 4 5. 6 .7 8. 9. 0");
         operateOnNewObj(0.1234567890, ".1 2 3 4 5 6 7 8 9 0");
-
-        operateOnNewObj(0, "");
-        operateOnNewObj(0, "0");
-        operateOnNewObj(1, "1");
-        operateOnNewObj(2, "2");
-        operateOnNewObj(3, "3");
-        operateOnNewObj(4, "4");
-        operateOnNewObj(5, "5");
-        operateOnNewObj(6, "6");
-        operateOnNewObj(7, "7");
-        operateOnNewObj(8, "8");
-        operateOnNewObj(9, "9");
-        operateOnNewObj(10, "10");
-        operateOnNewObj(99, "99");
-        operateOnNewObj(100, "100");
-        operateOnNewObj(111, "111");
-        operateOnNewObj(123, "12 3");
-        operateOnNewObj(999, "999");
-        operateOnNewObj(1000, "1000");
-        operateOnNewObj(123456, "1 2 3 4 5 6");
-        operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
-        operateOnNewObj(1234567890, "1 2 3 4 5 6 7 8 9 0");
-        for (int i = 0; i < ITERATE_COUNT; i++) {
-            int random = r.nextInt(MAX_VALUE);
-            operateOnNewObj(random, String.valueOf(random));
-        }
 
         //todo boundary values
         //todo negative numbers
@@ -109,7 +83,7 @@ public class ModelTest {
         operateOnNewObj(90, "0090");
         operateOnNewObj(120, "00000000120");
         operateOnNewObj(100120, "0000000000000000000100120");
-        for (int i = 0; i < ITERATE_COUNT; i++) { //todo: Long
+        for (int i = 0; i < ITERATE_COUNT; i++) {
             StringBuilder sb = new StringBuilder();
 
             for (int j = 0; j < ITERATE_COUNT; j++) {
@@ -216,8 +190,7 @@ public class ModelTest {
         operateOnNewObj(MAX_VALUE, 0 + "+" + MAX_VALUE + "=");
 
         //each operation common model obj
-        model = new Model();
-        operate(0, "0 + 0 =");
+        operateOnNewObj(0, "0 + 0 =");
         operate(1, "1 + 0 =");
         operate(99, "99 + 0 =");
         operate(1, "0 + 1 =");
@@ -263,8 +236,7 @@ public class ModelTest {
         operateOnNewObj(MAX_VALUE, MAX_VALUE, "-", 0);
         operateOnNewObj(-MAX_VALUE, 0, "-", MAX_VALUE);
 
-        model = new Model();
-        operate(0, 0, "-", 0);
+        operateOnNewObj(0, 0, "-", 0);
         operate(1, 1, "-", 0);
         operate(99, 99, "-", 0);
         operate(-1, 0, "-", 1);
@@ -298,8 +270,7 @@ public class ModelTest {
         operateOnNewObj(MAX_VALUE, MAX_VALUE, "-", 0);
         operateOnNewObj(-MAX_VALUE, 0, "-", MAX_VALUE);
 
-        model = new Model();
-        operate(0, 0, "*", 0);
+        operateOnNewObj(0, 0, "*", 0);
         operate(0, 1, "*", 0);
         operate(0, 99, "*", 0);
         operate(0, 0, "*", 1);
@@ -330,8 +301,7 @@ public class ModelTest {
         operateOnNewObj(Double.POSITIVE_INFINITY, MAX_VALUE, "/", 0);
         operateOnNewObj(0, 0, "/", MAX_VALUE);
 
-        model = new Model();
-        operate(Double.NaN, 0, "/", 0);
+        operateOnNewObj(Double.NaN, 0, "/", 0);
         operate(Double.POSITIVE_INFINITY, 1, "/", 0);
         operate(Double.POSITIVE_INFINITY, 99, "/", 0);
         operate(0, 0, "/", 1);
@@ -353,8 +323,7 @@ public class ModelTest {
         operateOnNewObj(0, "*=");
         operateOnNewObj(Double.NaN, "/=");
 
-        model = new Model();
-        operate(0, "+=");
+        operateOnNewObj(0, "+=");
         operate(0, "-=");
         operate(0, "*=");
         operate(0, "+=");
@@ -389,8 +358,7 @@ public class ModelTest {
         operateOnNewObj(MAX_VALUE, MAX_VALUE + "=");
         operateOnNewObj(MAX_VALUE, MAX_VALUE + "= = = = =");
 
-        model = new Model();
-        operate(0, "0 =");
+        operateOnNewObj(0, "0 =");
         operate(0, "0 = = =");
         operate(0, "0 = = = = = =");
         operate(1, "1 =");
@@ -439,8 +407,7 @@ public class ModelTest {
         operateOnNewObj(45, "5 +========");
         operateOnNewObj(0, "5 +======-=");
 
-        model = new Model();
-        operate(1, "1 = +");
+        operateOnNewObj(1, "1 = +");
         operate(4, "1 =+=");
         operate(12, "1 =+=+=");
         operate(56, "1 =+=+=+=");
@@ -448,15 +415,13 @@ public class ModelTest {
         operate(28, "negate(1) = +");
         operate(54, "negate(1) =+=");
 
-        model = new Model();
-        operate(-1, "negate(1) = +");
+        operateOnNewObj(-1, "negate(1) = +");
         operate(-4, "negate(1) =+=");
         operate(-12, "negate(1) =+=+=");
         operate(-56, "negate(1) =+=+=+=");
         operate(-464, "negate(1) =+=+=+=+=");
 
-        model = new Model();
-        operate(1, "1 =-");
+        operateOnNewObj(1, "1 =-");
         operate(0, "1 =-=");
         operate(0, "1 =-=-=");
         operate(0, "1 =-=-=-=-=");
@@ -485,9 +450,7 @@ public class ModelTest {
         operate(68, "34 ++++++=");
         operate(-16, "negate(8)++++++++=");
 
-        //---
-        model = new Model();
-        operate(8, "3+5=");
+        operateOnNewObj(8, "3+5=");
         operate(8, "3+5=");
         operate(100, "31+5/2/9+1*11+67=");
         operate(167, "=");
@@ -498,12 +461,10 @@ public class ModelTest {
         operate(-1.3333, "/3+");
         operate(-4, "*3=");
 
-        model = new Model();
-        operate(11, "*3++++++++++11=");
+        operateOnNewObj(11, "*3++++++++++11=");
         operate(44, "*3++++++++++11=");
 
-        model = new Model();
-        operate(9.5, "+3/2+1*3+2=");
+        operateOnNewObj(9.5, "+3/2+1*3+2=");
         operate(4, "2=");
 
         //---------------TEST UNARY OPERATORS------------
@@ -783,8 +744,8 @@ public class ModelTest {
             }
 
             if (symbol == ')') {
-                for (UnaryOperation aListUnary : listUnary) {
-                    model.addUnaryOperator(aListUnary.getOperator());
+                for (UnaryOperation operation : listUnary) {
+                    model.addUnaryOperator(operation.getOperator());
                 }
                 listUnary.clear();
                 continue;
