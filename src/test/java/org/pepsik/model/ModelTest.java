@@ -23,7 +23,6 @@ public class ModelTest {
 
     @Test
     public void validValues() {
-
         // -----------INPUT TESTS---------
         operateOnNewObj(0, "");
         operateOnNewObj(0, "0");
@@ -740,6 +739,7 @@ public class ModelTest {
         model.backspace();
         model.backspace();
         operate(10, "=");
+        //-------- END BACKSPACE ------
     }
 
     private void operateOnNewObj(double expected, String str) {
