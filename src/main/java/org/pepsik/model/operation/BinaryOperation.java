@@ -21,8 +21,8 @@ public enum BinaryOperation {
     DIVIDE("/") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.divide(s);
-        } //todo divide
+            return f.divide(s, 16, BigDecimal.ROUND_UP);
+        }
     },
     MULTIPLY("*") {
         @Override
@@ -56,5 +56,14 @@ public enum BinaryOperation {
             }
         }
         return false;
+    }
+
+    public static BinaryOperation find(char operator) {
+        for (BinaryOperation value : values()) {
+            if (value.getOperator().equals(String.valueOf(operator))) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException(" No enum constant for " + operator);
     }
 }

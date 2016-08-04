@@ -4,10 +4,12 @@ import org.junit.Test;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static java.lang.Integer.MAX_VALUE;
 import static org.junit.Assert.*;
 
@@ -15,7 +17,7 @@ import static org.junit.Assert.*;
  * Created by pepsik on 7/27/2016.
  */
 public class ModelTest {
-    private static final double DELTA = 0.0001;
+    private static final double DELTA = 0.00001;
     public static final int ITERATE_COUNT = 100;
 
     private Model model;
@@ -53,16 +55,17 @@ public class ModelTest {
         operateOnNewObj(1, "1.0");
         operateOnNewObj(9.9, "9.9");
         operateOnNewObj(1, "1.00");
-        operateOnNewObj(1, "1.0.0");
         operateOnNewObj(1.11, "1.11");
-        operateOnNewObj(1.11, "1.1.1");
         operateOnNewObj(11.1, "11.1");
         operateOnNewObj(12.3, "12.3");
         operateOnNewObj(9.99, "9.99");
         operateOnNewObj(10, "10.00");
         operateOnNewObj(123456, "1 2 3 4 5 6.");
-        operateOnNewObj(1.234567890, "1 .2 .3 4 5. 6 .7 8. 9. 0");
         operateOnNewObj(0.1234567890, ".1 2 3 4 5 6 7 8 9 0");
+
+        operateOnNewObj(1111111111111111.0, "1111111111111111");
+
+        operateOnNewObj(11111111111111111.0, "11111111111111111");
 
         //todo boundary values
         //todo negative numbers
@@ -137,8 +140,6 @@ public class ModelTest {
             int number = r.nextInt(MAX_VALUE);
             operateOnNewObj(number, "0 +" + number + "=");
         }
-        //todo boundary values
-        //todo negative numbers
 
         operateOnNewObj(2, "1 + 1 =");
         operateOnNewObj(3, "2 + 1 =");
@@ -286,34 +287,29 @@ public class ModelTest {
         operate(-MAX_VALUE, 0, "-", MAX_VALUE);
 
         //test divide 2 numbers
-        operateOnNewObj(Double.NaN, 0, "/", 0);
-        operateOnNewObj(Double.POSITIVE_INFINITY, 1, "/", 0);
-        operateOnNewObj(Double.POSITIVE_INFINITY, 99, "/", 0);
         operateOnNewObj(0, 0, "/", 1);
         operateOnNewObj(0, 0, "/", 99);
         operateOnNewObj(1, 1, "/", 1);
-        operateOnNewObj(0.3333, 1, "/", 3);
-        operateOnNewObj(2.3333, 7, "/", 3);
+        operateOnNewObj(0.3333333333333333, 1, "/", 3);
+        operateOnNewObj(2.3333333333333335, 7, "/", 3);
         operateOnNewObj(2, 100, "/", 50);
         operateOnNewObj(0.5, 50, "/", 100);
 
+        operate(2.3333333333333335, 7, "/", 3);
+        operate(7, "*3 =");
+
         operateOnNewObj(1, MAX_VALUE / 2, "/", MAX_VALUE / 2);
-        operateOnNewObj(Double.POSITIVE_INFINITY, MAX_VALUE, "/", 0);
         operateOnNewObj(0, 0, "/", MAX_VALUE);
 
-        operateOnNewObj(Double.NaN, 0, "/", 0);
-        operate(Double.POSITIVE_INFINITY, 1, "/", 0);
-        operate(Double.POSITIVE_INFINITY, 99, "/", 0);
         operate(0, 0, "/", 1);
         operate(0, 0, "/", 99);
         operate(1, 1, "/", 1);
-        operate(0.3333, 1, "/", 3);
-        operate(2.3333, 7, "/", 3);
+        operate(0.3333333333333333, 1, "/", 3);
+        operate(2.3333333333333333, 7, "/", 3);
         operate(2, 100, "/", 50);
         operate(0.5, 50, "/", 100);
 
         operate(1, MAX_VALUE / 2, "/", MAX_VALUE / 2);
-        operate(Double.POSITIVE_INFINITY, MAX_VALUE, "/", 0);
         operate(0, 0, "/", MAX_VALUE);
         // ----------- END Integer INPUT ---------
 
@@ -321,7 +317,6 @@ public class ModelTest {
         operateOnNewObj(0, "+=");
         operateOnNewObj(0, "-=");
         operateOnNewObj(0, "*=");
-        operateOnNewObj(Double.NaN, "/=");
 
         operateOnNewObj(0, "+=");
         operate(0, "-=");
@@ -329,10 +324,6 @@ public class ModelTest {
         operate(0, "+=");
         operate(0, "-=");
         operate(0, "*=");
-        operate(Double.NaN, "/=");
-        operate(Double.NaN, "*=");
-        operate(Double.NaN, "+=");
-        operate(Double.NaN, "-=");
 
         //equals
         operateOnNewObj(0, "0 =");
@@ -458,7 +449,7 @@ public class ModelTest {
         operate(222, "= = - 11 /2 + 5 = =");
         operate(0, "+ 1 = + = + = - =");
         operate(-4, "- 1 = + = + =");
-        operate(-1.3333, "/3+");
+        operate(-1.3333333333333333, "/3+");
         operate(-4, "*3=");
 
         operateOnNewObj(11, "*3++++++++++11=");
@@ -575,15 +566,16 @@ public class ModelTest {
         operateOnNewObj(11019960576.0, "square(square(2) + 2 = square(square(square()");
         //--------- END SQUARE --------
 
+        operateOnNewObj(1.7320508075688772, "sqrt(3) = ");
+        operate(3, "square() = ");
+
         //--------- FRACTION --------
-        operateOnNewObj(Double.POSITIVE_INFINITY, "fraction(0) = ");
         operateOnNewObj(0.1, "fraction(10) = ");
         operateOnNewObj(0.02, "fraction(50) = ");
         operateOnNewObj(2, "fraction(fraction(2) = ");
         operateOnNewObj(50, "fraction(50) = fraction()");
         operateOnNewObj(0.2, "fraction(50) = fraction(5)");
 
-        operateOnNewObj(Double.NEGATIVE_INFINITY, "fraction(negate(0) = ");
         operateOnNewObj(-0.1, "fraction(negate(10) = ");
         operateOnNewObj(-0.02, "fraction(negate(50) = ");
         operateOnNewObj(-2, "fraction(fraction(negate(2) = ");
@@ -593,7 +585,7 @@ public class ModelTest {
 
         operateOnNewObj(1, "fraction(fraction(1) + negate(0) = ");
         operateOnNewObj(3, "fraction(fraction(2) + 1 = ");
-        operateOnNewObj(2.3333, "fraction(3) + 2 = ");
+        operateOnNewObj(2.33333333, "fraction(3) + 2 = ");
         operateOnNewObj(6.05, "fraction(10) + 2 + 10/2 = ");
         operateOnNewObj(4.5, "fraction(4) + 2*2 = ");
 
@@ -650,7 +642,7 @@ public class ModelTest {
         model.addToMemory();
         model.getMemory();
         operate(1, "");
-        operate(1355, "333 + 22 =");
+        operate(355, "333 + 22 =");
         model.getMemory();
         operate(1, "");
 
@@ -701,6 +693,20 @@ public class ModelTest {
         model.backspace();
         operate(10, "=");
         //-------- END BACKSPACE ------
+
+        //----- DIVIDE BY ZERO -----
+        operateOnNewObjEx(ArithmeticException.class, "/0 =");
+        operateOnNewObjEx(ArithmeticException.class, "/0=");
+        operateOnNewObjEx(ArithmeticException.class, "99/0=");
+        operateOnNewObjEx(ArithmeticException.class, "fraction(negate(0) = ");
+        operateOnNewObjEx(ArithmeticException.class, "/=");
+        operateOnNewObjEx(ArithmeticException.class, MAX_VALUE + "/0=");
+        operateOnNewObjEx(ArithmeticException.class, MAX_VALUE + "/0=");
+        operateOnNewObjEx(ArithmeticException.class, "/=");
+        operateOnNewObjEx(ArithmeticException.class, "0/0=");
+        operateOnNewObjEx(ArithmeticException.class, "1/ 0=");
+        operateOnNewObjEx(ArithmeticException.class, "99/0=");
+        operateOnNewObjEx(ArithmeticException.class, "fraction(0) = ");
     }
 
     private void operateOnNewObj(double expected, String str) {
@@ -708,44 +714,66 @@ public class ModelTest {
         operate(expected, str);
     }
 
+    private void operateOnNewObjEx(Class ex, String str) {
+        model = new Model();
+        try {
+            expectException(str);
+            fail("MUST FAIL!");
+        } catch (Exception e) {
+            assertThat(e, instanceOf(ex));
+        }
+    }
+
     private void operate(double expected, String str) {
         String data = str.replaceAll("\\s+", "");
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder operatorSB = new StringBuilder();
+        StringBuilder numberSB = new StringBuilder();
         List<UnaryOperation> listUnary = new ArrayList<>();
 
         for (int i = 0; i < data.length(); i++) {
             char symbol = data.charAt(i);
 
             if (Character.isDigit(symbol)) {
-                model.addInputDigit(String.valueOf(symbol));
+                numberSB.append(new BigDecimal(String.valueOf(symbol)));
+                model.addNumber(new BigDecimal(numberSB.toString()));
                 continue;
             }
 
             if (symbol == '.') {
-                model.addInputPoint(String.valueOf(symbol));
+                numberSB.append(".");
                 continue;
             }
 
             if (BinaryOperation.isExist(String.valueOf(symbol))) {
-                model.addBinaryOperator(String.valueOf(symbol));
+                if (numberSB.length() > 0) {
+                    model.addNumber(new BigDecimal(numberSB.toString()));
+                }
+
+                model.addBinaryOperator(BinaryOperation.find(symbol));
+                numberSB = new StringBuilder();
+                operatorSB = new StringBuilder();
                 continue;
             }
 
             if (Character.isAlphabetic(symbol)) {
-                sb.append(symbol);
+                operatorSB.append(symbol);
                 continue;
             }
 
             if (symbol == '(') {
-                listUnary.add(UnaryOperation.valueOf(sb.toString().toUpperCase()));
-                sb = new StringBuilder();
+                listUnary.add(UnaryOperation.valueOf(operatorSB.toString().toUpperCase()));
+                operatorSB = new StringBuilder();
                 continue;
             }
 
             if (symbol == ')') {
+                if (numberSB.length() > 0) {
+                    model.addNumber(new BigDecimal(numberSB.toString()));
+                }
+
                 for (UnaryOperation operation : listUnary) {
-                    model.addUnaryOperator(operation.getOperator());
+                    model.addUnaryOperator(operation);
                 }
                 listUnary.clear();
                 continue;
@@ -754,7 +782,7 @@ public class ModelTest {
             throw new RuntimeException("UNEXPECTED symbol " + symbol);
         }
 
-        assertEquals(expected, Double.valueOf(model.getDisplay()), DELTA);
+        assertEquals(expected, model.getDisplay().doubleValue(), DELTA);
     }
 
     private void operateOnNewObj(double expected, double value1, String operator, double value2) {
@@ -763,11 +791,70 @@ public class ModelTest {
     }
 
     private void operate(double expected, double value1, String operator, double value2) {
-        model.addInputDigit(String.valueOf(value1));
-        model.addBinaryOperator(operator);
-        model.addInputDigit(String.valueOf(value2));
-        model.addBinaryOperator("=");
+        model.addNumber(BigDecimal.valueOf(value1));
+        model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
+        model.addNumber(BigDecimal.valueOf(value2));
+        model.addBinaryOperator(BinaryOperation.EQUAL);
 
-        assertEquals(expected, Double.parseDouble(model.getDisplay()), DELTA);
+        assertEquals(expected, model.getDisplay().doubleValue(), DELTA);
+    }
+
+    private void expectException(String str) {
+        String data = str.replaceAll("\\s+", "");
+
+        StringBuilder operatorSB = new StringBuilder();
+        StringBuilder numberSB = new StringBuilder();
+        List<UnaryOperation> listUnary = new ArrayList<>();
+
+        for (int i = 0; i < data.length(); i++) {
+            char symbol = data.charAt(i);
+
+            if (Character.isDigit(symbol)) {
+                numberSB.append(new BigDecimal(String.valueOf(symbol)));
+                model.addNumber(new BigDecimal(numberSB.toString()));
+                continue;
+            }
+
+            if (symbol == '.') {
+                numberSB.append(".");
+                continue;
+            }
+
+            if (BinaryOperation.isExist(String.valueOf(symbol))) {
+                if (numberSB.length() > 0) {
+                    model.addNumber(new BigDecimal(numberSB.toString()));
+                }
+
+                model.addBinaryOperator(BinaryOperation.find(symbol));
+                numberSB = new StringBuilder();
+                operatorSB = new StringBuilder();
+                continue;
+            }
+
+            if (Character.isAlphabetic(symbol)) {
+                operatorSB.append(symbol);
+                continue;
+            }
+
+            if (symbol == '(') {
+                listUnary.add(UnaryOperation.valueOf(operatorSB.toString().toUpperCase()));
+                operatorSB = new StringBuilder();
+                continue;
+            }
+
+            if (symbol == ')') {
+                if (numberSB.length() > 0) {
+                    model.addNumber(new BigDecimal(numberSB.toString()));
+                }
+
+                for (UnaryOperation operation : listUnary) {
+                    model.addUnaryOperator(operation);
+                }
+                listUnary.clear();
+                continue;
+            }
+
+            throw new RuntimeException("UNEXPECTED symbol " + symbol);
+        }
     }
 }

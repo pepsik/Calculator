@@ -1,7 +1,10 @@
 package org.pepsik.model;
 
 import com.sun.org.apache.xpath.internal.operations.Minus;
+import org.pepsik.model.operation.BinaryOperation;
+import org.pepsik.model.operation.UnaryOperation;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +13,10 @@ import java.util.List;
  * Created by pepsik on 7/27/2016.
  */
 public class Stage {
-
-    private static final String EMPTY = " ";
-    private static final String ZERO = "0";
-    public static final String POINT = ".";
-
-    private String binaryOperator = EMPTY;
-    private List<String> unaryOperators = new ArrayList<String>();
-    private String operand = EMPTY;
-    private String resultOperation = EMPTY; //todo: migrate to model?
+    private BinaryOperation binaryOperator;
+    private List<UnaryOperation> unaryOperators = new ArrayList<>();
+    private BigDecimal operand;
+    private BigDecimal resultOperation;
 
     public Stage() {
     }
@@ -29,68 +27,44 @@ public class Stage {
         binaryOperator = stage.getBinaryOperator();
     }
 
-    public void setBinaryOperator(String binaryOperator) {
+    public void setBinaryOperator(BinaryOperation binaryOperator) {
         this.binaryOperator = binaryOperator;
     }
 
-    public String getBinaryOperator() {
+    public BinaryOperation getBinaryOperator() {
         return binaryOperator;
     }
 
-    public void addUnaryOperator(String unary) {
+    public void addUnaryOperator(UnaryOperation unary) {
         unaryOperators.add(unary);
     }
 
-    public List<String> getUnaryOperators() {
+    public List<UnaryOperation> getUnaryOperators() {
         return unaryOperators;
     }
 
-    public String getOperand() {
+    public BigDecimal getOperand() {
         return operand;
     }
 
-    public void addDigitToOperand(String input) {
-        if (operand.equals(ZERO) || operand.equals(EMPTY)) {
-            operand = input;
-        } else {
-            operand += input;
-        }
-    }
-
-    public void addPointToOperand(String input) {
-        if (!operand.contains(EMPTY)) {
-            if (!operand.contains(POINT)) {
-                operand += input;
-            }
-        } else {
-            operand = ZERO + POINT;
-        }
-    }
-
-    public void setOperand(String operand) {
+    public void setOperand(BigDecimal operand) {
         this.operand = operand;
     }
 
-    public String getResultOperation() {
+    public BigDecimal getResultOperation() {
         return resultOperation;
     }
 
-    public void setResultOperation(String resultOperation) {
+    public void setResultOperation(BigDecimal resultOperation) {
         this.resultOperation = resultOperation;
-        checkValues();
     }
 
-    public void clearUnaryOperators(){
+    public void clearUnaryOperators() {
         unaryOperators.clear();
-    }
-
-    private void checkValues() {
-        operand = operand.replaceAll("(\\.|(\\.(\\d*[1-9])?))0+\\b", "$2");
-        resultOperation = resultOperation.replaceAll("(\\.|(\\.(\\d*[1-9])?))0+\\b", "$2");
     }
 
     @Override
     public String toString() {
-        return binaryOperator + operand;
+        return binaryOperator.getOperator() + operand;
     }
 }
