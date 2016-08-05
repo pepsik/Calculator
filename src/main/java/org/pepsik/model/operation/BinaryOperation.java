@@ -1,9 +1,10 @@
 package org.pepsik.model.operation;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
- * Created by Berezovyi Aleksandr on 8/2/2016.
+ * This enum represents binary operation. Each constant consist correspond string presentation and logic to operate.
  */
 public enum BinaryOperation {
     ADD("+") {
@@ -21,13 +22,13 @@ public enum BinaryOperation {
     DIVIDE("/") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.divide(s, 16, BigDecimal.ROUND_UP).stripTrailingZeros();
+            return f.divide(s, 17, BigDecimal.ROUND_HALF_UP).stripTrailingZeros();
         }
     },
     MULTIPLY("*") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.multiply(s);
+            return f.multiply(s).setScale(16, RoundingMode.UP);
         }
     },
     EQUAL("=") {
@@ -43,6 +44,12 @@ public enum BinaryOperation {
         this.operator = operator;
     }
 
+    /**
+     * Executes operation with 2 values
+     * @param f first value
+     * @param s second value
+     * @return result operation
+     */
     public abstract BigDecimal execute(BigDecimal f, BigDecimal s);
 
     public final String getOperator() {
@@ -58,6 +65,13 @@ public enum BinaryOperation {
         return false;
     }
 
+    /**
+     * Finds binary operation by string
+     * @param operator string represents operation
+     * @return binary operation
+     *
+     * @throws IllegalArgumentException in case if operation not found
+     */
     public static BinaryOperation find(char operator) {
         for (BinaryOperation value : values()) {
             if (value.getOperator().equals(String.valueOf(operator))) {

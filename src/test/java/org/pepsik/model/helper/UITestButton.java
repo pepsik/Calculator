@@ -1,9 +1,12 @@
-package org.pepsik.model;
+package org.pepsik.model.helper;
+
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 
 /**
  * Created by Berezovyi Aleksandr on 8/4/2016.
  */
-public enum UIButton {
+public enum UITestButton {
     NUMBER_1("1"),
     NUMBER_2("2"),
     NUMBER_3("3"),
@@ -39,9 +42,20 @@ public enum UIButton {
     MEMORY_SUBTRACT("M-"),
     MEMORY_SAVE("MS");
 
-    private String value;
+    private static Scene scene;
 
-    UIButton(String value) {
+    private String value;
+    private Button button;
+
+    public static void setScene(Scene scene) {
+        UITestButton.scene = scene;
+
+        for (UITestButton button : values()) {
+            button.button = (Button) scene.lookup("#" + button.name().toLowerCase());
+        }
+    }
+
+    UITestButton(String value) {
         this.value = value;
     }
 
@@ -49,8 +63,25 @@ public enum UIButton {
         return value;
     }
 
+    public void fire() {
+        this.button.fire();
+    }
+
+    public static Button getButton(String input) {
+        for (UITestButton button : values()) {
+            if (button.getValue().equals(input)) {
+                return button.button;
+            }
+        }
+        throw new IllegalArgumentException("No match buttons found to " + input);
+    }
+
+    public Button getButton(){
+        return button;
+    }
+
     public static String isExist(String input) {
-        for (UIButton button : values()) {
+        for (UITestButton button : values()) {
             if (button.getValue().equals(input)) {
                 return button.name().toLowerCase();
             }

@@ -1,4 +1,4 @@
-package org.pepsik.model;
+package org.pepsik.model.helper;
 
 import java.util.concurrent.CountDownLatch;
 

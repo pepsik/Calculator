@@ -66,7 +66,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="backspace" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="&lt;" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Button id="backspace" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBackspaceAction" text="&lt;" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
@@ -175,27 +175,27 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button id="memory_add" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="M+" GridPane.columnIndex="2">
+            <Button id="memory_add" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryAddAction" text="M+" GridPane.columnIndex="2">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                </styleClass></Button>
-            <Button id="memory_recall" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MR" GridPane.columnIndex="1">
+            <Button id="memory_recall" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryRecallAction" text="MR" GridPane.columnIndex="1">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                </styleClass></Button>
-            <Button id="memory_subtract" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="M-" GridPane.columnIndex="3">
+            <Button id="memory_subtract" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemorySubtractAction" text="M-" GridPane.columnIndex="3">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                </styleClass></Button>
-            <Button id="MEMORY_SAVE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MS" GridPane.columnIndex="4">
+            <Button id="memory_save" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemorySaveAction" text="MS" GridPane.columnIndex="4">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                </styleClass></Button>
-            <Button id="memory_clear" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MC">
+            <Button id="memory_clear" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryClearAction" text="MC">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />

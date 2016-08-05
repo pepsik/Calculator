@@ -5,9 +5,13 @@ import javafx.scene.control.Button;
 import java.util.Set;
 
 /**
- * Created by Berezovyi Aleksandr on 8/3/2016.
+ * This enum represents calculator buttons. Each constant consist actual values (number or operation)  witch used in Model class in expression execution
+ * and corresponding button from FXML and resize logic for it.
  */
 public enum CalculatorButton {
+    /**
+     * Button number constants
+     */
     NUMBER_1("1"),
     NUMBER_2("2"),
     NUMBER_3("3"),
@@ -19,6 +23,9 @@ public enum CalculatorButton {
     NUMBER_9("9"),
     NUMBER_0("0"),
 
+    /**
+     * Button binary operation constants
+     */
     ADD("+") {
         @Override
         protected void resize(double width, double height) {
@@ -63,7 +70,21 @@ public enum CalculatorButton {
             }
         }
     },
+    EQUAL("=") {
+        @Override
+        protected void resize(double width, double height) {
+            if (Double.compare(width, 270) > 0
+                    && Double.compare(height, 450) > 0) {
+                this.getButton().setStyle("-fx-font: 20px arial;");
+            } else {
+                this.getButton().setStyle("-fx-font: 16px arial;");
+            }
+        }
+    },
 
+    /**
+     * Button unary operation constants
+     */
     SQUARE("X²") {
         @Override
         protected void resize(double width, double height) {
@@ -120,17 +141,9 @@ public enum CalculatorButton {
         }
     },
 
-    EQUAL("=") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 20px arial;");
-            } else {
-                this.getButton().setStyle("-fx-font: 16px arial;");
-            }
-        }
-    },
+    /**
+     * Point constant
+     */
     POINT(".") {
         @Override
         protected void resize(double width, double height) {
@@ -143,7 +156,9 @@ public enum CalculatorButton {
         }
     },
 
-
+    /**
+     * Clear button constants
+     */
     CLEAR_ENTRY("CE") {
         @Override
         protected void resize(double width, double height) {
@@ -166,6 +181,10 @@ public enum CalculatorButton {
             }
         }
     },
+
+    /**
+     * Backspace button constant
+     */
     BACKSPACE("<") {
         @Override
         protected void resize(double width, double height) {
@@ -178,6 +197,9 @@ public enum CalculatorButton {
         }
     },
 
+    /**
+     * Memory button constants
+     */
     MEMORY_CLEAR("MC") {
         @Override
         protected void resize(double width, double height) {
@@ -209,13 +231,29 @@ public enum CalculatorButton {
         }
     };
 
+    /**
+     * Memory default font css style
+     */
+    private static final String MEMORY_STYLE = "-fx-font: 12px arial;";
+
+    /**
+     * String presentation operation
+     */
     private String value;
+
+    /**
+     * Button presentation operation
+     */
     private Button button;
 
     CalculatorButton(String value) {
         this.value = value;
     }
 
+    /**
+     * Set Button collection to constants
+     * @param buttons collection FXML buttons
+     */
     public static void setButtons(Set<Button> buttons) {
         for (Button button : buttons) {
             valueOf(button.getId().toUpperCase()).button = button;
@@ -226,6 +264,13 @@ public enum CalculatorButton {
         return button;
     }
 
+    /**
+     * Return string button presentation by FXML Button
+     * @param button FXML Node Button
+     * @return String represents correspond button
+     *
+     * @throws IllegalArgumentException in case button not found
+     */
     public static String valueOf(Button button) {
         for (CalculatorButton cb : values()) {
             if (cb.button.equals(button)) {
@@ -236,7 +281,7 @@ public enum CalculatorButton {
     }
 
     /**
-     * default resize (0-9 buttons)
+     * Default resize (0-9 buttons)
      */
     protected void resize(double width, double height) {
         if (Double.compare(width, 270) > 0
@@ -247,6 +292,11 @@ public enum CalculatorButton {
         }
     }
 
+    /**
+     * Initialize resize logic for all buttons
+     * @param width new stage width
+     * @param height new stage height
+     */
     public static void resizeButtons(double width, double height) {
         for (CalculatorButton value : values()) {
             value.resize(width, height);
@@ -259,6 +309,4 @@ public enum CalculatorButton {
                 ", button=" + button +
                 '}';
     }
-
-    private static final String MEMORY_STYLE = "-fx-font: 12px arial;";
 }
