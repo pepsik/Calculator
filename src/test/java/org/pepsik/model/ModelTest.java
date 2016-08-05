@@ -695,7 +695,7 @@ public class ModelTest {
         //-------- END BACKSPACE ------
 
         //----- DIVIDE BY ZERO -----
-        operateOnNewObjEx(ArithmeticException.class, "/0 =");
+        operateOnNewObjEx(ArithmeticException.class, "0/0 =");
         operateOnNewObjEx(ArithmeticException.class, "/0=");
         operateOnNewObjEx(ArithmeticException.class, "99/0=");
         operateOnNewObjEx(ArithmeticException.class, "fraction(negate(0) = ");
@@ -717,7 +717,7 @@ public class ModelTest {
     private void operateOnNewObjEx(Class ex, String str) {
         model = new Model();
         try {
-            expectException(str);
+            operate(0, str);
             fail("MUST FAIL!");
         } catch (Exception e) {
             assertThat(e, instanceOf(ex));
@@ -797,64 +797,5 @@ public class ModelTest {
         model.addBinaryOperator(BinaryOperation.EQUAL);
 
         assertEquals(expected, model.getDisplay().doubleValue(), DELTA);
-    }
-
-    private void expectException(String str) {
-        String data = str.replaceAll("\\s+", "");
-
-        StringBuilder operatorSB = new StringBuilder();
-        StringBuilder numberSB = new StringBuilder();
-        List<UnaryOperation> listUnary = new ArrayList<>();
-
-        for (int i = 0; i < data.length(); i++) {
-            char symbol = data.charAt(i);
-
-            if (Character.isDigit(symbol)) {
-                numberSB.append(new BigDecimal(String.valueOf(symbol)));
-                model.addNumber(new BigDecimal(numberSB.toString()));
-                continue;
-            }
-
-            if (symbol == '.') {
-                numberSB.append(".");
-                continue;
-            }
-
-            if (BinaryOperation.isExist(String.valueOf(symbol))) {
-                if (numberSB.length() > 0) {
-                    model.addNumber(new BigDecimal(numberSB.toString()));
-                }
-
-                model.addBinaryOperator(BinaryOperation.find(symbol));
-                numberSB = new StringBuilder();
-                operatorSB = new StringBuilder();
-                continue;
-            }
-
-            if (Character.isAlphabetic(symbol)) {
-                operatorSB.append(symbol);
-                continue;
-            }
-
-            if (symbol == '(') {
-                listUnary.add(UnaryOperation.valueOf(operatorSB.toString().toUpperCase()));
-                operatorSB = new StringBuilder();
-                continue;
-            }
-
-            if (symbol == ')') {
-                if (numberSB.length() > 0) {
-                    model.addNumber(new BigDecimal(numberSB.toString()));
-                }
-
-                for (UnaryOperation operation : listUnary) {
-                    model.addUnaryOperator(operation);
-                }
-                listUnary.clear();
-                continue;
-            }
-
-            throw new RuntimeException("UNEXPECTED symbol " + symbol);
-        }
     }
 }

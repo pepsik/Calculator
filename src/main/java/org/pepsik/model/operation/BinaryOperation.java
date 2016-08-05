@@ -21,7 +21,7 @@ public enum BinaryOperation {
     DIVIDE("/") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.divide(s, 16, BigDecimal.ROUND_UP);
+            return f.divide(s, 16, BigDecimal.ROUND_UP).stripTrailingZeros();
         }
     },
     MULTIPLY("*") {

@@ -41,7 +41,10 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handlePointAction(ActionEvent event) {
         String point = CalculatorButton.valueOf(((Button) event.getSource()));
-        inputNumber += point;
+
+        if (!inputNumber.contains(point)) {
+            inputNumber += point;
+        }
         displayField.setText(model.getDisplay().toString());
     }
 
@@ -59,6 +62,8 @@ public class CalculatorController implements Initializable {
     private void handleUnaryOperationAction(ActionEvent event) {
         String operator = CalculatorButton.valueOf(((Button) event.getSource()));
         model.addUnaryOperator(UnaryOperation.find(operator));
+        inputNumber = null;
+
         displayField.setText(model.getDisplay().toString());
         displayHistory.setText(model.getCurrentExpression());
     }
@@ -68,6 +73,8 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleClearAction(ActionEvent event) {
         model.clearEntry();
+        inputNumber = null;
+
         displayField.setText(model.getDisplay().toString());
     }
 
@@ -75,6 +82,8 @@ public class CalculatorController implements Initializable {
     private void handleClearAllAction(ActionEvent event) {
 //        //todo add Clear All in model
         model = new Model();
+        inputNumber = null;
+
         displayField.setText(model.getDisplay().toString());
         displayHistory.setText("");
     }

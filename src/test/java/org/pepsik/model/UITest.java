@@ -2,11 +2,14 @@ package org.pepsik.model;
 
 import com.athaydes.automaton.FXApp;
 import com.athaydes.automaton.FXer;
+import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pepsik.MainApp;
+import org.pepsik.model.operation.BinaryOperation;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +74,7 @@ public class UITest {
 
     @Test
     public void inputNumberTest() {
-//        testOperation(0, "");
+//        testOperation("0", "");
 //        testOperation(0, "0");
 //        testOperation(1, "1");
 //        testOperation(2, "2");
@@ -84,17 +87,17 @@ public class UITest {
 //        testOperation(9, "9");
 //        testOperation(1234567890, "1 2 3 4 5 6 7 8 9 0");
 //        testOperation(1234567890, "1 2 3 4 5 6 7 8 9 0");
-
-        testOperation(1.0, "1.0");
-        testOperation(9.9, "9.9");
-        testOperation(1, "1.00");
-        testOperation(1, "1.0.0");
+//
+//        testOperation("1.0");
+        testOperation("9.9");
+        testOperation("1.00");
+        testOperation("1.00", "1.0.0");
         testOperation("1.11");
         testOperation(1.11, "1.1.1");
         testOperation(11.1, "11.1");
         testOperation(12.3, "12.3");
         testOperation(9.99, "9.99");
-        testOperation(10.00, "10.00");
+        testOperation("10.00");
         testOperation(123456., "1 2 3 4 5 6.");
         testOperation(1.234567890, "1 .2 .3 4 5. 6 .7 8. 9. 0");
         testOperation(0.1234567890, ".1 2 3 4 5 6 7 8 9 0");
@@ -150,54 +153,54 @@ public class UITest {
     public void unaryOperationTest() {
         //---------------TEST UNARY OPERATORS------------
         // ----- NEGATE -----
-        testOperation(0, "negate(0) = ");
-        testOperation(0, "negate(negate(0) = ");
-        testOperation(0, "negate(negate(negate(negate(0) = ");
-        testOperation(-1, "negate(1) = ");
-        testOperation(1, "negate(negate(1) = ");
-        testOperation(-1, "negate(negate(negate(1) = ");
-        testOperation(-9, "negate(9) = ");
-        testOperation(9, "negate(negate(9) = ");
-        testOperation(0, "negate() =");
-
-        testOperation(0, "negate()");
-
-        testOperation(0, "negate() = negate()");
-        testOperation(0, "negate(negate() = negate()");
-        testOperation(0, "negate(negate() = negate(negate()");
-        testOperation(0, "negate(negate() = negate(negate(negate()");
-        testOperation(0, "negate(negate(negate(negate() = negate(negate(negate()");
-
-        testOperation(9, "negate(9) = negate()");
-        testOperation(-9, "negate(9) = negate(negate()");
-        testOperation(0, "negate() + negate() = negate()");
-        testOperation(0, "negate(negate() + negate() = negate()");
-        testOperation(0, "negate(negate() + negate(negate(negate() = negate()");
-        testOperation(0, "negate(negate() + negate(negate(negate() = negate(negate(negate()");
-        testOperation(7, "negate(9) + 2 = negate()");
-        testOperation(-7, "negate(9) + 2 = negate(negate()");
-        testOperation(11, "negate(negate(9) + 2 = negate(negate()");
-        testOperation(-11, "negate(negate(9) + 2 = negate(negate(negate()");
-
-        testOperation(-3, "negate(1) = negate(3)");
-        testOperation(2, "negate(9) = negate(negate(2)");
-        testOperation(4, "negate(1) + negate(3) = negate()");
-        testOperation(-5, "negate(negate(11) + negate(2) = negate(5)");
-        testOperation(-3, "negate(negate(4) + negate(negate(negate(4) = negate(3)");
-        testOperation(-1, "negate(negate(2) + negate(negate(negate(2) = negate(negate(negate(1)");
-        testOperation(-5, "negate(9) + 2 = negate(5)");
+//        testOperation(0, "negate(0) = ");
+//        testOperation(0, "negate(negate(0) = ");
+//        testOperation(0, "negate(negate(negate(negate(0) = ");
+//        testOperation(-1, "negate(1) = ");
+//        testOperation(1, "negate(negate(1) = ");
+//        testOperation(-1, "negate(negate(negate(1) = ");
+//        testOperation(-9, "negate(9) = ");
+//        testOperation(9, "negate(negate(9) = ");
+//        testOperation(0, "negate() =");
+//
+//        testOperation(0, "negate()");
+//
+//        testOperation(0, "negate() = negate()");
+//        testOperation(0, "negate(negate() = negate()");
+//        testOperation(0, "negate(negate() = negate(negate()");
+//        testOperation(0, "negate(negate() = negate(negate(negate()");
+//        testOperation(0, "negate(negate(negate(negate() = negate(negate(negate()");
+//
+//        testOperation(9, "negate(9) = negate()");
+//        testOperation(-9, "negate(9) = negate(negate()");
+//        testOperation(0, "negate() + negate() = negate()");
+//        testOperation(0, "negate(negate() + negate() = negate()");
+//        testOperation(0, "negate(negate() + negate(negate(negate() = negate()");
+//        testOperation(0, "negate(negate() + negate(negate(negate() = negate(negate(negate()");
+//        testOperation(7, "negate(9) + 2 = negate()");
+//        testOperation(-7, "negate(9) + 2 = negate(negate()");
+//        testOperation(11, "negate(negate(9) + 2 = negate(negate()");
+//        testOperation(-11, "negate(negate(9) + 2 = negate(negate(negate()");
+//
+//        testOperation(-3, "negate(1) = negate(3)");
+//        testOperation(2, "negate(9) = negate(negate(2)");
+//        testOperation(4, "negate(1) + negate(3) = negate()");
+//        testOperation(-5, "negate(negate(11) + negate(2) = negate(5)");
+//        testOperation(-3, "negate(negate(4) + negate(negate(negate(4) = negate(3)");
+//        testOperation(-1, "negate(negate(2) + negate(negate(negate(2) = negate(negate(negate(1)");
+//        testOperation(-5, "negate(9) + 2 = negate(5)");
         // -----END NEGATE -----
 
         //---- SQRT ---
-        testOperation(3, "sqrt(9) = ");
-        testOperation(9, "sqrt(81) = ");
-        testOperation(3, "sqrt(sqrt(81) = ");
-        testOperation(3, "sqrt(81) = sqrt()");
-
-        testOperation(3, "sqrt(sqrt(81) + negate(0) = ");
-        testOperation(3, "sqrt(sqrt(81) + 0 = ");
-        testOperation(4, "sqrt(sqrt(81) + 1 = ");
-        testOperation(5, "sqrt(sqrt(81) + 2 = ");
+//        testOperation(3.0, "sqrt(9) = ");
+//        testOperation(9, "sqrt(81) = ");
+//        testOperation(3, "sqrt(sqrt(81) = ");
+//        testOperation(3, "sqrt(81) = sqrt()");
+//
+//        testOperation(3, "sqrt(sqrt(81) + negate(0) = ");
+//        testOperation(3, "sqrt(sqrt(81) + 0 = ");
+//        testOperation(4, "sqrt(sqrt(81) + 1 = ");
+//        testOperation(5, "sqrt(sqrt(81) + 2 = ");
         testOperation(7.5, "sqrt(sqrt(81) + 2 + 10/2 = ");
         testOperation(10, "sqrt(sqrt(81) + 2*2 = ");
 
@@ -304,57 +307,72 @@ public class UITest {
     private void testOperation(double expected, String input) {
         user.clickOn("#clear_all");
 
-        DecimalFormat df = new DecimalFormat();
-        df.setDecimalSeparatorAlwaysShown(false);
-
-        // remove decimal part if ends on 0
-        operate(String.valueOf(df.format(expected)), input);
+        operate(new BigDecimal(expected).toString(), input);
     }
 
     private void testOperation(String input) {
         user.clickOn("#clear_all");
-        // remove decimal part if ends on 0
+
         operate(input, input);
     }
 
     private void testOperation(String expected, String input) {
         user.clickOn("#clear_all");
+
         operate(expected, input);
     }
 
     private void operate(String expected, String input) {
+        System.out.println(expected);
+
         String data = input.replaceAll("\\s+", "");
 
         StringBuilder sb = new StringBuilder();
         List<String> listUnary = new ArrayList<>();
 
         for (int i = 0; i < data.length(); i++) {
-            char symbol = data.charAt(i);
+            String symbol = data.substring(i, i + 1);
 
-            if (Character.isAlphabetic(symbol)) {
+            if (StringUtils.isNumeric(symbol)) {
+                user.clickOn("#" + UIButton.isExist(symbol));
+                continue;
+            }
+
+            if (StringUtils.isAlpha(symbol)) {
                 sb.append(symbol);
                 continue;
             }
 
-            if (symbol == '(') {
+            if (symbol.equals(".")) {
+                user.clickOn("#" + UIButton.isExist(symbol));
+                continue;
+            }
+
+            if (BinaryOperation.isExist(symbol)) {
+                user.clickOn("#" + UIButton.isExist(symbol));
+                continue;
+            }
+
+            if (symbol.equals("(")) {
                 listUnary.add(UIButton.isExist(sb.toString()));
                 sb = new StringBuilder();
                 continue;
             }
 
-            if (symbol == ')') {
+            if (symbol.equals(")")) {
                 for (String operation : listUnary) {
                     user.clickOn("#" + operation);
                 }
+
                 listUnary.clear();
                 continue;
             }
 
-            user.clickOn("#" + UIButton.isExist(String.valueOf(symbol)));
+            throw new IllegalStateException("FAIL" + symbol);
         }
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
