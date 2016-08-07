@@ -22,7 +22,7 @@ public enum BinaryOperation {
     DIVIDE("/") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.divide(s, 17, BigDecimal.ROUND_HALF_UP).stripTrailingZeros();
+            return f.divide(s, 17, BigDecimal.ROUND_HALF_UP);
         }
     },
     MULTIPLY("*") {
@@ -46,13 +46,14 @@ public enum BinaryOperation {
 
     /**
      * Executes operation with 2 values
+     *
      * @param f first value
      * @param s second value
      * @return result operation
      */
     public abstract BigDecimal execute(BigDecimal f, BigDecimal s);
 
-    public final String getOperator() {
+    public String getOperator() {
         return operator;
     }
 
@@ -67,9 +68,9 @@ public enum BinaryOperation {
 
     /**
      * Finds binary operation by string
+     *
      * @param operator string represents operation
      * @return binary operation
-     *
      * @throws IllegalArgumentException in case if operation not found
      */
     public static BinaryOperation find(char operator) {

@@ -56,7 +56,7 @@ public class UITest {
     }
 
     @Test
-    public void testInputNumberButton() throws InterruptedException {
+    public void testNumberButton() throws InterruptedException {
         assertExpression(0, "");
         assertExpression(0, "0");
         assertExpression(1, "1");
@@ -115,7 +115,7 @@ public class UITest {
     }
 
     @Test
-    public void testExpressionRandomOperatorCombinations() {
+    public void testRandomOperationCombination() {
         assertExpression(0, "+=");
         assertExpression(0, "-=");
         assertExpression(0, "*=");
@@ -260,7 +260,7 @@ public class UITest {
     }
 
     @Test
-    public void testExpressionTwoOrMoreValues() {
+    public void testExpression() {
         // -----------SUM TESTS------------
         // -----------SUM 2 VALUES---------
         //each operation on new model obj
@@ -401,6 +401,27 @@ public class UITest {
     }
 
     @Test
+    public void testDivideByZeroOperation() {
+        //----- DIVIDE BY ZERO -----
+        assertDivideByZeroErrorMessage("0/0 =");
+        assertDivideByZeroErrorMessage("/0=");
+        assertDivideByZeroErrorMessage("99/0=");
+        assertDivideByZeroErrorMessage("fraction(negate(0) = ");
+        assertDivideByZeroErrorMessage("/=");
+        assertDivideByZeroErrorMessage(MAX_VALUE + "/0=");
+        assertDivideByZeroErrorMessage(MAX_VALUE + "/0=");
+        assertDivideByZeroErrorMessage("/=");
+
+        //todo error message block input
+        assertDivideByZeroErrorMessage("0/0=");
+        assertDivideByZeroErrorMessage("1/ 0=");
+        assertDivideByZeroErrorMessage("99/0=");
+        assertDivideByZeroErrorMessage("fraction(0) = ");
+
+
+    }
+
+    @Test
     public void testNegateButton() {
         // ----- NEGATE -----
         assertExpression(0, "negate(0) = ");
@@ -510,6 +531,8 @@ public class UITest {
         assertExpression(3, "square(1) + 2 = ");
         assertExpression(2, "square(square(0) + 2 = ");
         assertExpression(18, "square(square(2) + 2 = ");
+
+        assertExpression(9, "square(56)square(9)square(3)=");
         //--------- END SQUARE --------
     }
 
@@ -558,7 +581,7 @@ public class UITest {
     }
 
     @Test
-    public void testResizeButtonsFontSize() throws InterruptedException {
+    public void testResizeButtonFontSize() throws InterruptedException {
         //Test font Resize
         stage.setWidth(250);
         stage.setHeight(350);
@@ -598,6 +621,9 @@ public class UITest {
         assertResizeFontButton("12px", UITestButton.MEMORY_CLEAR);
         assertResizeFontButton("12px", UITestButton.MEMORY_RECALL);
         assertResizeFontButton("12px", UITestButton.MEMORY_SAVE);
+
+        stage.setWidth(400);
+        stage.setHeight(600);
     }
 
     @Test
@@ -617,9 +643,9 @@ public class UITest {
         assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
     }
 
-    @Test
     @Ignore
-    public void testMainDisplay() {
+    @Test
+    public void testResizeDisplayFont() {
         //Test display resize
     }
 
@@ -768,6 +794,13 @@ public class UITest {
         waitForCompleteExecution();
 
         assertEquals(expected, display.getText());
+    }
+
+    private void assertDivideByZeroErrorMessage(String input) {
+        CLEAR_ALL.push();
+        parseAndExecute(input);
+
+        assertEquals("Cannot divide by zero", display.getText());
     }
 
 }

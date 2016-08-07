@@ -23,10 +23,6 @@ public class Stage {
      * Operand as right operand in binary operation
      */
     private BigDecimal operand;
-    /**
-     * Result of operation
-     */
-    private BigDecimal resultOperation;
 
     public Stage() {
     }
@@ -65,20 +61,7 @@ public class Stage {
         this.operand = operand;
     }
 
-    public BigDecimal getResultOperation() {
-        return resultOperation;
-    }
-
-    public void setResultOperation(BigDecimal resultOperation) {
-        this.resultOperation = resultOperation;
-    }
-
     public void clearUnaryOperators() {
         unaryOperators.clear();
-    }
-
-    @Override
-    public String toString() {
-        return binaryOperator.getOperator() + operand;
     }
 }

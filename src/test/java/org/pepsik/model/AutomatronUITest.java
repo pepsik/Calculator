@@ -5,6 +5,7 @@ import com.athaydes.automaton.FXer;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.pepsik.MainApp;
 import org.pepsik.model.helper.UITestButton;
@@ -39,6 +40,7 @@ public class AutomatronUITest {
         FXApp.doInFXThreadBlocking(() -> FXApp.getStage().close());
     }
 
+    @Ignore
     @Test
     public void automatonTest() {
         System.out.println("Running test");
@@ -61,6 +63,7 @@ public class AutomatronUITest {
         }
     }
 
+    @Ignore
     @Test
     public void inputNumberTest() {
         testOperation("0", "");
@@ -109,6 +112,7 @@ public class AutomatronUITest {
         testOperation(100120, "0000000000000000000100120");
     }
 
+    @Ignore
     @Test
     public void binaryOperationTest() {
         testOperation(0, "0 + 0 =");
@@ -140,6 +144,7 @@ public class AutomatronUITest {
         testOperation(9, "10 - 1 =");
     }
 
+    @Ignore
     @Test
     public void unaryOperationTest() {
         //---------------TEST UNARY OPERATORS------------

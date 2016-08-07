@@ -20,12 +20,6 @@ public enum UnaryOperation {
             return BigDecimal.valueOf(StrictMath.sqrt(value.doubleValue()));
         }
     },
-    PERCENT("%") {
-        @Override
-        public BigDecimal execute(BigDecimal value) {
-            throw new RuntimeException("UNSUPPORTED % OPERATION!");
-        }
-    },
     FRACTION("1/X") {
         @Override
         public BigDecimal execute(BigDecimal value) {
@@ -37,7 +31,17 @@ public enum UnaryOperation {
         public BigDecimal execute(BigDecimal value) {
             return value.negate();
         }
+    },
+    PERCENT("%") {
+        @Override
+        public BigDecimal execute(BigDecimal value) {
+            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), 17, BigDecimal.ROUND_HALF_UP));
+            operand = null;
+            return result;
+        }
     };
+
+    private static BigDecimal operand;
 
     private String operator;
 
@@ -45,8 +49,13 @@ public enum UnaryOperation {
         this.operator = operator;
     }
 
+    public static void setOperand(BigDecimal operand) {
+        UnaryOperation.operand = operand;
+    }
+
     /**
      * Finds unary operation by string
+     *
      * @param value String represent operation
      * @return unary operation
      */
@@ -61,6 +70,7 @@ public enum UnaryOperation {
 
     /**
      * Executes operation on value
+     *
      * @param value input value
      * @return result
      */

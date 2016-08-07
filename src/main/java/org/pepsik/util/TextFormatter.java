@@ -5,6 +5,7 @@ import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Deque;
 import java.util.Iterator;
@@ -16,19 +17,14 @@ public class TextFormatter {
 
     /**
      * Formats history
+     *
      * @param expression list of stages to format
      * @return String represents expression
      */
     public static String history(Deque<Stage> expression) {
         StringBuilder sb = new StringBuilder();
-        Iterator<Stage> iterator = expression.iterator();
 
-        if (iterator.hasNext()) {
-            sb.append(iterator.next().getResultOperation());
-        }
-
-        while (iterator.hasNext()) {
-            Stage stage = iterator.next();
+        for (Stage stage : expression) {
             BigDecimal operand = stage.getOperand();
             BinaryOperation operator = stage.getBinaryOperator();
 
@@ -37,9 +33,12 @@ public class TextFormatter {
                 sb.append(stage.getBinaryOperator().getOperator());
             }
             if (operand != null) {
-                sb.append(" ");
+                if (sb.length() != 0) {
+                    sb.append(" ");
+                }
+
                 if (stage.getUnaryOperators().isEmpty()) {
-                    sb.append(stage.getOperand());
+                    sb.append(stage.getOperand().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
                 } else {
                     for (UnaryOperation unary : stage.getUnaryOperators()) {
                         sb.append(unary.name().toLowerCase());
@@ -57,6 +56,7 @@ public class TextFormatter {
 
     /**
      * Format display
+     *
      * @param input string represents display
      * @return formatted display string
      */

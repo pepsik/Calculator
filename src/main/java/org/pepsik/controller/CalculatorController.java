@@ -40,6 +40,8 @@ public class CalculatorController implements Initializable {
      * User input value
      */
     private String inputNumber = EMPTY;
+
+    private boolean noError = true;
     /**
      * Calculator Model witch calculate expression
      */
@@ -54,15 +56,17 @@ public class CalculatorController implements Initializable {
     private void handleDigitAction(ActionEvent event) {
         String digit = CalculatorButton.valueOf((Button) event.getSource());
 
-        if (inputNumber.isEmpty()) {
-            inputNumber = digit;
-        } else if (inputNumber.length() < 16) {
-            inputNumber += digit;
-            inputNumber = new BigDecimal(inputNumber).toString();
-        }
+        if (noError) {
+            if (inputNumber.isEmpty()) {
+                inputNumber = digit;
+            } else if (inputNumber.length() < 16) {
+                inputNumber += digit;
+                inputNumber = new BigDecimal(inputNumber).toString();
+            }
 
-        model.addNumber(new BigDecimal(inputNumber));
-        displayField.setText(inputNumber);
+            model.addNumber(new BigDecimal(inputNumber));
+            displayField.setText(inputNumber);
+        }
     }
 
     /**
@@ -74,45 +78,66 @@ public class CalculatorController implements Initializable {
     private void handlePointAction(ActionEvent event) {
         String point = CalculatorButton.valueOf(((Button) event.getSource()));
 
-        if (inputNumber.isEmpty()) {
-            inputNumber = "0.";
-        } else if (!inputNumber.contains(point)) {
-            inputNumber += point;
-        }
+        if (noError) {
+            if (inputNumber.isEmpty()) {
+                inputNumber = "0.";
+            } else if (!inputNumber.contains(point)) {
+                inputNumber += point;
+            }
 
-        displayField.setText(inputNumber);
+            displayField.setText(inputNumber);
+        }
     }
 
     /**
      * Handles binary operation event
+     *
      * @param event binary event
      */
     @FXML
     private void handleBinaryOperationAction(ActionEvent event) {
         String operator = CalculatorButton.valueOf(((Button) event.getSource()));
-        model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
-        inputNumber = EMPTY;
 
-        displayField.setText(model.getResult().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
-        displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
+        if (noError) {
+            try {
+                model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
+
+                displayField.setText(model.getResult().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
+                displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
+            } catch (ArithmeticException e) {
+                noError = false;
+                displayField.setText("Cannot divide by zero");
+            }
+            inputNumber = EMPTY;
+        }
     }
 
     /**
      * Handles unary operation event
+     *
      * @param event unary event
      */
     @FXML
     private void handleUnaryOperationAction(ActionEvent event) {
         String operator = CalculatorButton.valueOf(((Button) event.getSource()));
-        model.addUnaryOperator(UnaryOperation.find(operator));
-        inputNumber = ZERO;
 
-        displayField.setText(model.getOperand().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
-        displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
+        if (noError) {
+            try {
+                inputNumber = ZERO;
+                model.addUnaryOperator(UnaryOperation.find(operator));
+
+                displayField.setText(model.getOperand().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
+                displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
+            } catch (ArithmeticException e) {
+                noError = false;
+                displayField.setText("Cannot divide by zero");
+            }
+        }
     }
 
     /**
      * Handles Clear entry event
+     *
      * @param event clear event
      */
     @FXML
@@ -120,12 +145,14 @@ public class CalculatorController implements Initializable {
         CalculatorButton.valueOf(((Button) event.getSource()));
         model.clearEntry();
         inputNumber = ZERO;
+        noError = true;
 
         displayField.setText(ZERO);
     }
 
     /**
      * Handles clear all event
+     *
      * @param event clear all event
      */
     @FXML
@@ -133,6 +160,7 @@ public class CalculatorController implements Initializable {
         CalculatorButton.valueOf(((Button) event.getSource()));
         model = new Model();
         inputNumber = ZERO;
+        noError = true;
 
         displayField.setText(ZERO);
         displayHistory.setText(EMPTY);
@@ -140,75 +168,100 @@ public class CalculatorController implements Initializable {
 
     /**
      * Handles backspace event
+     *
      * @param event backspace event
      */
     @FXML
     private void handleBackspaceAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        if (!inputNumber.isEmpty()) {
-            if (inputNumber.length() > 1) {
-                inputNumber = inputNumber.substring(0, inputNumber.length() - 1);
-            } else {
-                inputNumber = ZERO;
-            }
 
-            model.addNumber(new BigDecimal(inputNumber));
-            displayField.setText(inputNumber);
+        if (noError) {
+            if (!inputNumber.isEmpty()) {
+                if (inputNumber.length() > 1) {
+                    inputNumber = inputNumber.substring(0, inputNumber.length() - 1);
+                } else {
+                    inputNumber = ZERO;
+                }
+
+                model.addNumber(new BigDecimal(inputNumber));
+                displayField.setText(inputNumber);
+            }
         }
     }
 
     /**
      * Handles memory add event
+     *
      * @param event memory add event
      */
     @FXML
-    public void handleMemoryAddAction(ActionEvent event) {
+    private void handleMemoryAddAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        model.addToMemory();
+
+        if (noError) {
+            model.addToMemory();
+        }
     }
 
     /**
      * Handles memory subtract event
+     *
      * @param event memory subtract event
      */
     @FXML
-    public void handleMemorySubtractAction(ActionEvent event) {
+    private void handleMemorySubtractAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        model.subtractFromMemory();
+
+        if (noError) {
+            model.subtractFromMemory();
+        }
     }
 
     /**
      * Handles memory save event
+     *
      * @param event memory save event
      */
     @FXML
-    public void handleMemorySaveAction(ActionEvent event) {
+    private void handleMemorySaveAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        model.saveMemory();
+
+        if (noError) {
+            model.saveMemory();
+        }
     }
 
     /**
      * Handles memory clear event
+     *
      * @param event memory clear event
      */
     @FXML
-    public void handleMemoryClearAction(ActionEvent event) {
+    private void handleMemoryClearAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        model.clearMemory();
+
+        if (noError) {
+            model.clearMemory();
+        }
     }
 
     /**
      * Handles memory recall event
+     *
      * @param event memory recall event
      */
     @FXML
-    public void handleMemoryRecallAction(ActionEvent event) {
+    private void handleMemoryRecallAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        BigDecimal memory = model.getMemory();
-        displayField.setText(memory.toString());
+
+        if (noError) {
+            BigDecimal memory = model.getMemory();
+            displayField.setText(memory.toString());
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        displayField.setText(ZERO);
     }
 }
