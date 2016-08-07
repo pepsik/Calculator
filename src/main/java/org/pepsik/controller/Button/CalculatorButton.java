@@ -1,4 +1,4 @@
-package org.pepsik.controller;
+package org.pepsik.controller.button;
 
 import javafx.scene.control.Button;
 

@@ -1,5 +1,6 @@
 package org.pepsik.model.helper;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
@@ -42,50 +43,46 @@ public enum UITestButton {
     MEMORY_SUBTRACT("M-"),
     MEMORY_SAVE("MS");
 
-    private static Scene scene;
-
     private String value;
     private Button button;
-
-    public static void setScene(Scene scene) {
-        UITestButton.scene = scene;
-
-        for (UITestButton button : values()) {
-            button.button = (Button) scene.lookup("#" + button.name().toLowerCase());
-        }
-    }
 
     UITestButton(String value) {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
+    public static void setUIButtons(Scene scene) {
+        for (UITestButton button : values()) {
+            button.button = (Button) scene.lookup("#" + button.name().toLowerCase());
+        }
     }
 
-    public void fire() {
-        this.button.fire();
-    }
-
-    public static Button getButton(String input) {
+    public static UITestButton getUIButton(String input) {
         for (UITestButton button : values()) {
             if (button.getValue().equals(input)) {
-                return button.button;
+                return button;
             }
         }
         throw new IllegalArgumentException("No match buttons found to " + input);
     }
 
-    public Button getButton(){
-        return button;
-    }
-
-    public static String isExist(String input) {
+    public static String getUIButtonName(String input) {
         for (UITestButton button : values()) {
             if (button.getValue().equals(input)) {
                 return button.name().toLowerCase();
             }
         }
         throw new IllegalArgumentException("No match buttons found to " + input);
+    }
+
+    public String getStyle() {
+        return button.getStyle();
+    }
+
+    public void push() {
+        Platform.runLater(() -> button.fire());
+    }
+
+    public String getValue() {
+        return value;
     }
 }

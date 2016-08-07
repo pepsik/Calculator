@@ -130,10 +130,10 @@ public class AutomatronUITest {
         testOperation(2, "2 * 1 =");
         testOperation(3, "3 * 1 =");
 
-        testOperation(5, "4 / 1 =");
-        testOperation(6, "5 / 1 =");
-        testOperation(7, "6 / 1 =");
-        testOperation(8, "7 / 1 =");
+        testOperation(4, "4 / 1 =");
+        testOperation(5, "5 / 1 =");
+        testOperation(6, "6 / 1 =");
+        testOperation(7, "7 / 1 =");
 
         testOperation(7, "8 - 1 =");
         testOperation(8, "9 - 1 =");
@@ -252,8 +252,6 @@ public class AutomatronUITest {
     }
 
     private void operate(String expected, String input) {
-        System.out.println(expected);
-
         String data = input.replaceAll("\\s+", "");
 
         StringBuilder sb = new StringBuilder();
@@ -263,7 +261,7 @@ public class AutomatronUITest {
             String symbol = data.substring(i, i + 1);
 
             if (StringUtils.isNumeric(symbol)) {
-                user.clickOn("#" + UITestButton.isExist(symbol));
+                user.clickOn("#" + UITestButton.getUIButtonName(symbol));
                 continue;
             }
 
@@ -273,17 +271,17 @@ public class AutomatronUITest {
             }
 
             if (symbol.equals(".")) {
-                user.clickOn("#" + UITestButton.isExist(symbol));
+                user.clickOn("#" + UITestButton.getUIButtonName(symbol));
                 continue;
             }
 
             if (BinaryOperation.isExist(symbol)) {
-                user.clickOn("#" + UITestButton.isExist(symbol));
+                user.clickOn("#" + UITestButton.getUIButtonName(symbol));
                 continue;
             }
 
             if (symbol.equals("(")) {
-                listUnary.add(UITestButton.isExist(sb.toString())); //todo: input str, output str
+                listUnary.add(UITestButton.getUIButtonName(sb.toString())); //todo: input str, output str
                 sb = new StringBuilder();
                 continue;
             }

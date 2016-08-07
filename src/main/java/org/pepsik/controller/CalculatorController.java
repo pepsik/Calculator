@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.Model;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -173,7 +174,7 @@ public class CalculatorController implements Initializable {
     @FXML
     public void handleMemorySubtractAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        model.substructFromMemory();
+        model.subtractFromMemory();
     }
 
     /**

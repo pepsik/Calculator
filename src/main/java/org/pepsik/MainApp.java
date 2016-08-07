@@ -6,8 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import org.pepsik.controller.CalculatorButton;
+import org.pepsik.controller.button.CalculatorButton;
 
+import java.io.IOException;
 import java.util.Set;
 
 public class MainApp extends Application {
@@ -24,8 +25,13 @@ public class MainApp extends Application {
     private Label display;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Calculator.fxml"));
+    public void start(Stage primaryStage) {
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/view/Calculator.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         primaryStage.setTitle("Calculator");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

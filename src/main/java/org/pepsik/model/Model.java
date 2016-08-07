@@ -51,7 +51,6 @@ public class Model {
         //operator - exist;  operand - empty
         if (binaryOperator != null && operand == null) {
             currentStage.setBinaryOperator(inputOperator);
-            return;
         }
 
         //operator - exist;  operand - exist
@@ -238,9 +237,9 @@ public class Model {
         BigDecimal operand = currentStage.getOperand();
 
         if (operand != null) {
-            currentStage.setOperand(operand.divide(new BigDecimal(10), RoundingMode.DOWN));
+            currentStage.setOperand(operand.divide(new BigDecimal(10), RoundingMode.FLOOR));
         } else {
-            currentStage.setOperand(getLastCompleteStage().getResultOperation().divide(new BigDecimal(10), RoundingMode.DOWN));
+            currentStage.setOperand(getLastCompleteStage().getResultOperation().divide(new BigDecimal(10), RoundingMode.FLOOR));
         }
     }
 
@@ -256,7 +255,7 @@ public class Model {
         }
     }
 
-    public void substructFromMemory() {
+    public void subtractFromMemory() {
         if (currentStage.getOperand() == null) {
             memory = new BigDecimal(ZERO);
         }

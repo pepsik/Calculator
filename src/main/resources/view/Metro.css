@@ -1,14 +1,17 @@
-/*******************************************************************************
- *                                                                             *
- * Push Button                                                                 *
- *                                                                             *
- ******************************************************************************/
+/*
+    Calculator buttons css.
+
+     Top buttons block represents are first 2 button lines -
+    - all memory, clear, clear all, unary square, square root, fraction.
+
+    Bottom buttons block represents buttons under the above-mentioned.
+*/
+
+/*-------------Button default-------------*/
 
 .button {
-    /*-fx-padding: 5 12 5 12;*/
-    -fx-border-style: null;
+    -fx-border-style: none;
     -fx-background-radius: 0;
-
     -fx-background-color: #e6e6e6;
 
     -fx-font-family: Segoe UI, Frutiger, Frutiger Linotype, Dejavu Sans, Helvetica Neue, Arial, sans-serif;
@@ -21,7 +24,7 @@
 }
 
 .button:pressed, .button:default:hover:pressed {
-    -fx-background-color: b8b8b8;
+    -fx-background-color: #b8b8b8;
     -fx-text-fill: black;
 }
 
@@ -40,6 +43,9 @@
     -fx-background-color: #219297;
 }
 
+/*-------------Button default END-------------*/
+
+/*-------------Button TOP -------------*/
 .top-button {
     -fx-background-color: #f2f2f2;
 }
@@ -51,6 +57,13 @@
     -fx-text-fill: #787878;
 }
 
+.clear-button {
+    -fx-font-size: 16px;
+}
+
+/*-------------Button TOP END -------------*/
+
+/*-------------Button BOTTOM -------------*/
 .equal:hover {
     -fx-background-color: #219797;
 }
@@ -60,10 +73,9 @@
     -fx-text-fill: white;
 }
 
-.clear-button {
-    -fx-font-size: 16px;
-}
+/*-------------Button BOTTOM END-------------*/
 
+/*-------------Display-------------*/
 #display {
     -fx-background-color: #f2f2f2;
     -fx-font-size: 48px bold;
@@ -76,6 +88,7 @@
     -fx-padding: 0 10 0 10;
 }
 
+/*-------------Display END-------------*/
 
 
 
