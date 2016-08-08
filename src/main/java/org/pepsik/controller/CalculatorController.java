@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import org.pepsik.controller.button.CalculatorButton;
+import org.pepsik.controller.button.InputNumber;
 import org.pepsik.model.Model;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -37,10 +38,9 @@ public class CalculatorController implements Initializable {
     private Label displayHistory;
 
     /**
-     * User input value
+     * Block calculation buttons if error
+     * Can be removed by Clear, ClearALL buttons
      */
-    private String inputNumber = EMPTY;
-
     private boolean noError = true;
     /**
      * Calculator Model witch calculate expression
@@ -54,18 +54,11 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleDigitAction(ActionEvent event) {
-        String digit = CalculatorButton.valueOf((Button) event.getSource());
-
         if (noError) {
-            if (inputNumber.isEmpty()) {
-                inputNumber = digit;
-            } else if (inputNumber.length() < 16) {
-                inputNumber += digit;
-                inputNumber = new BigDecimal(inputNumber).toString();
-            }
+            InputNumber.addDigit(event);
+            model.addNumber(InputNumber.getInput());
 
-            model.addNumber(new BigDecimal(inputNumber));
-            displayField.setText(inputNumber);
+            displayField.setText(InputNumber.getInput().toPlainString());
         }
     }
 
@@ -76,16 +69,12 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handlePointAction(ActionEvent event) {
-        String point = CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf(((Button) event.getSource()));
 
         if (noError) {
-            if (inputNumber.isEmpty()) {
-                inputNumber = "0.";
-            } else if (!inputNumber.contains(point)) {
-                inputNumber += point;
-            }
+            InputNumber.addPoint();
 
-            displayField.setText(inputNumber);
+            displayField.setText(InputNumber.getInput() + ".");
         }
     }
 
@@ -100,15 +89,16 @@ public class CalculatorController implements Initializable {
 
         if (noError) {
             try {
+                InputNumber.clearInput();
                 model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
 
                 displayField.setText(model.getResult().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;
+
                 displayField.setText("Cannot divide by zero");
             }
-            inputNumber = EMPTY;
         }
     }
 
@@ -123,13 +113,14 @@ public class CalculatorController implements Initializable {
 
         if (noError) {
             try {
-                inputNumber = ZERO;
+                InputNumber.clearInput();
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
                 displayField.setText(model.getOperand().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;
+
                 displayField.setText("Cannot divide by zero");
             }
         }
@@ -143,9 +134,14 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleClearAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
-        model.clearEntry();
-        inputNumber = ZERO;
+
+        if (!noError) {
+            displayHistory.setText("");
+        }
+
+        InputNumber.clearInput();
         noError = true;
+        model.clearEntry();
 
         displayField.setText(ZERO);
     }
@@ -158,8 +154,9 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleClearAllAction(ActionEvent event) {
         CalculatorButton.valueOf(((Button) event.getSource()));
+
         model = new Model();
-        inputNumber = ZERO;
+        InputNumber.clearInput();
         noError = true;
 
         displayField.setText(ZERO);
@@ -176,15 +173,13 @@ public class CalculatorController implements Initializable {
         CalculatorButton.valueOf(((Button) event.getSource()));
 
         if (noError) {
-            if (!inputNumber.isEmpty()) {
-                if (inputNumber.length() > 1) {
-                    inputNumber = inputNumber.substring(0, inputNumber.length() - 1);
-                } else {
-                    inputNumber = ZERO;
-                }
+            InputNumber.backspace();
+            if (InputNumber.getInput() != null) {
+                model.addNumber(InputNumber.getInput());
 
-                model.addNumber(new BigDecimal(inputNumber));
-                displayField.setText(inputNumber);
+                displayField.setText(InputNumber.getInput().toPlainString());
+            } else {
+                displayField.setText(ZERO);
             }
         }
     }
@@ -256,7 +251,10 @@ public class CalculatorController implements Initializable {
 
         if (noError) {
             BigDecimal memory = model.getMemory();
-            displayField.setText(memory.toString());
+
+            if (memory != null) {
+                displayField.setText(memory.toString());
+            }
         }
     }
 

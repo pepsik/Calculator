@@ -1,6 +1,7 @@
 package org.pepsik.model;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -8,18 +9,19 @@ import javafx.stage.Stage;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.pepsik.MainApp;
 import org.pepsik.model.helper.UITestButton;
 import org.pepsik.model.operation.BinaryOperation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Integer.MAX_VALUE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.pepsik.model.helper.UITestButton.*;
 
 public class UITest {
@@ -36,7 +38,11 @@ public class UITest {
 
         Platform.runLater(() -> {
             stage = new Stage();
-            new MainApp().start(stage);
+            try {
+                new MainApp().start(stage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             Scene scene = stage.getScene();
             UITestButton.setUIButtons(scene);
@@ -88,6 +94,7 @@ public class UITest {
         assertExpression(9.99, "9.99");
         assertExpression("10.00", "10.00");
         assertExpression("123456.", "1 2 3 4 5 6.");
+        assertExpression("0.12", ".1 2");
         assertExpression("0.1234567890", ".1 2 3 4 5 6 7 8 9 0");
 
         assertExpression("1111111111111111", "1111111111111111");
@@ -581,49 +588,101 @@ public class UITest {
     }
 
     @Test
-    public void testResizeButtonFontSize() throws InterruptedException {
-        //Test font Resize
+    public void testResizeButtonFont() throws InterruptedException {
         stage.setWidth(250);
         stage.setHeight(350);
 
-        assertResizeFontButton("18px", UITestButton.NUMBER_1);
-        assertResizeFontButton("18px", UITestButton.NUMBER_2);
-        assertResizeFontButton("18px", UITestButton.NUMBER_3);
-        assertResizeFontButton("18px", UITestButton.NUMBER_4);
-        assertResizeFontButton("18px", UITestButton.NUMBER_5);
-        assertResizeFontButton("18px", UITestButton.NUMBER_6);
-        assertResizeFontButton("18px", UITestButton.NUMBER_7);
-        assertResizeFontButton("18px", UITestButton.NUMBER_8);
-        assertResizeFontButton("18px", UITestButton.NUMBER_9);
-        assertResizeFontButton("18px", UITestButton.NUMBER_0);
+        Thread.sleep(200);
 
-        assertResizeFontButton("16px", UITestButton.ADD);
-        assertResizeFontButton("16px", UITestButton.SUBTRACT);
-        assertResizeFontButton("16px", UITestButton.MULTIPLY);
-        assertResizeFontButton("16px", UITestButton.DIVIDE);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_1);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_2);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_3);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_4);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_5);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_6);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_7);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_8);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_9);
+        assertResizeFontButton("number_small_font", UITestButton.NUMBER_0);
 
-        assertResizeFontButton("14px", UITestButton.SQUARE);
-        assertResizeFontButton("14px", UITestButton.SQUARE_ROOT);
-        assertResizeFontButton("14px", UITestButton.FRACTION);
-        assertResizeFontButton("14px", UITestButton.PERCENT);
-        assertResizeFontButton("16px", UITestButton.NEGATE);
+        assertResizeFontButton("binary_small_font", UITestButton.ADD);
+        assertResizeFontButton("binary_small_font", UITestButton.SUBTRACT);
+        assertResizeFontButton("binary_small_font", UITestButton.MULTIPLY);
+        assertResizeFontButton("binary_small_font", UITestButton.DIVIDE);
+        assertResizeFontButton("binary_small_font", UITestButton.EQUAL);
 
-        assertResizeFontButton("16px", UITestButton.EQUAL);
-        assertResizeFontButton("18px", UITestButton.POINT);
+        assertResizeFontButton("unary_small_font", UITestButton.SQUARE);
+        assertResizeFontButton("unary_small_font", UITestButton.SQUARE_ROOT);
+        assertResizeFontButton("unary_small_font", UITestButton.FRACTION);
+        assertResizeFontButton("unary_small_font", UITestButton.PERCENT);
+        assertResizeFontButton("unary_small_font", UITestButton.NEGATE);
 
-        assertResizeFontButton("14px", UITestButton.CLEAR_ALL);
-        assertResizeFontButton("14px", UITestButton.CLEAR_ENTRY);
+        assertResizeFontButton("point_small_font", UITestButton.POINT);
 
-        assertResizeFontButton("14px", UITestButton.BACKSPACE);
+        assertResizeFontButton("clear_small_font", UITestButton.CLEAR_ALL);
+        assertResizeFontButton("clear_small_font", UITestButton.CLEAR_ENTRY);
+        assertResizeFontButton("clear_small_font", UITestButton.BACKSPACE);
 
-        assertResizeFontButton("12px", UITestButton.MEMORY_ADD);
-        assertResizeFontButton("12px", UITestButton.MEMORY_SUBTRACT);
-        assertResizeFontButton("12px", UITestButton.MEMORY_CLEAR);
-        assertResizeFontButton("12px", UITestButton.MEMORY_RECALL);
-        assertResizeFontButton("12px", UITestButton.MEMORY_SAVE);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_ADD);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_SUBTRACT);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_CLEAR);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_RECALL);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_SAVE);
 
         stage.setWidth(400);
         stage.setHeight(600);
+
+        Thread.sleep(200);
+
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_1);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_2);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_3);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_4);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_5);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_6);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_7);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_8);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_9);
+        assertResizeFontButton("number_big_font", UITestButton.NUMBER_0);
+
+        assertResizeFontButton("binary_big_font", UITestButton.ADD);
+        assertResizeFontButton("binary_big_font", UITestButton.SUBTRACT);
+        assertResizeFontButton("binary_big_font", UITestButton.MULTIPLY);
+        assertResizeFontButton("binary_big_font", UITestButton.DIVIDE);
+        assertResizeFontButton("binary_big_font", UITestButton.EQUAL);
+
+        assertResizeFontButton("unary_big_font", UITestButton.SQUARE);
+        assertResizeFontButton("unary_big_font", UITestButton.SQUARE_ROOT);
+        assertResizeFontButton("unary_big_font", UITestButton.FRACTION);
+        assertResizeFontButton("unary_big_font", UITestButton.PERCENT);
+        assertResizeFontButton("unary_big_font", UITestButton.NEGATE);
+
+        assertResizeFontButton("clear_big_font", UITestButton.CLEAR_ALL);
+        assertResizeFontButton("clear_big_font", UITestButton.CLEAR_ENTRY);
+        assertResizeFontButton("clear_big_font", UITestButton.BACKSPACE);
+
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_ADD);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_SUBTRACT);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_CLEAR);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_RECALL);
+        assertResizeFontButton("memory_font", UITestButton.MEMORY_SAVE);
+
+        assertResizeFontButton("point_big_font", UITestButton.POINT);
+    }
+
+    @Test
+    public void testResizeDisplayFont() throws InterruptedException {
+        stage.setHeight(350);
+        stage.setWidth(250);
+
+        assertResizeFontDisplay("display_small_font", display);
+
+        stage.setHeight(550);
+        stage.setWidth(350);
+
+        Thread.sleep(200);
+
+        assertResizeFontDisplay("display_big_font", display);
     }
 
     @Test
@@ -641,12 +700,6 @@ public class UITest {
         assertHistoryExpressionDisplay("3 + negate(233) + fraction(7)");
         assertHistoryExpressionDisplay("1 * negate(6) + fraction(71)");
         assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
-    }
-
-    @Ignore
-    @Test
-    public void testResizeDisplayFont() {
-        //Test display resize
     }
 
     @Test
@@ -668,6 +721,13 @@ public class UITest {
         MEMORY_ADD.push();
         MEMORY_RECALL.push();
         assertExpressionWithoutClear(12, "/12=");
+
+        CLEAR_ALL.push();
+        parseAndExecute("5 + 3");
+        MEMORY_ADD.push();
+        MEMORY_CLEAR.push();
+        MEMORY_CLEAR.push();
+        MEMORY_SUBTRACT.push();
     }
 
     @Test
@@ -701,11 +761,6 @@ public class UITest {
     private void assertExpressionWithoutClear(String expected, String input) {
         parseAndExecute(input);
         assertEquals(expected, display.getText());
-    }
-
-    private void assertExpressionWithoutClear(double expected, String input) {
-        parseAndExecute(input);
-        assertEquals(String.valueOf(expected), display.getText());
     }
 
     private void assertExpressionWithoutClear(int expected, String input) {
@@ -774,7 +829,13 @@ public class UITest {
     }
 
     private void assertResizeFontButton(String expected, UITestButton button) throws InterruptedException {
-        assertEquals("-fx-font: " + expected + " arial;", button.getStyle());
+        ObservableList<String> cssClasses = button.getStyleClass();
+        assertTrue(cssClasses.contains(expected));
+    }
+
+    private void assertResizeFontDisplay(String expected, Label display) throws InterruptedException {
+        ObservableList<String> cssClasses = display.getStyleClass();
+        assertTrue(cssClasses.contains(expected));
     }
 
     private void assertHistoryExpressionDisplay(String expected) {

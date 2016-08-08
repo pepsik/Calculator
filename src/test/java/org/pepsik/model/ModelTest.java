@@ -589,29 +589,6 @@ public class ModelTest {
     }
 
     @Test
-    public void testBackspaceOperation() {
-        //------ BACKSPACE ------
-        assertResult(55, "55 =");
-        model.backspace();
-        assertResultWithoutClear(5, "=");
-        model.backspace();
-        assertResultWithoutClear(0, "=");
-        model.backspace();
-        assertResultWithoutClear(0, "");
-
-        assertResultWithoutClear(15, "10 + 5 = ");
-        model.backspace();
-        assertResultWithoutClear(6, "=");
-
-        assertResultWithoutClear(15, "10 + 5 = ");
-        model.backspace();
-        model.backspace();
-        model.backspace();
-        assertResultWithoutClear(-5, " - 5 =");
-        //-------- END BACKSPACE ------
-    }
-
-    @Test
     public void testMemoryOperation() {
         //--------- MEMORY ----------
         assertResult(5, "5 + 10");

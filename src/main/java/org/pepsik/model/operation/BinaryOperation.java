@@ -38,23 +38,13 @@ public enum BinaryOperation {
         }
     };
 
+    /**
+     * String representation of operator
+     */
     private String operator;
 
     BinaryOperation(String operator) {
         this.operator = operator;
-    }
-
-    /**
-     * Executes operation with 2 values
-     *
-     * @param f first value
-     * @param s second value
-     * @return result operation
-     */
-    public abstract BigDecimal execute(BigDecimal f, BigDecimal s);
-
-    public String getOperator() {
-        return operator;
     }
 
     public static boolean isExist(String str) {
@@ -80,5 +70,18 @@ public enum BinaryOperation {
             }
         }
         throw new IllegalArgumentException(" No enum constant for " + operator);
+    }
+
+    /**
+     * Executes operation with 2 values
+     *
+     * @param f first value
+     * @param s second value
+     * @return result operation
+     */
+    public abstract BigDecimal execute(BigDecimal f, BigDecimal s);
+
+    public String getOperator() {
+        return operator;
     }
 }

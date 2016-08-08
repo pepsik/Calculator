@@ -8,7 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class represent a stage of binary operation. Stage consist of binary operator, operand, unary operations (witch operate with operand) and result of binary operation.
+ * Class represent a stage of binary operation. Stage consist of binary operator, operand, unary operations.
+ *
+ * <p>1) E.g. expression 5+4=9 will be as sequence of stages - {5},{+,4},{=,9} where first argument in Stage{} is BinaryOperation and second is BigDecimal operand.
+ * <p>The first stage {empty,5} don't have an operator then result of this stage result = 5. <p>The second stage do binary ADD where left operand is result = 5 of last stage {5}
+ * and right operand is field of second stage. <p>The result will be stored in Model and used for next stages.
+ * When last stage with EQUAL operator found than operand of this stage will be the result of all expression in e.g. {=,9}.
+ *<p>
+ * <p>2) E.g. expression 5+(-√9)=2 will be  {5},{+, negate(sqrt(9)},{=,2}.<p> First stage 5 and result = 5. <p>The second stage consist additional unary operators, they operate with
+ * current stage operand (9) before binary operation. <p>After unary operations stage will be like {+,-3} and result = 2. When encounter an EQUAL operator,
+ * then expression end and result stage looks {=, 2}.
+ *
  */
 public class Stage {
     /**

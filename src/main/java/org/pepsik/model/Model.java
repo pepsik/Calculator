@@ -17,13 +17,31 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
 public class Model {
     private static final String ZERO = "0";
 
+    /**
+     * Expression represents by sequence of stages
+     */
     private Deque<Stage> currentExpression = new ArrayDeque<>();
+    /**
+     * History of last expressions
+     */
     private List<Deque<Stage>> history = new ArrayList<>();
 
+    /**
+     * Current stage operate with
+     */
     private Stage currentStage = new Stage();
+    /**
+     * Last binary stage
+     */
     private Stage lastBinaryStage;
 
+    /**
+     * Result of last complete stage
+     */
     private BigDecimal result = new BigDecimal(ZERO);
+    /**
+     * Memory which consist one number
+     */
     private BigDecimal memory;
 
     /**
@@ -116,19 +134,6 @@ public class Model {
         currentStage.setOperand(new BigDecimal(ZERO));
     }
 
-    public void backspace() {
-        BigDecimal operand = currentStage.getOperand();
-
-        if (operand != null) {
-            operand = operand.divide(new BigDecimal(10), RoundingMode.FLOOR);
-        } else {
-            operand = this.result.divide(new BigDecimal(10), RoundingMode.FLOOR);
-        }
-
-        currentStage.setOperand(operand);
-    }
-
-    //todo MEMORY TO ENUM
     public void addToMemory() {
         if (memory == null) {
             memory = new BigDecimal("0");
@@ -142,14 +147,16 @@ public class Model {
     }
 
     public void subtractFromMemory() {
-        if (currentStage.getOperand() == null) {
-            memory = new BigDecimal(ZERO);
-        }
+        if (memory != null) {
+            if (currentStage.getOperand() == null) {
+                memory = new BigDecimal(ZERO);
+            }
 
-        if (currentStage.getOperand() != null) {
-            memory = memory.add(currentStage.getOperand());
-        } else {
-            memory = memory.add(result);
+            if (currentStage.getOperand() != null) {
+                memory = memory.add(currentStage.getOperand());
+            } else {
+                memory = memory.add(result);
+            }
         }
     }
 

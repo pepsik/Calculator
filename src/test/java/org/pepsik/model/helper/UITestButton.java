@@ -1,6 +1,7 @@
 package org.pepsik.model.helper;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
@@ -74,8 +75,8 @@ public enum UITestButton {
         throw new IllegalArgumentException("No match buttons found to " + input);
     }
 
-    public String getStyle() {
-        return button.getStyle();
+    public ObservableList<String> getStyleClass() {
+        return button.getStyleClass();
     }
 
     public void push() {

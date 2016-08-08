@@ -41,14 +41,15 @@ public enum UnaryOperation {
         }
     };
 
+    /**
+     * Operand which operate to
+     */
     private static BigDecimal operand;
 
-    private String operator;
-
-    UnaryOperation(String operator) {
-        this.operator = operator;
-    }
-
+    /**
+     * Sets operand
+     * @param operand operand which operate to
+     */
     public static void setOperand(BigDecimal operand) {
         UnaryOperation.operand = operand;
     }
@@ -66,6 +67,15 @@ public enum UnaryOperation {
         }
 
         throw new IllegalArgumentException("Unary operator not found!" + value);
+    }
+
+    /**
+     * String representation of operator
+     */
+    private String operator;
+
+    UnaryOperation(String operator) {
+        this.operator = operator;
     }
 
     /**
