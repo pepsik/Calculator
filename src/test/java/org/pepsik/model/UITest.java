@@ -566,7 +566,7 @@ public class UITest {
 
         assertExpression(1, "fraction(fraction(1) + negate(0) = ");
         assertExpression(3, "fraction(fraction(2) + 1 = ");
-        assertExpression("2.3333333333333333E0", "fraction(3) + 2 = ");
+        assertExpression("2.3333333333333333", "fraction(3) + 2 = ");
         assertExpression(6.05, "fraction(10) + 2 + 10/2 = ");
         assertExpression(4.5, "fraction(4) + 2*2 = ");
 

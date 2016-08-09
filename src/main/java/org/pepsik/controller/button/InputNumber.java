@@ -46,6 +46,7 @@ public enum InputNumber {
 
     /**
      * Returns input number
+     *
      * @return actual input number
      */
     public static BigDecimal getInput() {
@@ -54,6 +55,7 @@ public enum InputNumber {
 
     /**
      * Sets JavaFX buttons to enum constants
+     *
      * @param buttons javaFX node buttons
      */
     public static void setButtons(Set<Button> buttons) {
@@ -68,6 +70,7 @@ public enum InputNumber {
 
     /**
      * Adds digit to input number
+     *
      * @param event input digit event
      */
     public static void addDigit(ActionEvent event) {
@@ -87,7 +90,13 @@ public enum InputNumber {
             input = new BigDecimal(0);
         }
 
-        scale++;
+        if (scale == 0) {
+            scale++;
+        }
+    }
+
+    public static boolean isPointSet() {
+        return scale != 0;
     }
 
     /**
@@ -109,6 +118,7 @@ public enum InputNumber {
 
     /**
      * Add input digit to input number
+     *
      * @param value input digit
      */
     private static void addToInput(BigDecimal value) {
@@ -126,6 +136,7 @@ public enum InputNumber {
 
     /**
      * Checks if limit input digits is reached
+     *
      * @param n number to check
      * @return bool
      */
