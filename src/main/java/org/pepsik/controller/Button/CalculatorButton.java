@@ -1,5 +1,6 @@
 package org.pepsik.controller.button;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 
 import java.util.Set;
@@ -31,9 +32,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 20px arial;");
+                changeCssClass("binary_small_font", "binary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("binary_big_font", "binary_small_font");
             }
         }
     },
@@ -42,9 +43,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 20px arial;");
+                changeCssClass("binary_small_font", "binary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("binary_big_font", "binary_small_font");
             }
         }
     },
@@ -53,9 +54,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 20px arial;");
+                changeCssClass("binary_small_font", "binary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("binary_big_font", "binary_small_font");
             }
         }
     },
@@ -64,9 +65,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 20px arial;");
+                changeCssClass("binary_small_font", "binary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("binary_big_font", "binary_small_font");
             }
         }
     },
@@ -75,9 +76,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 20px arial;");
+                changeCssClass("binary_small_font", "binary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("binary_big_font", "binary_small_font");
             }
         }
     },
@@ -90,9 +91,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 18px arial;");
+                changeCssClass("unary_small_font", "unary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 14px arial;");
+                changeCssClass("unary_big_font", "unary_small_font");
             }
         }
     },
@@ -101,9 +102,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 18px arial;");
+                changeCssClass("unary_small_font", "unary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 14px arial;");
+                changeCssClass("unary_big_font", "unary_small_font");
             }
         }
     },
@@ -112,9 +113,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 18px arial;");
+                changeCssClass("unary_small_font", "unary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 14px arial;");
+                changeCssClass("unary_big_font", "unary_small_font");
             }
         }
     },
@@ -123,9 +124,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 20px arial;");
+                changeCssClass("unary_small_font", "unary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("unary_big_font", "unary_small_font");
             }
         }
     },
@@ -134,9 +135,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 18px arial;");
+                changeCssClass("unary_small_font", "unary_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 14px arial;");
+                changeCssClass("unary_big_font", "unary_small_font");
             }
         }
     },
@@ -149,9 +150,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 24px arial;");
+                changeCssClass("point_small_font", "point_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 18px arial;");
+                changeCssClass("point_big_font", "point_small_font");
             }
         }
     },
@@ -164,9 +165,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("clear_small_font", "clear_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 14px arial;");
+                changeCssClass("clear_big_font", "clear_small_font");
             }
         }
     },
@@ -175,9 +176,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("clear_small_font", "clear_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 14px arial;");
+                changeCssClass("clear_big_font", "clear_small_font");
             }
         }
     },
@@ -190,9 +191,9 @@ public enum CalculatorButton {
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
                     && Double.compare(height, 450) > 0) {
-                this.getButton().setStyle("-fx-font: 16px arial;");
+                changeCssClass("clear_small_font", "clear_big_font");
             } else {
-                this.getButton().setStyle("-fx-font: 14px arial;");
+                changeCssClass("clear_big_font", "clear_small_font");
             }
         }
     },
@@ -200,41 +201,11 @@ public enum CalculatorButton {
     /**
      * Memory button constants
      */
-    MEMORY_CLEAR("MC") {
-        @Override
-        protected void resize(double width, double height) {
-            this.getButton().setStyle(MEMORY_STYLE);
-        }
-    },
-    MEMORY_RECALL("MR") {
-        @Override
-        protected void resize(double width, double height) {
-            this.getButton().setStyle(MEMORY_STYLE);
-        }
-    },
-    MEMORY_ADD("M+") {
-        @Override
-        protected void resize(double width, double height) {
-            this.getButton().setStyle(MEMORY_STYLE);
-        }
-    },
-    MEMORY_SUBTRACT("M-") {
-        @Override
-        protected void resize(double width, double height) {
-            this.getButton().setStyle(MEMORY_STYLE);
-        }
-    },
-    MEMORY_SAVE("MS") {
-        @Override
-        protected void resize(double width, double height) {
-            this.getButton().setStyle(MEMORY_STYLE);
-        }
-    };
-
-    /**
-     * Memory default font css style
-     */
-    private static final String MEMORY_STYLE = "-fx-font: 12px arial;";
+    MEMORY_CLEAR("MC"),
+    MEMORY_RECALL("MR"),
+    MEMORY_ADD("M+"),
+    MEMORY_SUBTRACT("M-"),
+    MEMORY_SAVE("MS");
 
     /**
      * String presentation operation
@@ -252,6 +223,7 @@ public enum CalculatorButton {
 
     /**
      * Set Button collection to constants
+     *
      * @param buttons collection FXML buttons
      */
     public static void setButtons(Set<Button> buttons) {
@@ -260,15 +232,24 @@ public enum CalculatorButton {
         }
     }
 
-    public Button getButton() {
-        return button;
+    /**
+     * Initialize resize logic for all buttons
+     *
+     * @param width  new stage width
+     * @param height new stage height
+     */
+
+    public static void resizeButtons(double width, double height) {
+        for (CalculatorButton value : values()) {
+            value.resize(width, height);
+        }
     }
 
     /**
      * Return string button presentation by FXML Button
+     *
      * @param button FXML Node Button
      * @return String represents correspond button
-     *
      * @throws IllegalArgumentException in case button not found
      */
     public static String valueOf(Button button) {
@@ -280,26 +261,29 @@ public enum CalculatorButton {
         throw new IllegalArgumentException("No match buttons found to " + button);
     }
 
+    public Button getButton() {
+        return button;
+    }
+
     /**
      * Default resize (0-9 buttons)
      */
     protected void resize(double width, double height) {
         if (Double.compare(width, 270) > 0
                 && Double.compare(height, 450) > 0) {
-            this.button.setStyle("-fx-font: 24px arial;");
+            changeCssClass("number_small_font", "number_big_font");
         } else {
-            this.button.setStyle("-fx-font: 18px arial;");
+            changeCssClass("number_big_font", "number_small_font");
         }
     }
 
-    /**
-     * Initialize resize logic for all buttons
-     * @param width new stage width
-     * @param height new stage height
-     */
-    public static void resizeButtons(double width, double height) {
-        for (CalculatorButton value : values()) {
-            value.resize(width, height);
+    protected void changeCssClass(String oldClass, String newCss) {
+        ObservableList<String> cssList = button.getStyleClass();
+
+        cssList.remove(oldClass);
+
+        if (!cssList.contains(newCss)) {
+            cssList.add(newCss);
         }
     }
 

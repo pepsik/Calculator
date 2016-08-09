@@ -147,16 +147,14 @@ public class Model {
     }
 
     public void subtractFromMemory() {
-        if (memory != null) {
-            if (currentStage.getOperand() == null) {
-                memory = new BigDecimal(ZERO);
-            }
+        if (memory == null) {
+            memory = new BigDecimal(ZERO);
+        }
 
-            if (currentStage.getOperand() != null) {
-                memory = memory.add(currentStage.getOperand());
-            } else {
-                memory = memory.add(result);
-            }
+        if (currentStage.getOperand() != null) {
+            memory = memory.subtract(currentStage.getOperand());
+        } else {
+            memory = memory.subtract(result);
         }
     }
 

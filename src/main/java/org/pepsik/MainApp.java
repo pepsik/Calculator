@@ -1,12 +1,14 @@
 package org.pepsik;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
@@ -21,6 +23,7 @@ public class MainApp extends Application {
     private static final int MIN_WIDTH = 215;
     private static final int PREF_HEIGHT = 365;
     private static final int PREF_WIDTH = 215;
+    public static final int MAX_WIDTH = 550;
 
 
     /**
@@ -41,58 +44,55 @@ public class MainApp extends Application {
         primaryStage.setHeight(PREF_HEIGHT);
         primaryStage.setWidth(PREF_WIDTH);
 
-        Set<Button> buttons = (Set) root.lookupAll((".button"));
+        primaryStage.setMaxWidth(MAX_WIDTH);
 
-        //add all button nodes to enum
+        //get and set all node buttons to enums
+        Set<Button> buttons = (Set) root.lookupAll((".button"));
         CalculatorButton.setButtons(buttons);
         InputNumber.setButtons(buttons);
+
+        //Listeners for resizing buttons
+        initResizeListeners(scene);
 
         //get display label for font resizing
         display = (Label) root.lookup("#display");
 
-        //listeners for resizing buttons font
-        initResizeListeners(scene);
+        //Display font resize listener
+        display.textProperty().addListener((observable, oldValue, newValue) -> {
+            resizeDisplay();
+        });
 
-        //todo binding width to font size
-//        double size = display.getWidth() / (display.getText().length()/3);
-//        System.out.println(size);
-//        if (size < 48) {
-//            display.setFont(Font.font(size));
-//        }
-
+        //disable memory recall and clear after init
+        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
 
         primaryStage.show();
+    }
+
+    private void installEventHandler(final Node keyNode) {
 
     }
 
+
     /**
-     * Resize calculator display
-     *
-     * @param width  new display width
-     * @param height new display height
+     * Resize display font size
      */
-    private void resizeDisplayFont(double width, double height) {
-        if (Double.compare(width, 270) > 0 && Double.compare(height, 450) > 0) {
-            changeCssClass("display_small_font", "display_big_font");
+    private void resizeDisplay() {
+        double d = display.getScene().getWidth() / display.getText().length() * 1.5;
+        if (Double.compare(display.getScene().getWidth(), 270) > 0 && Double.compare(display.getScene().getHeight(), 450) > 0) {
+            //48px max display font size if width > 270 and height > 450
+            if (d > 48) {
+                display.setFont(Font.font(48));
+            } else {
+                display.setFont(Font.font(d));
+            }
         } else {
-            changeCssClass("display_big_font", "display_small_font");
-        }
-    }
-
-    /**
-     * Changes cssStyle between old and new css class
-     *
-     * @param oldClass old css class
-     * @param newCss   new css class
-     */
-    private void changeCssClass(String oldClass, String newCss) {
-        ObservableList<String> cssList = display.getStyleClass();
-
-        cssList.remove(oldClass);
-
-        if (!cssList.contains(newCss)) {
-            cssList.add(newCss);
+            //if size less then max font size is 32
+            if (d > 32) {
+                display.setFont(Font.font(32));
+            } else {
+                display.setFont(Font.font(d));
+            }
         }
     }
 
@@ -105,14 +105,13 @@ public class MainApp extends Application {
     private void initResizeListeners(Scene scene) {
         scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
             CalculatorButton.resizeButtons(newSceneWidth.doubleValue(), scene.getHeight());
+            resizeDisplay();
 
-            resizeDisplayFont(newSceneWidth.doubleValue(), scene.getHeight());
         });
 
         scene.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {
             CalculatorButton.resizeButtons(scene.getWidth(), newSceneHeight.doubleValue());
-
-            resizeDisplayFont(scene.getWidth(), newSceneHeight.doubleValue());
+            resizeDisplay();
         });
     }
 

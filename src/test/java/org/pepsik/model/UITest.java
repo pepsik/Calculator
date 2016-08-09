@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
@@ -675,14 +676,14 @@ public class UITest {
         stage.setHeight(350);
         stage.setWidth(250);
 
-        assertResizeFontDisplay("display_small_font", display);
+        assertResizeFontDisplay(display);
 
         stage.setHeight(550);
         stage.setWidth(350);
 
         Thread.sleep(200);
 
-        assertResizeFontDisplay("display_big_font", display);
+        assertResizeFontDisplay(display);
     }
 
     @Test
@@ -728,6 +729,34 @@ public class UITest {
         MEMORY_CLEAR.push();
         MEMORY_CLEAR.push();
         MEMORY_SUBTRACT.push();
+        MEMORY_RECALL.push();
+        assertExpressionWithoutClear(2, "=");
+
+        CLEAR_ALL.push();
+        parseAndExecute("123");
+        MEMORY_SAVE.push();
+        parseAndExecute("999");
+        assertExpressionWithoutClear(999, "");
+
+        CLEAR_ALL.push();
+        parseAndExecute("123");
+        MEMORY_ADD.push();
+        parseAndExecute("333");
+        assertExpressionWithoutClear(333, "");
+
+        CLEAR_ALL.push();
+        parseAndExecute("123");
+        MEMORY_SUBTRACT.push();
+        parseAndExecute("444");
+        assertExpressionWithoutClear(444, "");
+
+        CLEAR_ALL.push();
+        parseAndExecute("123");
+        MEMORY_SUBTRACT.push();
+        parseAndExecute("888");
+        MEMORY_RECALL.push();
+        parseAndExecute("444");
+        assertExpressionWithoutClear(444, "");
     }
 
     @Test
@@ -833,9 +862,19 @@ public class UITest {
         assertTrue(cssClasses.contains(expected));
     }
 
-    private void assertResizeFontDisplay(String expected, Label display) throws InterruptedException {
-        ObservableList<String> cssClasses = display.getStyleClass();
-        assertTrue(cssClasses.contains(expected));
+    private void assertResizeFontDisplay(Label display) throws InterruptedException {
+        double d = display.getWidth() / display.getText().length() * 1.5;
+
+        if (Double.compare(display.getScene().getWidth(), 270) > 0 && Double.compare(display.getScene().getHeight(), 450) > 0) {
+            if (d > 48) {
+                d = 48;
+            }
+        } else {
+            if (d > 32) {
+                d = 32;
+            }
+        }
+        assertEquals(d, display.getFont().getSize(), 0.000001);
     }
 
     private void assertHistoryExpressionDisplay(String expected) {

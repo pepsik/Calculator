@@ -196,6 +196,11 @@ public class CalculatorController implements Initializable {
         if (noError) {
             model.addToMemory();
         }
+
+        InputNumber.clearInput();
+
+        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(false);
+        CalculatorButton.MEMORY_RECALL.getButton().setDisable(false);
     }
 
     /**
@@ -210,6 +215,11 @@ public class CalculatorController implements Initializable {
         if (noError) {
             model.subtractFromMemory();
         }
+
+        InputNumber.clearInput();
+
+        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(false);
+        CalculatorButton.MEMORY_RECALL.getButton().setDisable(false);
     }
 
     /**
@@ -224,6 +234,11 @@ public class CalculatorController implements Initializable {
         if (noError) {
             model.saveMemory();
         }
+
+        InputNumber.clearInput();
+
+        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(false);
+        CalculatorButton.MEMORY_RECALL.getButton().setDisable(false);
     }
 
     /**
@@ -238,6 +253,11 @@ public class CalculatorController implements Initializable {
         if (noError) {
             model.clearMemory();
         }
+
+        InputNumber.clearInput();
+
+        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
+        CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
     }
 
     /**
@@ -256,6 +276,8 @@ public class CalculatorController implements Initializable {
                 displayField.setText(memory.toString());
             }
         }
+
+        InputNumber.clearInput();
     }
 
     @Override
