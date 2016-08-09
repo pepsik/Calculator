@@ -16,6 +16,8 @@ import org.pepsik.model.helper.UITestButton;
 import org.pepsik.model.operation.BinaryOperation;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -30,6 +32,8 @@ public class UITest {
     private static Stage stage;
     private static Label display;
     private static Label history;
+
+    private NumberFormat formatter = new DecimalFormat();
 
     @BeforeClass
     public static void initJFX() throws InterruptedException {
@@ -83,6 +87,8 @@ public class UITest {
         assertExpression(999, "999");
         assertExpression(1000, "1000");
         assertExpression(123456, "1 2 3 4 5 6");
+        assertExpression(123456, "1 2 3 4 5 6");
+        assertExpression("12,345.6", "1 2 3 4 5. 6");
         assertExpression(1234567890, "1 2 3 4 5 6 7 8 9 0");
         assertExpression(1234567890, "1 2 3 4 5 6 7 8 9 0");
 
@@ -98,10 +104,10 @@ public class UITest {
         assertExpression("0.12", ".1 2");
         assertExpression("0.1234567890", ".1 2 3 4 5 6 7 8 9 0");
 
-        assertExpression("1111111111111111", "1111111111111111");
+        assertExpression("1,111,111,111,111,111", "1111111111111111");
 
-        assertExpression("1111111111111111", "111111111111111111231231313");
-        assertExpression("9999999999999999", "99999999999999999999999999999");
+        assertExpression("1,111,111,111,111,111", "111111111111111111231231313");
+        assertExpression("9,999,999,999,999,999", "99999999999999999999999999999");
 
         assertExpression(0, "00");
         assertExpression(0, "0 0 0 0 0 ");
@@ -560,7 +566,7 @@ public class UITest {
 
         assertExpression(1, "fraction(fraction(1) + negate(0) = ");
         assertExpression(3, "fraction(fraction(2) + 1 = ");
-        assertExpression("2.3333333333333333", "fraction(3) + 2 = ");
+        assertExpression("2.3333333333333333E0", "fraction(3) + 2 = ");
         assertExpression(6.05, "fraction(10) + 2 + 10/2 = ");
         assertExpression(4.5, "fraction(4) + 2*2 = ");
 
@@ -778,13 +784,13 @@ public class UITest {
     private void assertExpression(double expected, String input) {
         CLEAR_ALL.push();
         parseAndExecute(input);
-        assertEquals(String.valueOf(expected), display.getText());
+        assertEquals(formatter.format(expected), display.getText());
     }
 
     private void assertExpression(int expected, String input) {
         CLEAR_ALL.push();
         parseAndExecute(input);
-        assertEquals(String.valueOf(expected), display.getText());
+        assertEquals(formatter.format(expected), display.getText());
     }
 
     private void assertExpressionWithoutClear(String expected, String input) {
@@ -863,7 +869,7 @@ public class UITest {
     }
 
     private void assertResizeFontDisplay(Label display) throws InterruptedException {
-        double d = display.getWidth() / display.getText().length() * 1.5;
+        double d = display.getWidth() / display.getText().length() * 1.6;
 
         if (Double.compare(display.getScene().getWidth(), 270) > 0 && Double.compare(display.getScene().getHeight(), 450) > 0) {
             if (d > 48) {

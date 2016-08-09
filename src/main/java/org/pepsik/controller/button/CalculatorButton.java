@@ -6,8 +6,8 @@ import javafx.scene.control.Button;
 import java.util.Set;
 
 /**
- * This enum represents calculator buttons. Each constant consist actual values (number or operation)  witch used in Model class in expression execution
- * and corresponding button from FXML and resize logic for it.
+ * This enum represents calculator buttons. Each constant consist values as String and Node a number or operation which used in Model class in expression execution
+ * and have resize button logic font.
  */
 public enum CalculatorButton {
     /**
@@ -238,7 +238,6 @@ public enum CalculatorButton {
      * @param width  new stage width
      * @param height new stage height
      */
-
     public static void resizeButtons(double width, double height) {
         for (CalculatorButton value : values()) {
             value.resize(width, height);

@@ -15,6 +15,8 @@ import org.pepsik.util.TextFormatter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 /**
@@ -42,6 +44,9 @@ public class CalculatorController implements Initializable {
      * Can be removed by Clear, ClearALL buttons
      */
     private boolean noError = true;
+
+    private DecimalFormat f = new DecimalFormat();
+
     /**
      * Calculator Model witch calculate expression
      */
@@ -56,9 +61,15 @@ public class CalculatorController implements Initializable {
     private void handleDigitAction(ActionEvent event) {
         if (noError) {
             InputNumber.addDigit(event);
+            f = new DecimalFormat();
             model.addNumber(InputNumber.getInput());
 
-            displayField.setText(InputNumber.getInput().toPlainString());
+            if (InputNumber.getInput().scale() == 0) {
+                displayField.setText(f.format(InputNumber.getInput()));
+            } else {
+                System.out.println(InputNumber.getInput());
+                displayField.setText(InputNumber.getInput().toPlainString());
+            }
         }
     }
 
@@ -92,7 +103,19 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
 
-                displayField.setText(model.getResult().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
+                NumberFormat f;
+                BigDecimal result = model.getResult().stripTrailingZeros();
+
+                if (result.precision() + result.scale() > 17) {
+                    f = new DecimalFormat("0.0E0");
+                    f.setMaximumFractionDigits(16);
+                    displayField.setText(f.format(result));
+                } else {
+                    f = new DecimalFormat();
+                    displayField.setText(f.format(result));
+                }
+
+
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;
@@ -116,7 +139,17 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
-                displayField.setText(model.getOperand().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
+                NumberFormat f = new DecimalFormat("0.0E0");
+                f.setMaximumFractionDigits(16);
+                BigDecimal result = model.getOperand().stripTrailingZeros();
+
+                if (result.precision() + result.scale() > 17) {
+                    displayField.setText(f.format(result));
+                } else {
+                    f = new DecimalFormat();
+                    displayField.setText(f.format(result));
+                }
+
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;

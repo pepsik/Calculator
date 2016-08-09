@@ -1,18 +1,16 @@
 package org.pepsik;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.InputNumber;
+import org.pepsik.controller.button.KeyboardShortcut;
 
 import java.io.IOException;
 import java.util.Set;
@@ -38,29 +36,17 @@ public class MainApp extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
+        //Init max, min, pref sizes
+        setUpApplicationSizes(primaryStage);
 
-        primaryStage.setHeight(PREF_HEIGHT);
-        primaryStage.setWidth(PREF_WIDTH);
+        //Setup all node buttons to enums
+        setUpButtons(scene);
 
-        primaryStage.setMaxWidth(MAX_WIDTH);
-
-        //get and set all node buttons to enums
-        Set<Button> buttons = (Set) root.lookupAll((".button"));
-        CalculatorButton.setButtons(buttons);
-        InputNumber.setButtons(buttons);
+        //Listeners for shortcut keys
+        initKeyboardShortcutListeners(scene);
 
         //Listeners for resizing buttons
         initResizeListeners(scene);
-
-        //get display label for font resizing
-        display = (Label) root.lookup("#display");
-
-        //Display font resize listener
-        display.textProperty().addListener((observable, oldValue, newValue) -> {
-            resizeDisplay();
-        });
 
         //disable memory recall and clear after init
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
@@ -69,16 +55,34 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
-    private void installEventHandler(final Node keyNode) {
+    private void setUpApplicationSizes(Stage primaryStage){
+        //Min size
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
 
+        //Preference size
+        primaryStage.setHeight(PREF_HEIGHT);
+        primaryStage.setWidth(PREF_WIDTH);
+
+        //Max size
+        primaryStage.setMaxWidth(MAX_WIDTH);
     }
 
+    private void initKeyboardShortcutListeners(Scene scene) {
+        scene.setOnKeyPressed(KeyboardShortcut::findAncExecuteKey);
+    }
+
+    private void setUpButtons(Scene scene){
+        Set<Button> buttons = (Set) scene.getRoot().lookupAll((".button"));
+        CalculatorButton.setButtons(buttons);
+        InputNumber.setButtons(buttons);
+    }
 
     /**
      * Resize display font size
      */
     private void resizeDisplay() {
-        double d = display.getScene().getWidth() / display.getText().length() * 1.5;
+        double d = display.getScene().getWidth() / display.getText().length() * 1.6;
         if (Double.compare(display.getScene().getWidth(), 270) > 0 && Double.compare(display.getScene().getHeight(), 450) > 0) {
             //48px max display font size if width > 270 and height > 450
             if (d > 48) {
@@ -103,6 +107,12 @@ public class MainApp extends Application {
      */
 
     private void initResizeListeners(Scene scene) {
+        //get display label for font resizing
+        display = (Label) scene.getRoot().lookup("#display");
+
+        //Display font resize listener
+        display.textProperty().addListener((observable, oldValue, newValue) -> resizeDisplay());
+
         scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
             CalculatorButton.resizeButtons(newSceneWidth.doubleValue(), scene.getHeight());
             resizeDisplay();

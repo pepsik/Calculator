@@ -32,6 +32,7 @@ public class TextFormatter {
                 sb.append(" ");
                 sb.append(stage.getBinaryOperator().getOperator());
             }
+
             if (operand != null) {
                 if (sb.length() != 0) {
                     sb.append(" ");

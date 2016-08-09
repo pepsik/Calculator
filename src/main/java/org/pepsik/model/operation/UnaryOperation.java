@@ -11,7 +11,7 @@ public enum UnaryOperation {
     SQUARE("X²") {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return value.multiply(value).setScale(15, RoundingMode.UP);
+            return value.multiply(value).setScale(Constants.SCALE, RoundingMode.HALF_UP);
         }
     },
     SQRT("√") {
@@ -23,7 +23,7 @@ public enum UnaryOperation {
     FRACTION("1/X") {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return new BigDecimal("1").divide(value, 18, RoundingMode.UP);
+            return new BigDecimal("1").divide(value, Constants.SCALE, RoundingMode.HALF_UP);
         }
     },
     NEGATE("+-") {
@@ -35,7 +35,7 @@ public enum UnaryOperation {
     PERCENT("%") {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), 17, BigDecimal.ROUND_HALF_UP));
+            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Constants.SCALE, BigDecimal.ROUND_HALF_UP));
             operand = null;
             return result;
         }
@@ -90,4 +90,7 @@ public enum UnaryOperation {
         return operator;
     }
 
+    private static class Constants {
+        private static final int SCALE = 50;
+    }
 }

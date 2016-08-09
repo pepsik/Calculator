@@ -22,19 +22,19 @@ public enum BinaryOperation {
     DIVIDE("/") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.divide(s, 17, BigDecimal.ROUND_HALF_UP);
+            return f.divide(s, Constants.SCALE, BigDecimal.ROUND_HALF_UP);
         }
     },
     MULTIPLY("*") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.multiply(s).setScale(16, RoundingMode.UP);
+            return f.multiply(s).setScale(Constants.SCALE, RoundingMode.HALF_UP);
         }
     },
     EQUAL("=") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            throw new RuntimeException("EQUALS NOT COMPLETE YET");
+            throw new RuntimeException("EQUAL NOT EXECUTES HERE");
         }
     };
 
@@ -83,5 +83,9 @@ public enum BinaryOperation {
 
     public String getOperator() {
         return operator;
+    }
+
+    private static class Constants {
+        private static final int SCALE = 50;
     }
 }
