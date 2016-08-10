@@ -8,8 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.pepsik.controller.button.CalculatorButton;
-import org.pepsik.controller.button.KeyboardShortcut;
+import org.pepsik.controller.buttons.CalculatorButton;
+import org.pepsik.controller.buttons.KeyboardShortcut;
 
 import java.io.IOException;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package org.pepsik.controller.button;
+package org.pepsik.controller.buttons;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;

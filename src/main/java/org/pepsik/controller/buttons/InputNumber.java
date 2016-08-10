@@ -1,4 +1,4 @@
-package org.pepsik.controller.button;
+package org.pepsik.controller.buttons;
 
 import javafx.event.ActionEvent;
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package org.pepsik.controller.button;
+package org.pepsik.controller.buttons;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
