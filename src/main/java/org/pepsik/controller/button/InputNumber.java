@@ -13,18 +13,7 @@ import static java.math.BigDecimal.TEN;
 /**
  * Enum represents an input number which used in Controller {@link org.pepsik.controller.CalculatorController#handleDigitAction(ActionEvent)} method
  */
-public enum InputNumber {
-    NUMBER_1("1"),
-    NUMBER_2("2"),
-    NUMBER_3("3"),
-    NUMBER_4("4"),
-    NUMBER_5("5"),
-    NUMBER_6("6"),
-    NUMBER_7("7"),
-    NUMBER_8("8"),
-    NUMBER_9("9"),
-    NUMBER_0("0");
-
+public class InputNumber {
     /**
      * Maximum input number
      */
@@ -40,50 +29,12 @@ public enum InputNumber {
     private static BigDecimal input;
 
     /**
-     * Number represents enum constant
-     */
-    private BigDecimal value;
-    /**
-     * JavaFX number button
-     */
-    private Button button;
-
-    /**
      * Returns input number
      *
      * @return actual input number
      */
     public static BigDecimal getInput() {
         return input;
-    }
-
-    /**
-     * Sets JavaFX buttons to enum constants
-     *
-     * @param buttons javaFX node buttons
-     */
-    public static void setButtons(Set<Button> buttons) {
-        for (Button button : buttons) {
-            try {
-                valueOf(button.getId().toUpperCase()).button = button;
-            } catch (IllegalArgumentException e) { //todo refact
-                /*nothing*/
-            }
-        }
-    }
-
-    /**
-     * Adds digit to input number
-     *
-     * @param event input digit event
-     */
-    public static void addDigit(ActionEvent event) {
-        Button button = (Button) event.getSource();
-        for (InputNumber nb : values()) {
-            if (nb.button == button) {
-                addToInput(nb.value);
-            }
-        }
     }
 
     /**
@@ -99,6 +50,10 @@ public enum InputNumber {
         }
     }
 
+    /**
+     * Verify is point set
+     * @return bool value if was set
+     */
     public static boolean isPointSet() {
         return scale != 0;
     }
@@ -131,7 +86,7 @@ public enum InputNumber {
      *
      * @param value input digit
      */
-    private static void addToInput(BigDecimal value) {
+    public static void addToInput(BigDecimal value) {
         if (input == null) {
             input = value;
         } else if (canInput(input)) {
@@ -153,9 +108,5 @@ public enum InputNumber {
     private static boolean canInput(BigDecimal n) {
         n = n.stripTrailingZeros();
         return n.precision() - n.scale() < MAX_DIGITS;
-    }
-
-    InputNumber(String value) {
-        this.value = new BigDecimal(value);
     }
 }

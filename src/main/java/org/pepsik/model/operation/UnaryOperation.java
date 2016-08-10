@@ -43,14 +43,14 @@ public enum UnaryOperation {
     };
 
     /**
-     * Scale for binary operation constant
+     * Scale for unary operation constant
      */
     private static class Constants {
         private static final int SCALE = 50;
     }
 
     /**
-     * Operand which operate to
+     * Operand which operate to. Used only for PERCENT operation
      */
     private static BigDecimal operand;
 
@@ -74,7 +74,7 @@ public enum UnaryOperation {
             if (u.getOperator().equals(value))
                 return u;
         }
-        throw new IllegalArgumentException("Unary operator not found!" + value);
+        return null;
     }
 
     /**
@@ -86,9 +86,14 @@ public enum UnaryOperation {
         this.operator = operator;
     }
 
-    private static final BigDecimal TWO = BigDecimal.valueOf(2L);
-
+    /**
+     * Calculates sqrt operation for enum constant SQRT
+     * @param x input value to operate
+     * @param mc context
+     * @return operation result
+     */
     private static BigDecimal sqrt(BigDecimal x, MathContext mc) {
+        BigDecimal TWO = BigDecimal.valueOf(2L);
         BigDecimal g = x.divide(TWO, mc);
         boolean done = false;
         final int maxIterations = mc.getPrecision() + 1;

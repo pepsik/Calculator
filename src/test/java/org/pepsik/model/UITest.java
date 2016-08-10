@@ -698,24 +698,26 @@ public class UITest {
     @Test
     public void testHistoryDisplay() {
         //Test History
-        assertHistoryExpressionDisplay("5 + 1 -");
-        assertHistoryExpressionDisplay("4 - 1 /");
-        assertHistoryExpressionDisplay("3 * sqr(3)", "3 * square(3)");
-        assertHistoryExpressionDisplay("2 / 4 +");
-        assertHistoryExpressionDisplay("1 + 5 -");
-        assertHistoryExpressionDisplay("0 - 6 *");
-
-        assertHistoryExpressionDisplay("5 + 6 + sqr(7)", "5 + 6 + square(7)");
-        assertHistoryExpressionDisplay("124 - 6 / √(7)", "124 - 6 / sqrt(7)");
-        assertHistoryExpressionDisplay("3 + negate(233) + 1/(7)", "3 + negate(233) + fraction(7)");
-        assertHistoryExpressionDisplay("1 * negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
-        assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
-
-        assertHistoryExpressionDisplay("negate(1231)");
-        assertHistoryExpressionDisplay("negate(negate(1231)");
-        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
-        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
-//        assertHistoryExpressionDisplay("1231", "negate(negate(fraction(fraction(1231)");
+//        assertHistoryExpressionDisplay("5 + 1 -");
+//        assertHistoryExpressionDisplay("4 - 1 /");
+//        assertHistoryExpressionDisplay("3 * sqr(3)", "3 * square(3)");
+//        assertHistoryExpressionDisplay("2 / 4 +");
+//        assertHistoryExpressionDisplay("1 + 5 -");
+//        assertHistoryExpressionDisplay("0 - 6 *");
+//
+//        assertHistoryExpressionDisplay("5 + 6 + sqr(7)", "5 + 6 + square(7)");
+//        assertHistoryExpressionDisplay("124 - 6 / √(7)", "124 - 6 / sqrt(7)");
+//        assertHistoryExpressionDisplay("3 + negate(233) + 1/(7)", "3 + negate(233) + fraction(7)");
+//        assertHistoryExpressionDisplay("1 * negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
+//        assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
+//
+//        assertHistoryExpressionDisplay("negate(0)", "negate()");
+//        assertHistoryExpressionDisplay("negate(1231)");
+//        assertHistoryExpressionDisplay("negate(negate(1231)");
+//        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
+//        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
+        assertHistoryExpressionDisplay("1231", "negate(negate(percent(percent(1231)");
+        assertHistoryExpressionDisplay("3 + 0.4356", "3 + square(percent(percent(22)");
     }
 
     @Test
@@ -810,7 +812,7 @@ public class UITest {
             }
 
             if (symbol.equals("<")) {
-                UITestButton.BACKSPACE.push();
+                UITestButton.getUIButton(symbol).push();
                 continue;
             }
 
@@ -878,18 +880,23 @@ public class UITest {
     }
 
     private void assertResizeFontDisplay(Label display) throws InterruptedException {
-        double d = display.getWidth() / display.getText().length() * 1.6;
+        int maxDisplayFont = 48;//crotch
+        int minDisplayFont = 32;
+        double multiplier = 1.6; // for display text fill
+        double delta = 0.000001;
+
+        double d = display.getWidth() / display.getText().length() * multiplier;
 
         if (Double.compare(display.getScene().getWidth(), 270) > 0 && Double.compare(display.getScene().getHeight(), 450) > 0) {
-            if (d > 48) {
-                d = 48;
+            if (d > maxDisplayFont) {
+                d = maxDisplayFont;
             }
         } else {
-            if (d > 32) {
-                d = 32;
+            if (d > minDisplayFont) {
+                d = minDisplayFont;
             }
         }
-        assertEquals(d, display.getFont().getSize(), 0.000001);
+        assertEquals(d, display.getFont().getSize(), delta);
     }
 
     private void assertHistoryExpressionDisplay(String expected) {

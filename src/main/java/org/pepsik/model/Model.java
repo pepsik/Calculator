@@ -5,6 +5,7 @@ import org.pepsik.model.operation.UnaryOperation;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.*;
 
 import static org.pepsik.model.operation.BinaryOperation.*;
@@ -12,11 +13,11 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
 
 /**
  * This class represents a calculator logic. It consist and operate with Stage class. Model creates chain of stages where
- * result of first stage used in second stage as left operand and last stage represent result of current expression.
+ * result of first stage used in second stage and last stage represent result of current expression.
  */
 public class Model {
     /**
-     * Expression represents by sequence of stages
+     * Expression represent sequence of stages
      */
     private Deque<Stage> currentExpression = new ArrayDeque<>();
     /**
@@ -55,8 +56,8 @@ public class Model {
         if (currentStage.getBinaryOperator() == null && currentStage.getOperand() == null) {
             currentExpression.addLast(currentStage);
         }
-
         currentStage.setOperand(number);
+
     }
 
     /**
@@ -88,7 +89,7 @@ public class Model {
         //operator - empty;  operand - empty
         if (binaryOperator == null && operand == null) {
             Stage first = new Stage();
-            first.setOperand(getLastCompleteStage().getOperand());
+            first.setOperand(getLastBinaryStage().getOperand());
             currentExpression.addFirst(first);
         }
 
@@ -136,30 +137,43 @@ public class Model {
         currentStage.clearUnaryOperators();
     }
 
+    /**
+     * Add to calculator memory
+     */
     public void addToMemory() {
         if (memory == null) {
             memory = new BigDecimal("0");
         }
 
+        BigDecimal r;
         if (currentStage.getOperand() != null) {
-            memory = memory.add(currentStage.getOperand());
+            r = currentStage.getOperand();
         } else {
-            memory = memory.add(result);
+            r = result;
         }
+        memory = memory.add(r);
     }
 
+    /**
+     * Subtract from calculator memory
+     */
     public void subtractFromMemory() {
         if (memory == null) {
             memory = new BigDecimal(BigInteger.ZERO);
         }
 
+        BigDecimal r;
         if (currentStage.getOperand() != null) {
-            memory = memory.subtract(currentStage.getOperand());
+            r = currentStage.getOperand();
         } else {
-            memory = memory.subtract(result);
+            r = result;
         }
+        memory = memory.subtract(r);
     }
 
+    /**
+     * Save to calculator memory
+     */
     public void saveMemory() {
         if (currentStage.getOperand() != null) {
             memory = currentStage.getOperand();
@@ -168,6 +182,10 @@ public class Model {
         }
     }
 
+    /**
+     * Get from calculator memory
+     * @return stored value
+     */
     public BigDecimal getMemory() {
         if (memory != null) {
             currentStage.setOperand(memory);
@@ -176,6 +194,9 @@ public class Model {
         return memory;
     }
 
+    /**
+     * Clear calculator memory
+     */
     public void clearMemory() {
         memory = null;
     }
@@ -209,6 +230,7 @@ public class Model {
         // operator - empty ; operand - empty
         // operator - exist; operand - empty
         if (operand == null) {
+            currentExpression.addLast(currentStage);
             currentStage.setOperand(result);
             temp = result;
         }
@@ -247,6 +269,7 @@ public class Model {
         // operator - empty ; operand - exist
         if (binaryOperator == null && operand != null) {
             result = calculateUnary();
+//            currentExpression.addLast(currentStage);
 
             if (lastBinaryStage != null) {
                 //clone
@@ -260,7 +283,7 @@ public class Model {
 
         // operator - empty ; operand - empty
         if (binaryOperator == null && operand == null) {
-            Stage binaryStage = new Stage(getLastCompleteStage());//clone
+            Stage binaryStage = new Stage(getLastBinaryStage());//clone
             currentExpression.addFirst(binaryStage);
 
             if (lastBinaryStage != null) {
@@ -285,7 +308,7 @@ public class Model {
      *
      * @return last complete stage
      */
-    private Stage getLastCompleteStage() {
+    private Stage getLastBinaryStage() {
         Iterator<Stage> descIterator = currentExpression.descendingIterator();
 
         while (descIterator.hasNext()) {

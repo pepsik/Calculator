@@ -171,7 +171,7 @@ public enum KeyboardShortcut {
             CalculatorButton.NUMBER_9.getButton().fire();
         }
     },
-    ZER_BUTTON(DIGIT0) {
+    ZERO_BUTTON(DIGIT0) {
         @Override
         protected void execute(KeyEvent event) {
             CalculatorButton.NUMBER_0.getButton().fire();
@@ -220,12 +220,19 @@ public enum KeyboardShortcut {
         }
     };
 
+    /**
+     * Keyboard button code
+     */
     protected KeyCode code;
 
     KeyboardShortcut(KeyCode code) {
         this.code = code;
     }
 
+    /**
+     * Finds keyboard key and pushes corresponding calculator button
+     * @param event keyboard key event
+     */
     public static void findAncExecuteKey(KeyEvent event) {
         for (KeyboardShortcut ks : values()) {
             if (ks.code == event.getCode()) {
@@ -234,5 +241,9 @@ public enum KeyboardShortcut {
         }
     }
 
+    /**
+     * Push correspond JavaFX node button
+     * @param event keyboard event
+     */
     protected abstract void execute(KeyEvent event);
 }

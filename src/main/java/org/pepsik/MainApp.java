@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.InputNumber;
 import org.pepsik.controller.button.KeyboardShortcut;
+import org.pepsik.util.TextFormatter;
 
 import java.io.IOException;
 import java.util.Set;
@@ -42,13 +43,13 @@ public class MainApp extends Application {
         //Setup all node buttons to enums
         setUpButtons(scene);
 
-        //Listeners for shortcut keys
+        //Init listeners for shortcut keys
         initKeyboardShortcutListeners(scene);
 
-        //Listeners for resizing buttons
+        //Init listeners for resizing buttons
         initResizeListeners(scene);
 
-        //disable memory recall and clear after init
+        //disable memory recall and clear buttons
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
 
@@ -68,32 +69,43 @@ public class MainApp extends Application {
         primaryStage.setMaxWidth(MAX_WIDTH);
     }
 
+    /**
+     * Initializes Keyboard shortcuts
+     * @param scene current scene
+     */
     private void initKeyboardShortcutListeners(Scene scene) {
         scene.setOnKeyPressed(KeyboardShortcut::findAncExecuteKey);
     }
 
+    /**
+     * Set Javafx node buttons to enum and verify it
+     * @param scene current scene
+     */
     private void setUpButtons(Scene scene){
         Set<Button> buttons = (Set) scene.getRoot().lookupAll((".button"));
         CalculatorButton.setButtons(buttons);
-        InputNumber.setButtons(buttons);
     }
 
     /**
      * Resize display font size
      */
     private void resizeDisplay() {
-        double d = display.getScene().getWidth() / display.getText().length() * 1.6;
-        if (Double.compare(display.getScene().getWidth(), 270) > 0 && Double.compare(display.getScene().getHeight(), 450) > 0) {
+        int maxDisplayFont = 48;//crotch
+        int minDisplayFont = 32;
+        Scene scene = display.getScene();
+
+        double d = display.getScene().getWidth() / display.getText().length() * 1.6; // multiplier to fill display
+        if (Double.compare(scene.getWidth(), 270) > 0 && Double.compare(scene.getHeight(), 450) > 0) {
             //48px max display font size if width > 270 and height > 450
-            if (d > 48) {
-                display.setFont(Font.font(48));
+            if (d > maxDisplayFont) {
+                display.setFont(Font.font(maxDisplayFont));
             } else {
                 display.setFont(Font.font(d));
             }
         } else {
             //if size less then max font size is 32
-            if (d > 32) {
-                display.setFont(Font.font(32));
+            if (d > minDisplayFont) {
+                display.setFont(Font.font(minDisplayFont));
             } else {
                 display.setFont(Font.font(d));
             }
@@ -109,6 +121,7 @@ public class MainApp extends Application {
     private void initResizeListeners(Scene scene) {
         //get display label for font resizing
         display = (Label) scene.getRoot().lookup("#display");
+        TextFormatter.setDisplay(display);
 
         //Display font resize listener
         display.textProperty().addListener((observable, oldValue, newValue) -> resizeDisplay());
@@ -116,7 +129,6 @@ public class MainApp extends Application {
         scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
             CalculatorButton.resizeButtons(newSceneWidth.doubleValue(), scene.getHeight());
             resizeDisplay();
-
         });
 
         scene.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {

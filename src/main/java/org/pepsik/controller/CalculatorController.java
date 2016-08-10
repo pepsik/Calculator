@@ -57,10 +57,10 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleDigitAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
+        String number = CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
-            InputNumber.addDigit(event);
+            InputNumber.addToInput(new BigDecimal(number));
             model.addNumber(InputNumber.getInput());
 
             int scale = InputNumber.getInput().scale();
@@ -297,7 +297,7 @@ public class CalculatorController implements Initializable {
         InputNumber.clearInput();
     }
 
-    private void setDisableMemoryClearAndRecall(boolean b){
+    private void setDisableMemoryClearAndRecall(boolean b) {
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(b);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(b);
     }
