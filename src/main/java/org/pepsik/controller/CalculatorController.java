@@ -113,31 +113,7 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
 
-                BigDecimal result = model.getResult();
-
-//                if (result.precision() + result.scale() > 17) {
-//                    f = new DecimalFormat("0.0E0");
-//                    f.setMaximumFractionDigits(16);
-//                    displayField.setText(f.format(result));
-//                } else {
-//                    f = new DecimalFormat();
-//                    displayField.setText(f.format(result));
-//                }
-
-                if (result.scale() == 0) {
-                    f.applyPattern("###,###");
-                    displayField.setText(f.format(result));
-                } else {
-                    if (result.abs().doubleValue() < 0.001 && result.doubleValue() != 0) {
-                        f.applyPattern("0.0E0");
-                        f.setMaximumFractionDigits(16);
-                        displayField.setText(f.format(result));
-                    } else {
-                        f.applyPattern("###,###.################");
-                        displayField.setText(f.format(result.setScale(16, BigDecimal.ROUND_HALF_UP)));
-                    }
-                }
-
+                displayField.setText(TextFormatter.display(model.getResult(), 16));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;
@@ -161,33 +137,7 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
-//                NumberFormat f = new DecimalFormat("0.0E0");
-//                f.setMaximumFractionDigits(15);
-                BigDecimal result = model.getOperand();
-//                if (result.precision() + result.scale() > 17) {
-//                    displayField.setText(f.format(result));
-//                } else {
-//                    f = new DecimalFormat();
-//                    displayField.setText(f.format(result));
-//                }
-
-                if (result.scale() == 0) {
-                    f.applyPattern("###,###");
-                    displayField.setText(f.format(result));
-                } else {
-                    if (result.scaleByPowerOfTen(3).doubleValue() > 0) {
-                        f.applyPattern("0.0E0");
-                        displayField.setText(f.format(result));
-                    } else {
-//                        if (result.scaleByPowerOfTen(15).doubleValue() > 0) {
-                            f.applyPattern("###,###.################");
-                            displayField.setText(f.format(result.setScale(15, BigDecimal.ROUND_HALF_UP)));
-//                        } else {
-//                            displayField.setText(result.toPlainString());
-//                        }
-                    }
-                }
-
+                displayField.setText(TextFormatter.display(model.getOperand(), 15));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;

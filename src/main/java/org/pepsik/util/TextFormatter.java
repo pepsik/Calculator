@@ -11,7 +11,7 @@ import java.util.Deque;
 import java.util.Iterator;
 
 /**
- * Created by Berezovyi Aleksandr on 8/1/2016.
+ * Util class for format display output
  */
 public class TextFormatter {
 
@@ -61,12 +61,20 @@ public class TextFormatter {
      * @param input string represents display
      * @return formatted display string
      */
-    public static String display(String input) {
-        double d = Double.valueOf(input);
-        if (d % 1 == 0) {
-            DecimalFormat decimalFormat = new DecimalFormat("#.#");
-            input = decimalFormat.format(d);
+    public static String display(BigDecimal result, int scale) {
+        DecimalFormat f = new DecimalFormat();
+
+        if (result.abs().doubleValue() < 0.001 && result.doubleValue() != 0) {
+            f.applyPattern("0.0E0");
+            return f.format(result);
         }
-        return input;
+
+        if (result.precision() - result.scale() > scale) {
+            f.applyPattern("0.################E0");
+            return f.format(result);
+        } else {
+            f.applyPattern("###,###.################");
+            return f.format(result.setScale(scale, BigDecimal.ROUND_HALF_UP));
+        }
     }
 }

@@ -412,6 +412,7 @@ public class UITest {
 
         assertExpression("1.7320508075688773", "sqrt(3) = ");
         assertExpressionWithoutClear(3, "square() = ");
+
     }
 
     @Test
@@ -509,6 +510,7 @@ public class UITest {
 
         assertExpression(5, "sqrt(sqrt(81) + sqrt(4) = ");
         assertExpression(5, " + sqrt(sqrt(81) + sqrt(4) = ");
+        assertExpression("1.000677130693066", "sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(4)");
         //---- END SQRT ---
     }
 
@@ -547,6 +549,7 @@ public class UITest {
         assertExpression(18, "square(square(2) + 2 = ");
 
         assertExpression(9, "square(56)square(9)square(3)=");
+        assertExpression("9.99200279944007E31", "square(square(square(9999)");
         //--------- END SQUARE --------
     }
 
@@ -773,6 +776,23 @@ public class UITest {
         assertBackspace("53", "12 + 538 ", 1);
         assertBackspace("1", "12 * 2 - 111 ", 2);
         assertBackspace("0", "12 * 2 - 111 + 123 ", 3);
+    }
+
+    @Test
+    public void testClearButton(){
+        assertExpression(3, "sqrt(9)=");
+        CLEAR_ENTRY.push();
+        assertExpression(81, "square(9)=");
+
+        CLEAR_ALL.push();
+        assertExpression(11, "5 + 3 * 2 + 11");
+
+        CLEAR_ENTRY.push();
+        assertExpressionWithoutClear(16, "16");
+        assertExpressionWithoutClear(32, "=");
+
+        CLEAR_ENTRY.push();
+        assertExpressionWithoutClear(0, "");
     }
 
     private void assertExpression(String expected, String input) {
