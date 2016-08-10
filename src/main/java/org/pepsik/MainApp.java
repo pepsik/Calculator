@@ -9,9 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
-import org.pepsik.controller.button.InputNumber;
 import org.pepsik.controller.button.KeyboardShortcut;
-import org.pepsik.util.TextFormatter;
 
 import java.io.IOException;
 import java.util.Set;
@@ -121,7 +119,6 @@ public class MainApp extends Application {
     private void initResizeListeners(Scene scene) {
         //get display label for font resizing
         display = (Label) scene.getRoot().lookup("#display");
-        TextFormatter.setDisplay(display);
 
         //Display font resize listener
         display.textProperty().addListener((observable, oldValue, newValue) -> resizeDisplay());

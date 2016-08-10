@@ -413,6 +413,9 @@ public class UITest {
         assertExpression("1.7320508075688773", "sqrt(3) = ");
         assertExpressionWithoutClear(3, "square() = ");
 
+        assertExpression("0.000099", "99/1000000=");
+        assertExpression("4.572473708276177E-4", "1/3=======");
+        assertExpression("6.774035123372115E-5", "4/3==========");
     }
 
     @Test
@@ -698,25 +701,25 @@ public class UITest {
     @Test
     public void testHistoryDisplay() {
         //Test History
-//        assertHistoryExpressionDisplay("5 + 1 -");
-//        assertHistoryExpressionDisplay("4 - 1 /");
-//        assertHistoryExpressionDisplay("3 * sqr(3)", "3 * square(3)");
-//        assertHistoryExpressionDisplay("2 / 4 +");
-//        assertHistoryExpressionDisplay("1 + 5 -");
-//        assertHistoryExpressionDisplay("0 - 6 *");
-//
-//        assertHistoryExpressionDisplay("5 + 6 + sqr(7)", "5 + 6 + square(7)");
-//        assertHistoryExpressionDisplay("124 - 6 / √(7)", "124 - 6 / sqrt(7)");
-//        assertHistoryExpressionDisplay("3 + negate(233) + 1/(7)", "3 + negate(233) + fraction(7)");
-//        assertHistoryExpressionDisplay("1 * negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
-//        assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
-//
-//        assertHistoryExpressionDisplay("negate(0)", "negate()");
-//        assertHistoryExpressionDisplay("negate(1231)");
-//        assertHistoryExpressionDisplay("negate(negate(1231)");
-//        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
-//        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
-        assertHistoryExpressionDisplay("1231", "negate(negate(percent(percent(1231)");
+        assertHistoryExpressionDisplay("5 + 1 -");
+        assertHistoryExpressionDisplay("4 - 1 /");
+        assertHistoryExpressionDisplay("3 * sqr(3)", "3 * square(3)");
+        assertHistoryExpressionDisplay("2 / 4 +");
+        assertHistoryExpressionDisplay("1 + 5 -");
+        assertHistoryExpressionDisplay("0 - 6 *");
+
+        assertHistoryExpressionDisplay("5 + 6 + sqr(7)", "5 + 6 + square(7)");
+        assertHistoryExpressionDisplay("124 - 6 / √(7)", "124 - 6 / sqrt(7)");
+        assertHistoryExpressionDisplay("3 + negate(233) + 1/(7)", "3 + negate(233) + fraction(7)");
+        assertHistoryExpressionDisplay("1 * negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
+        assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
+
+        assertHistoryExpressionDisplay("negate(0)", "negate()");
+        assertHistoryExpressionDisplay("negate(1231)");
+        assertHistoryExpressionDisplay("negate(negate(1231)");
+        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
+        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
+        assertHistoryExpressionDisplay("0", "negate(negate(percent(percent(1231)");
         assertHistoryExpressionDisplay("3 + 0.4356", "3 + square(percent(percent(22)");
     }
 

@@ -1,6 +1,6 @@
 package org.pepsik.util;
 
-import javafx.scene.control.Label;
+import org.pepsik.model.Model;
 import org.pepsik.model.Stage;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -9,14 +9,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Deque;
-import java.util.Iterator;
 
 /**
  * Util class for format display output
  */
 public class TextFormatter {
 
-    private static Label display;
+    private static Model model;
 
     /**
      * Formats history
@@ -50,26 +49,38 @@ public class TextFormatter {
                     // separately collect unary operators, not collect unary operators before PERCENT
                     StringBuilder unarySB = new StringBuilder();
 
+                    boolean isPercent = false;
                     for (UnaryOperation unary : stage.getUnaryOperators()) {
                         if (unary.equals(UnaryOperation.PERCENT)) {
+                            isPercent = true;
                             unarySB = new StringBuilder();
-                            UnaryOperation.setOperand(new BigDecimal(display.getText()).stripTrailingZeros());
-                            unarySB.append(UnaryOperation.PERCENT.execute(stage.getOperand()));
+                            unarySB.append(display(model.getOperand(), 16));
                         } else {
+                            isPercent = false;
                             unarySB.append(unary.getOperator().toLowerCase());
                             unarySB.append("(");
                         }
                     }
 
-                    sb.append(unarySB.toString());
-
-                    if (unarySB.length() == 0) {
+                    if (isPercent) {
+                        sb.append(unarySB);
+                    } else {
+                        sb.append(unarySB);
                         sb.append(stage.getOperand());
                         sb.append(")");
                     }
+
+//                    if (unarySB.length() != 0) {
+//                        unarySB.append(display(model.getOperand(), 16));
+////                        sb.append(stage.getOperand());
+//                        sb.append(")");
+//                    }else {
+//
+//                    }
                 }
             }
         }
+
 
         return sb.toString();
     }
@@ -85,8 +96,8 @@ public class TextFormatter {
         DecimalFormat f = new DecimalFormat();
 
         //if number lower then 0.00 show in engi mode
-        if (input.abs().doubleValue() < 0.001 && input.doubleValue() != 0) {
-            f.applyPattern("0.0E0");
+        if (input.abs().doubleValue() < 0.001 && input.movePointRight(scale).doubleValue() % 1 != 0) {
+            f.applyPattern("0.###############E0");
             return f.format(input);
         }
 
@@ -100,7 +111,7 @@ public class TextFormatter {
         }
     }
 
-    public static void setDisplay(Label display) {
-        TextFormatter.display = display;
+    public static void setModel(Model model) {
+        TextFormatter.model = model;
     }
 }

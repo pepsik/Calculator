@@ -142,6 +142,7 @@ public class CalculatorController implements Initializable {
                 // scale for unary operations
                 int scale = 15;
                 displayField.setText(TextFormatter.display(model.getOperand(), scale));
+                TextFormatter.setModel(model);
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;

@@ -1,13 +1,8 @@
 package org.pepsik.controller.button;
 
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Set;
 
-import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 
 /**
