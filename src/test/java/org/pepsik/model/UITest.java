@@ -33,7 +33,7 @@ public class UITest {
     private static Label display;
     private static Label history;
 
-    private NumberFormat formatter = new DecimalFormat();
+    private NumberFormat formatter = new DecimalFormat("###,###.################");
 
     @BeforeClass
     public static void initJFX() throws InterruptedException {
@@ -100,7 +100,7 @@ public class UITest {
         assertExpression(12.3, "12.3");
         assertExpression(9.99, "9.99");
         assertExpression("10.00", "10.00");
-        assertExpression("123456.", "1 2 3 4 5 6.");
+        assertExpression("123,456.", "1 2 3 4 5 6.");
         assertExpression("0.12", ".1 2");
         assertExpression("0.1234567890", ".1 2 3 4 5 6 7 8 9 0");
 
@@ -410,7 +410,7 @@ public class UITest {
         assertExpression(9.5, "+3/2+1*3+2=");
         assertExpressionWithoutClear(4, "2=");
 
-        assertExpression(1.7320508075688772, "sqrt(3) = ");
+        assertExpression("1.7320508075688773", "sqrt(3) = ");
         assertExpressionWithoutClear(3, "square() = ");
     }
 
@@ -583,7 +583,7 @@ public class UITest {
         assertExpression(0, "fraction(fraction(fraction(100) * 0 = ");
         assertExpression(0.01, "fraction(fraction(fraction(100) * 1 = ");
         assertExpression("0.6666666666666667", "fraction(fraction(fraction(3) * 2 = ");
-        assertExpression("1.3333333333333334", "fraction(fraction(fraction(3) * 2*2 = ");
+        assertExpression("1.3333333333333333", "fraction(fraction(fraction(3) * 2*2 = ");
 
         assertExpression(0.0151515151515152, "fraction(33) / 2 = ");
         assertExpression(0.0303030303030303, "   fraction(33) / 2*2 = ");

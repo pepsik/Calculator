@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 /**
- * Enum represents an input number with backspace and limit number logic. Used in Controller when input digits
+ * Enum represents an input number with backspace and limit number logic
  */
 public enum InputNumber {
     NUMBER_1("1"),
@@ -90,7 +90,7 @@ public enum InputNumber {
             input = new BigDecimal(0);
         }
 
-        if (scale == 0) {
+        if (!isPointSet()) {
             scale++;
         }
     }
@@ -142,7 +142,7 @@ public enum InputNumber {
      */
     private static boolean canInput(BigDecimal n) {
         n = n.stripTrailingZeros();
-        return n.precision() < MAX_DIGITS;
+        return n.precision() - n.scale() < MAX_DIGITS;
     }
 
     InputNumber(String value) {

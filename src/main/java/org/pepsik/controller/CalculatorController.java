@@ -40,7 +40,7 @@ public class CalculatorController implements Initializable {
     private Label displayHistory;
 
     /**
-     * Block calculation buttons if error
+     * Block calculation buttons if error occurs
      * Can be removed by Clear, ClearALL buttons
      */
     private boolean noError = true;
@@ -63,8 +63,13 @@ public class CalculatorController implements Initializable {
             InputNumber.addDigit(event);
             model.addNumber(InputNumber.getInput());
 
-            if (InputNumber.getInput().scale() != 0) {
-                f.applyPattern("###,###.################");
+            int scale = InputNumber.getInput().scale();
+            String pattern = "###,##0.";
+            if (scale != 0) {
+                for (int i = 0; i < scale; i++) {
+                    pattern += "0";
+                }
+                f.applyPattern(pattern);
                 displayField.setText(f.format(InputNumber.getInput()));
             } else {
                 f.applyPattern("###,###");
@@ -129,7 +134,7 @@ public class CalculatorController implements Initializable {
                         displayField.setText(f.format(result));
                     } else {
                         f.applyPattern("###,###.################");
-                        displayField.setText(f.format(result));
+                        displayField.setText(f.format(result.setScale(16, BigDecimal.ROUND_HALF_UP)));
                     }
                 }
 
@@ -157,9 +162,8 @@ public class CalculatorController implements Initializable {
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
 //                NumberFormat f = new DecimalFormat("0.0E0");
-//                f.setMaximumFractionDigits(16);
+//                f.setMaximumFractionDigits(15);
                 BigDecimal result = model.getOperand();
-//
 //                if (result.precision() + result.scale() > 17) {
 //                    displayField.setText(f.format(result));
 //                } else {
@@ -173,11 +177,14 @@ public class CalculatorController implements Initializable {
                 } else {
                     if (result.scaleByPowerOfTen(3).doubleValue() > 0) {
                         f.applyPattern("0.0E0");
-                        f.setMaximumFractionDigits(16);
                         displayField.setText(f.format(result));
                     } else {
-                        f.applyPattern("###,###.################");
-                        displayField.setText(f.format(result));
+//                        if (result.scaleByPowerOfTen(15).doubleValue() > 0) {
+                            f.applyPattern("###,###.################");
+                            displayField.setText(f.format(result.setScale(15, BigDecimal.ROUND_HALF_UP)));
+//                        } else {
+//                            displayField.setText(result.toPlainString());
+//                        }
                     }
                 }
 
