@@ -13,10 +13,8 @@ import org.pepsik.model.operation.UnaryOperation;
 import org.pepsik.util.TextFormatter;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 /**
@@ -59,6 +57,8 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleDigitAction(ActionEvent event) {
+        CalculatorButton.valueOf((Button) event.getSource());
+
         if (noError) {
             InputNumber.addDigit(event);
             model.addNumber(InputNumber.getInput());
@@ -85,7 +85,7 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handlePointAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             f.applyPattern("###,###");
@@ -106,14 +106,16 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleBinaryOperationAction(ActionEvent event) {
-        String operator = CalculatorButton.valueOf(((Button) event.getSource()));
+        String operator = CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             try {
                 InputNumber.clearInput();
                 model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
 
-                displayField.setText(TextFormatter.display(model.getResult(), 16));
+                //scale for binary operations
+                int scale = 16;
+                displayField.setText(TextFormatter.display(model.getResult(), scale));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;
@@ -130,14 +132,16 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleUnaryOperationAction(ActionEvent event) {
-        String operator = CalculatorButton.valueOf(((Button) event.getSource()));
+        String operator = CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             try {
                 InputNumber.clearInput();
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
-                displayField.setText(TextFormatter.display(model.getOperand(), 15));
+                // scale for unary operations
+                int scale = 15;
+                displayField.setText(TextFormatter.display(model.getOperand(), scale));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
                 noError = false;
@@ -154,7 +158,7 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleClearAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (!noError) {
             displayHistory.setText("");
@@ -191,7 +195,7 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleBackspaceAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             InputNumber.backspace();
@@ -212,16 +216,14 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleMemoryAddAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             model.addToMemory();
         }
 
         InputNumber.clearInput();
-
-        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(false);
-        CalculatorButton.MEMORY_RECALL.getButton().setDisable(false);
+        setDisableMemoryClearAndRecall(false);
     }
 
     /**
@@ -231,16 +233,14 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleMemorySubtractAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             model.subtractFromMemory();
         }
 
         InputNumber.clearInput();
-
-        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(false);
-        CalculatorButton.MEMORY_RECALL.getButton().setDisable(false);
+        setDisableMemoryClearAndRecall(false);
     }
 
     /**
@@ -250,16 +250,14 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleMemorySaveAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             model.saveMemory();
         }
 
         InputNumber.clearInput();
-
-        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(false);
-        CalculatorButton.MEMORY_RECALL.getButton().setDisable(false);
+        setDisableMemoryClearAndRecall(false);
     }
 
     /**
@@ -269,16 +267,14 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleMemoryClearAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             model.clearMemory();
         }
 
         InputNumber.clearInput();
-
-        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
-        CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
+        setDisableMemoryClearAndRecall(true);
     }
 
     /**
@@ -288,7 +284,7 @@ public class CalculatorController implements Initializable {
      */
     @FXML
     private void handleMemoryRecallAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        CalculatorButton.valueOf((Button) event.getSource());
 
         if (noError) {
             BigDecimal memory = model.getMemory();
@@ -299,6 +295,11 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
+    }
+
+    private void setDisableMemoryClearAndRecall(boolean b){
+        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(b);
+        CalculatorButton.MEMORY_RECALL.getButton().setDisable(b);
     }
 
     @Override

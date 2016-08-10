@@ -5,13 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pepsik.MainApp;
+import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.model.helper.UITestButton;
 import org.pepsik.model.operation.BinaryOperation;
 
@@ -700,92 +700,63 @@ public class UITest {
         //Test History
         assertHistoryExpressionDisplay("5 + 1 -");
         assertHistoryExpressionDisplay("4 - 1 /");
-        assertHistoryExpressionDisplay("3 * square(3)");
+        assertHistoryExpressionDisplay("3 * sqr(3)", "3 * square(3)");
         assertHistoryExpressionDisplay("2 / 4 +");
         assertHistoryExpressionDisplay("1 + 5 -");
         assertHistoryExpressionDisplay("0 - 6 *");
 
-        assertHistoryExpressionDisplay("5 + 6 + square(7)");
-        assertHistoryExpressionDisplay("124 - 6 / sqrt(7)");
-        assertHistoryExpressionDisplay("3 + negate(233) + fraction(7)");
-        assertHistoryExpressionDisplay("1 * negate(6) + fraction(71)");
-        assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
+        assertHistoryExpressionDisplay("5 + 6 + sqr(7)", "5 + 6 + square(7)");
+        assertHistoryExpressionDisplay("124 - 6 / √(7)", "124 - 6 / sqrt(7)");
+        assertHistoryExpressionDisplay("3 + negate(233) + 1/(7)", "3 + negate(233) + fraction(7)");
+        assertHistoryExpressionDisplay("1 * negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
+        assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
+
+        assertHistoryExpressionDisplay("negate(1231)");
+        assertHistoryExpressionDisplay("negate(negate(1231)");
+        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
+        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
+//        assertHistoryExpressionDisplay("1231", "negate(negate(fraction(fraction(1231)");
     }
 
     @Test
     public void testMemoryButton() {
         //Memory
-        CLEAR_ALL.push();
-        parseAndExecute("5 + 12");
-        MEMORY_SAVE.push();
-        MEMORY_ADD.push();
-        parseAndExecute("=");
-        MEMORY_RECALL.push();
-        assertExpressionWithoutClear(12, " - 12 =");
+        assertExpression(17, "5 + 12 MS M+ =");
+        assertExpressionWithoutClear(12, "MR - 12 =");
 
-        CLEAR_ALL.push();
-        parseAndExecute("12*3=");
-        MEMORY_SAVE.push();
-        MEMORY_ADD.push();
-        MEMORY_ADD.push();
-        MEMORY_ADD.push();
-        MEMORY_RECALL.push();
-        assertExpressionWithoutClear(12, "/12=");
+        assertExpression(12, " 12*3= MS M+ M+ M+ MR/12=");
+        assertExpression(2, "5 + 3 M+ MC MC M- MR =");
 
-        CLEAR_ALL.push();
-        parseAndExecute("5 + 3");
-        MEMORY_ADD.push();
-        MEMORY_CLEAR.push();
-        MEMORY_CLEAR.push();
-        MEMORY_SUBTRACT.push();
-        MEMORY_RECALL.push();
-        assertExpressionWithoutClear(2, "=");
-
-        CLEAR_ALL.push();
-        parseAndExecute("123");
-        MEMORY_SAVE.push();
-        parseAndExecute("999");
-        assertExpressionWithoutClear(999, "");
-
-        CLEAR_ALL.push();
-        parseAndExecute("123");
-        MEMORY_ADD.push();
-        parseAndExecute("333");
-        assertExpressionWithoutClear(333, "");
-
-        CLEAR_ALL.push();
-        parseAndExecute("123");
-        MEMORY_SUBTRACT.push();
-        parseAndExecute("444");
-        assertExpressionWithoutClear(444, "");
-
-        CLEAR_ALL.push();
-        parseAndExecute("123");
-        MEMORY_SUBTRACT.push();
-        parseAndExecute("888");
-        MEMORY_RECALL.push();
-        parseAndExecute("444");
-        assertExpressionWithoutClear(444, "");
+        assertExpression(999, "123 MS 999");
+        assertExpression(333, "123 M+ 333");
+        assertExpression(444, "123 M- 444");
+        assertExpression(444, "123 M- 888 MR 444");
     }
 
     @Test
     public void testBackspaceButton() {
-        assertBackspace("1234", "1234567", 3);
-        assertBackspace("0", "1234567", 7);
-        assertBackspace("0", "1234567", 12);
-        assertBackspace("53", "12 + 538 ", 1);
-        assertBackspace("1", "12 * 2 - 111 ", 2);
-        assertBackspace("0", "12 * 2 - 111 + 123 ", 3);
+        assertBackspace("1234", "1234567<<<");
+        assertBackspace("0", "1234567<<<<<<<");
+        assertBackspace("0", "1234567<<<<<<<<<<<<");
+        assertBackspace("5.0", "5.0123<<<");
+        assertBackspace("5.1234", "5.12340<");
+        assertBackspace("5", "5.12340<<<<<");
+
+        assertBackspace("53", "12 + 538< ");
+        assertBackspace("1", "12 * 2 - 111 <<");
+        assertBackspace("0", "12 * 2 - 111 + 123 <<<");
+        assertBackspace("0", "12 * 2 - 111 + 123 <<<");
+
     }
 
     @Test
-    public void testClearButton(){
+    public void testClearButton() {
         assertExpression(3, "sqrt(9)=");
         CLEAR_ENTRY.push();
-        assertExpression(81, "square(9)=");
+        assertExpressionWithoutClear(81, "square(9)=");
 
         CLEAR_ALL.push();
-        assertExpression(11, "5 + 3 * 2 + 11");
+        assertExpressionWithoutClear(11, "5 + 3 * 2 + 11");
 
         CLEAR_ENTRY.push();
         assertExpressionWithoutClear(16, "16");
@@ -827,13 +798,30 @@ public class UITest {
         String data = input.replaceAll("\\s+", "");
 
         StringBuilder sb = new StringBuilder();
-        List<String> listUnary = new ArrayList<>();
+        List<UITestButton> listUnary = new ArrayList<>();
+        boolean memory_flag = false;
 
         for (int i = 0; i < data.length(); i++) {
             String symbol = data.substring(i, i + 1);
 
             if (StringUtils.isNumeric(symbol)) {
                 UITestButton.getUIButton(symbol).push();
+                continue;
+            }
+
+            if (symbol.equals("<")) {
+                UITestButton.BACKSPACE.push();
+                continue;
+            }
+
+            if (symbol.toUpperCase().equals("M")) {
+                memory_flag = true;
+                continue;
+            }
+
+            if (memory_flag) {
+                UITestButton.getUIButton("M" + symbol).push();
+                memory_flag = false;
                 continue;
             }
 
@@ -847,21 +835,19 @@ public class UITest {
                 continue;
             }
 
-            if (BinaryOperation.isExist(symbol)) {
+            if (BinaryOperation.find(symbol.toCharArray()[0]) != null) {
                 UITestButton.getUIButton(symbol).push();
                 continue;
             }
 
             if (symbol.equals("(")) {
-                listUnary.add(UITestButton.getUIButtonName(sb.toString()));
+                listUnary.add(UITestButton.getUIButton(sb.toString()));
                 sb = new StringBuilder();
                 continue;
             }
 
             if (symbol.equals(")")) {
-                for (String operation : listUnary) {
-                    UITestButton.valueOf(operation.toUpperCase()).push();
-                }
+                listUnary.forEach(UITestButton::push);
 
                 listUnary.clear();
                 continue;
@@ -873,6 +859,9 @@ public class UITest {
         waitForCompleteExecution();
     }
 
+    /**
+     * Lock test thread and wait for complete coperations in JAvaFX Thread
+     */
     private void waitForCompleteExecution() {
         final CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(latch::countDown);
@@ -910,14 +899,16 @@ public class UITest {
         assertEquals(expected, history.getText());
     }
 
-    private void assertBackspace(String expected, String expression, int countBacksplace) {
+    private void assertHistoryExpressionDisplay(String expected, String input) {
+        CLEAR_ALL.push();
+        parseAndExecute(input);
+
+        assertEquals(expected, history.getText());
+    }
+
+    private void assertBackspace(String expected, String expression) {
         CLEAR_ALL.push();
         parseAndExecute(expression);
-
-        for (int i = 0; i < countBacksplace; i++) {
-            BACKSPACE.push();
-        }
-        waitForCompleteExecution();
 
         assertEquals(expected, display.getText());
     }

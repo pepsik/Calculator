@@ -7,7 +7,7 @@ import java.util.Set;
 
 /**
  * This enum represents calculator buttons. Each constant consist values as String and Node button which used in Controller class
- * to handle pressed events and have resize logic font.
+ * to handle button events and have resize font logic for each button.
  */
 public enum CalculatorButton {
     /**
@@ -86,7 +86,7 @@ public enum CalculatorButton {
     /**
      * Button unary operation constants
      */
-    SQUARE("X²") {
+    SQUARE("sqr") {
         @Override
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
@@ -108,7 +108,7 @@ public enum CalculatorButton {
             }
         }
     },
-    FRACTION("1/X") {
+    FRACTION("1/") {
         @Override
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
@@ -119,7 +119,7 @@ public enum CalculatorButton {
             }
         }
     },
-    NEGATE("+-") {
+    NEGATE("negate") {
         @Override
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
@@ -260,10 +260,6 @@ public enum CalculatorButton {
         throw new IllegalArgumentException("No match buttons found to " + button);
     }
 
-    public Button getButton() {
-        return button;
-    }
-
     /**
      * Default resize (0-9 buttons)
      */
@@ -284,6 +280,10 @@ public enum CalculatorButton {
         if (!cssList.contains(newCss)) {
             cssList.add(newCss);
         }
+    }
+
+    public Button getButton() {
+        return button;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class TextFormatter {
                     sb.append(stage.getOperand().setScale(16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
                 } else {
                     for (UnaryOperation unary : stage.getUnaryOperators()) {
-                        sb.append(unary.name().toLowerCase());
+                        sb.append(unary.getOperator().toLowerCase());
                         sb.append("(");
                     }
 
@@ -56,25 +56,25 @@ public class TextFormatter {
     }
 
     /**
-     * Format display
-     *
-     * @param input string represents display
-     * @return formatted display string
+     * Format display output
+     * @param input value to display
+     * @param scale value scale
+     * @return formatted string
      */
-    public static String display(BigDecimal result, int scale) {
+    public static String display(BigDecimal input, int scale) {
         DecimalFormat f = new DecimalFormat();
 
-        if (result.abs().doubleValue() < 0.001 && result.doubleValue() != 0) {
+        if (input.abs().doubleValue() < 0.001 && input.doubleValue() != 0) {
             f.applyPattern("0.0E0");
-            return f.format(result);
+            return f.format(input);
         }
 
-        if (result.precision() - result.scale() > scale) {
+        if (input.precision() - input.scale() > scale) {
             f.applyPattern("0.################E0");
-            return f.format(result);
+            return f.format(input);
         } else {
             f.applyPattern("###,###.################");
-            return f.format(result.setScale(scale, BigDecimal.ROUND_HALF_UP));
+            return f.format(input.setScale(scale, BigDecimal.ROUND_HALF_UP));
         }
     }
 }

@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 /**
- * Created by Berezovyi Aleksandr on 8/4/2016.
+ * Helper class represents calculator buttons with logic to emulate push button in JavaFX Thread to avoid exceptions. Used only in tests
  */
 public enum UITestButton {
     NUMBER_1("1"),
@@ -44,11 +44,11 @@ public enum UITestButton {
     MEMORY_SUBTRACT("M-"),
     MEMORY_SAVE("MS");
 
-    private String value;
+    private String shortName;
     private Button button;
 
     UITestButton(String value) {
-        this.value = value;
+        this.shortName = value;
     }
 
     public static void setUIButtons(Scene scene) {
@@ -59,22 +59,27 @@ public enum UITestButton {
 
     public static UITestButton getUIButton(String input) {
         for (UITestButton button : values()) {
-            if (button.getValue().equals(input)) {
+            if (button.shortName.equals(input)) {
                 return button;
             }
         }
         throw new IllegalArgumentException("No match buttons found to " + input);
     }
 
-    public static String getUIButtonName(String input) {
+    public static String getShortName(String input) {
         for (UITestButton button : values()) {
-            if (button.getValue().equals(input)) {
+            if (button.shortName.equals(input)) {
                 return button.name().toLowerCase();
             }
         }
         throw new IllegalArgumentException("No match buttons found to " + input);
     }
 
+    /**
+     * Gets button Css style classes
+     *
+     * @return list of css classes
+     */
     public ObservableList<String> getStyleClass() {
         return button.getStyleClass();
     }
@@ -83,7 +88,7 @@ public enum UITestButton {
         Platform.runLater(() -> button.fire());
     }
 
-    public String getValue() {
-        return value;
+    public String getShortName() {
+        return shortName;
     }
 }

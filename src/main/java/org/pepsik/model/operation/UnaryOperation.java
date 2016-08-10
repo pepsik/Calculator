@@ -9,7 +9,7 @@ import java.math.RoundingMode;
  * This enum represents unary operation. Each constant consist correspond string presentation and logic to operate.
  */
 public enum UnaryOperation {
-    SQUARE("X²") {
+    SQUARE("sqr") {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return value.multiply(value).setScale(Constants.SCALE, RoundingMode.HALF_UP);
@@ -21,13 +21,13 @@ public enum UnaryOperation {
             return sqrt(value, MathContext.DECIMAL128);
         }
     },
-    FRACTION("1/X") {
+    FRACTION("1/") {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return new BigDecimal(BigInteger.ONE).divide(value, Constants.SCALE, RoundingMode.HALF_UP);
         }
     },
-    NEGATE("+-") {
+    NEGATE("negate") {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return value.negate();
@@ -42,6 +42,9 @@ public enum UnaryOperation {
         }
     };
 
+    /**
+     * Scale for binary operation constant
+     */
     private static class Constants {
         private static final int SCALE = 50;
     }
@@ -53,6 +56,7 @@ public enum UnaryOperation {
 
     /**
      * Sets operand
+     *
      * @param operand operand which operate to
      */
     public static void setOperand(BigDecimal operand) {
@@ -70,7 +74,6 @@ public enum UnaryOperation {
             if (u.getOperator().equals(value))
                 return u;
         }
-
         throw new IllegalArgumentException("Unary operator not found!" + value);
     }
 
@@ -81,18 +84,6 @@ public enum UnaryOperation {
 
     UnaryOperation(String operator) {
         this.operator = operator;
-    }
-
-    /**
-     * Executes operation on value
-     *
-     * @param value input value
-     * @return result
-     */
-    public abstract BigDecimal execute(BigDecimal value);
-
-    public String getOperator() {
-        return operator;
     }
 
     private static final BigDecimal TWO = BigDecimal.valueOf(2L);
@@ -110,5 +101,17 @@ public enum UnaryOperation {
             g = r;
         }
         return g;
+    }
+
+    /**
+     * Executes operation on value
+     *
+     * @param value input value
+     * @return result
+     */
+    public abstract BigDecimal execute(BigDecimal value);
+
+    public String getOperator() {
+        return operator;
     }
 }

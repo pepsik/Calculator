@@ -4,10 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Set;
 
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.TEN;
+
 /**
- * Enum represents an input number with backspace and limit number logic
+ * Enum represents an input number which used in Controller {@link org.pepsik.controller.CalculatorController#handleDigitAction(ActionEvent)} method
  */
 public enum InputNumber {
     NUMBER_1("1"),
@@ -104,7 +108,13 @@ public enum InputNumber {
      */
     public static void backspace() {
         if (input != null) {
-            input = input.divideToIntegralValue(BigDecimal.TEN);
+            if (scale == 0) {
+                input = input.divideToIntegralValue(TEN);
+            } else {
+                String temp = input.toString(); //crotch
+                input = new BigDecimal(temp.substring(0, temp.length() - 1));
+                scale--;
+            }
         }
     }
 
@@ -129,7 +139,7 @@ public enum InputNumber {
                 input = input.add(value.movePointLeft(scale));
                 scale++;
             } else {
-                input = value.add(input.multiply(BigDecimal.TEN));
+                input = value.add(input.multiply(TEN));
             }
         }
     }

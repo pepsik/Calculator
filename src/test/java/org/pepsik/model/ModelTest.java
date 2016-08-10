@@ -711,7 +711,7 @@ public class ModelTest {
                 continue;
             }
 
-            if (BinaryOperation.isExist(String.valueOf(symbol))) {
+            if (BinaryOperation.find(symbol) != null) {
                 if (numberSB.length() > 0) {
                     model.addNumber(new BigDecimal(numberSB.toString()));
                 }

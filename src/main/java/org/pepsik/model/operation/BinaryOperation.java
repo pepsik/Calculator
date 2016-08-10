@@ -39,21 +39,19 @@ public enum BinaryOperation {
     };
 
     /**
+     * Scale for binary operation constant
+     */
+    private static class Constants {
+        private static final int SCALE = 50;
+    }
+
+    /**
      * String representation of operator
      */
     private String operator;
 
     BinaryOperation(String operator) {
         this.operator = operator;
-    }
-
-    public static boolean isExist(String str) {
-        for (BinaryOperation value : values()) {
-            if (value.getOperator().equals(str)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -69,7 +67,7 @@ public enum BinaryOperation {
                 return value;
             }
         }
-        throw new IllegalArgumentException(" No enum constant for " + operator);
+        return null;
     }
 
     /**
@@ -83,9 +81,5 @@ public enum BinaryOperation {
 
     public String getOperator() {
         return operator;
-    }
-
-    private static class Constants {
-        private static final int SCALE = 50;
     }
 }
