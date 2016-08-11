@@ -291,7 +291,7 @@ public class CalculatorController implements Initializable {
             BigDecimal memory = model.getMemory();
 
             if (memory != null) {
-                displayField.setText(memory.toString());
+                displayField.setText(TextFormatter.display(memory, 16));
             }
         }
 

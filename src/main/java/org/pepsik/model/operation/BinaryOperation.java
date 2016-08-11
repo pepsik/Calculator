@@ -58,8 +58,7 @@ public enum BinaryOperation {
      * Finds binary operation by string
      *
      * @param operator string represents operation
-     * @return binary operation
-     * @throws IllegalArgumentException in case if operation not found
+     * @return binary operation or null if no such found
      */
     public static BinaryOperation find(char operator) {
         for (BinaryOperation value : values()) {

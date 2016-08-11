@@ -14,7 +14,7 @@ public class InputNumber {
      */
     private static final int MAX_DIGITS = 16;
     /**
-     * Scale of input number to move point
+     * Scale of input number
      */
     private static short scale;
 

@@ -124,7 +124,6 @@ public class UITest {
         assertExpression(90, "0090");
         assertExpression(120, "00000000120");
         assertExpression(100120, "0000000000000000000100120");
-        // -----------END INPUT TESTS---------
     }
 
     @Test
@@ -274,7 +273,6 @@ public class UITest {
 
     @Test
     public void testExpression() {
-        // -----------SUM TESTS------------
         // -----------SUM 2 VALUES---------
         //each operation on new model obj
         assertExpression(0, "0 + 0 =");
@@ -405,13 +403,14 @@ public class UITest {
         assertExpression(-72, "12 * 12 - sqrt(81) + square(3) /2 * negate(1) = ");
         assertExpression(111.9, "12 + 1 + 43 * 2 - fraction(10) = ");
 
-        //
+        //Random
         assertExpression(9.5, "+3/2+1*3+2=");
         assertExpressionWithoutClear(4, "2=");
 
         assertExpression("1.7320508075688773", "sqrt(3) = ");
         assertExpressionWithoutClear(3, "square() = ");
 
+        //boundary expressions
         assertExpression("0.000099", "99/1000000=");
         assertExpression("4.572473708276177E-4", "1/3=======");
         assertExpression("6.774035123372115E-5", "4/3==========");
@@ -419,7 +418,6 @@ public class UITest {
 
     @Test
     public void testDivideByZeroOperation() {
-        //----- DIVIDE BY ZERO -----
         assertDivideByZeroErrorMessage("0/0 =");
         assertDivideByZeroErrorMessage("/0=");
         assertDivideByZeroErrorMessage("99/0=");
@@ -429,7 +427,6 @@ public class UITest {
         assertDivideByZeroErrorMessage(MAX_VALUE + "/0=");
         assertDivideByZeroErrorMessage("/=");
 
-        //todo error message block input
         assertDivideByZeroErrorMessage("0/0=");
         assertDivideByZeroErrorMessage("1/ 0=");
         assertDivideByZeroErrorMessage("99/0=");
@@ -440,7 +437,6 @@ public class UITest {
 
     @Test
     public void testNegateButton() {
-        // ----- NEGATE -----
         assertExpression(0, "negate(0) = ");
         assertExpression(0, "negate(negate(0) = ");
         assertExpression(0, "negate(negate(negate(negate(0) = ");
@@ -474,12 +470,10 @@ public class UITest {
         assertExpression(0, "negate(negate(4) + negate(negate(negate(4) = ");
         assertExpression(0, "negate(negate(2) + negate(negate(negate(2) = ");
         assertExpression(-7, "negate(9) + 2 =");
-        // -----END NEGATE -----
     }
 
     @Test
     public void testSquareRootButton() {
-        //---- SQRT ---
         assertExpression(3, "sqrt(9) = ");
         assertExpression(9, "sqrt(81) = ");
         assertExpression(3, "sqrt(sqrt(81) = ");
@@ -513,12 +507,10 @@ public class UITest {
         assertExpression(5, "sqrt(sqrt(81) + sqrt(4) = ");
         assertExpression(5, " + sqrt(sqrt(81) + sqrt(4) = ");
         assertExpression("1.000677130693066", "sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(4)");
-        //---- END SQRT ---
     }
 
     @Test
     public void testSquareButton() {
-        //-----SQUARE -----
         assertExpression(9, "square(3) = ");
         assertExpression(81, "square(square(3) = ");
         assertExpression(83, "square(square(3) + 2 = ");
@@ -552,12 +544,10 @@ public class UITest {
 
         assertExpression(9, "square(56)square(9)square(3)=");
         assertExpression("9.99200279944007E31", "square(square(square(9999)");
-        //--------- END SQUARE --------
     }
 
     @Test
     public void testFractionButton() {
-        //--------- FRACTION --------
         assertExpression(0.1, "fraction(10) = ");
         assertExpression(0.02, "fraction(50) = ");
         assertExpression(2, "fraction(fraction(2) = ");
@@ -596,7 +586,6 @@ public class UITest {
         assertExpression(1.5, "fraction(fraction(1) + fraction(2) = ");
         assertExpression(-1.5, " + negate(fraction(fraction(1) + negate(fraction(2) = ");
         assertExpression(10, "sqrt(sqrt(81) + 2*2 = ");
-        //--------- END FRACTION --------
     }
 
     @Test
@@ -699,7 +688,6 @@ public class UITest {
 
     @Test
     public void testHistoryDisplay() {
-        //Test History
         assertHistoryExpressionDisplay("5 + 1 -");
         assertHistoryExpressionDisplay("4 - 1 /");
         assertHistoryExpressionDisplay("3 * sqr(3)", "3 * square(3)");
@@ -711,13 +699,13 @@ public class UITest {
         assertHistoryExpressionDisplay("124 - 6 / √(7)", "124 - 6 / sqrt(7)");
         assertHistoryExpressionDisplay("3 + negate(233) + 1/(7)", "3 + negate(233) + fraction(7)");
         assertHistoryExpressionDisplay("1 * negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
-        assertHistoryExpressionDisplay("0 + negate(1231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
+        assertHistoryExpressionDisplay("0 + negate(1,231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
 
         assertHistoryExpressionDisplay("negate(0)", "negate()");
-        assertHistoryExpressionDisplay("negate(1231)");
-        assertHistoryExpressionDisplay("negate(negate(1231)");
-        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
-        assertHistoryExpressionDisplay("negate(negate(√(1231)", "negate(negate(sqrt(1231)");
+        assertHistoryExpressionDisplay("negate(1,231)","negate(1231)");
+        assertHistoryExpressionDisplay("negate(negate(1,231)","negate(negate(1231)");
+        assertHistoryExpressionDisplay("negate(negate(√(1,231)", "negate(negate(sqrt(1231)");
+        assertHistoryExpressionDisplay("negate(negate(√(1,231)", "negate(negate(sqrt(1231)");
         assertHistoryExpressionDisplay("0", "negate(negate(percent(percent(1231)");
         assertHistoryExpressionDisplay("3 + 0.4356", "3 + square(percent(percent(22)");
     }
@@ -882,10 +870,18 @@ public class UITest {
     }
 
     private void assertResizeFontDisplay(Label display) throws InterruptedException {
-        int maxDisplayFont = 48;//crotch
-        int minDisplayFont = 32;
+        //get css max display font
+        display.getStyleClass().add("display_max_font");
+        int maxDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_max_font");
+
+        //get css min display font
+        display.getStyleClass().add("display_min_font");
+        int minDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_min_font");
+
         double multiplier = 1.6; // for display text fill
-        double delta = 0.000001;
+        double delta = 0.000001; //for compare display font expect and actual
 
         double d = display.getWidth() / display.getText().length() * multiplier;
 

@@ -67,7 +67,7 @@ public enum UnaryOperation {
      * Finds unary operation by string
      *
      * @param value String represent operation
-     * @return unary operation
+     * @return unary operation or null if no such found
      */
     public static UnaryOperation find(String value) {
         for (UnaryOperation u : values()) {

@@ -27,6 +27,7 @@ public class TextFormatter {
         int scale = 16;
         StringBuilder sb = new StringBuilder();
 
+        //iterate though expression stages and assemble string to show on display
         for (Stage stage : expression) {
             BigDecimal operand = stage.getOperand();
             BinaryOperation operator = stage.getBinaryOperator();
@@ -37,6 +38,7 @@ public class TextFormatter {
                 sb.append(stage.getBinaryOperator().getOperator());
             }
 
+            //if we get first stage without operator add space
             if (operand != null) {
                 if (sb.length() != 0) {
                     sb.append(" ");
@@ -44,17 +46,18 @@ public class TextFormatter {
 
                 //adds unary operations if exist
                 if (stage.getUnaryOperators().isEmpty()) {
-                    sb.append(stage.getOperand().setScale(scale, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
+                    sb.append(display(stage.getOperand(), scale));
                 } else {
                     // separately collect unary operators, not collect unary operators before PERCENT
                     StringBuilder unarySB = new StringBuilder();
+                    boolean isPercent = false; //last unary percent flag
 
-                    boolean isPercent = false;
                     for (UnaryOperation unary : stage.getUnaryOperators()) {
+                        //if get percent then clear all previous recorded unary operations
                         if (unary.equals(UnaryOperation.PERCENT)) {
                             isPercent = true;
-                            unarySB = new StringBuilder();
-                            unarySB.append(display(model.getOperand(), 16));
+                            unarySB = new StringBuilder(); //clear all recorded unary
+                            unarySB.append(display(model.getOperand(), scale));
                         } else {
                             isPercent = false;
                             unarySB.append(unary.getOperator().toLowerCase());
@@ -62,21 +65,14 @@ public class TextFormatter {
                         }
                     }
 
+                    //checks if we get percent as last unary
                     if (isPercent) {
                         sb.append(unarySB);
                     } else {
                         sb.append(unarySB);
-                        sb.append(stage.getOperand());
+                        sb.append(display(stage.getOperand(), scale));
                         sb.append(")");
                     }
-
-//                    if (unarySB.length() != 0) {
-//                        unarySB.append(display(model.getOperand(), 16));
-////                        sb.append(stage.getOperand());
-//                        sb.append(")");
-//                    }else {
-//
-//                    }
                 }
             }
         }
@@ -101,12 +97,17 @@ public class TextFormatter {
             return f.format(input);
         }
 
-        //if number have more then scale number digits of integral number then show in engi mode
+        //if number have more then scale count digits before point then show in engi mode
         if (input.precision() - input.scale() > scale) {
             f.applyPattern("0.################E0");
             return f.format(input);
         } else {
-            f.applyPattern("###,###.################");
+            //show not more then scale count digits on display
+            String pattern = "###,###.#";
+            for (int i = 0; i < scale - input.precision() + input.scale(); i++) {
+                pattern += "#";
+            }
+            f.applyPattern(pattern);
             return f.format(input.setScale(scale, BigDecimal.ROUND_HALF_UP));
         }
     }

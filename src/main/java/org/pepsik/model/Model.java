@@ -39,7 +39,7 @@ public class Model {
      */
     private BigDecimal result = new BigDecimal(BigInteger.ZERO);
     /**
-     * Memory which consist one number
+     * Calculator memory
      */
     private BigDecimal memory;
 
@@ -211,6 +211,7 @@ public class Model {
         try {
             result = binaryOperator.execute(result, operand);
         } catch (ArithmeticException e) {
+            //clear stage and expression if get error and rethrow exception
             currentExpression = new ArrayDeque<>();
             currentStage = new Stage();
             throw e;
@@ -269,7 +270,6 @@ public class Model {
         // operator - empty ; operand - exist
         if (binaryOperator == null && operand != null) {
             result = calculateUnary();
-//            currentExpression.addLast(currentStage);
 
             if (lastBinaryStage != null) {
                 //clone
@@ -326,6 +326,7 @@ public class Model {
             stage.setOperand(new BigDecimal(BigInteger.ZERO));
             return stage;
         } else {
+            //get last stage in previous expression
             return history.get(history.size() - 1).getLast();
         }
     }

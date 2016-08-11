@@ -31,7 +31,7 @@ public enum CalculatorButton {
         @Override
         protected void resize(double width, double height) {
             if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("binary_small_font", "binary_big_font");
             } else {
                 changeCssClass("binary_big_font", "binary_small_font");
@@ -41,8 +41,8 @@ public enum CalculatorButton {
     SUBTRACT("-") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("binary_small_font", "binary_big_font");
             } else {
                 changeCssClass("binary_big_font", "binary_small_font");
@@ -52,8 +52,8 @@ public enum CalculatorButton {
     DIVIDE("/") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("binary_small_font", "binary_big_font");
             } else {
                 changeCssClass("binary_big_font", "binary_small_font");
@@ -63,8 +63,8 @@ public enum CalculatorButton {
     MULTIPLY("*") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("binary_small_font", "binary_big_font");
             } else {
                 changeCssClass("binary_big_font", "binary_small_font");
@@ -74,8 +74,8 @@ public enum CalculatorButton {
     EQUAL("=") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("binary_small_font", "binary_big_font");
             } else {
                 changeCssClass("binary_big_font", "binary_small_font");
@@ -89,8 +89,8 @@ public enum CalculatorButton {
     SQUARE("sqr") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("unary_small_font", "unary_big_font");
             } else {
                 changeCssClass("unary_big_font", "unary_small_font");
@@ -100,8 +100,8 @@ public enum CalculatorButton {
     SQUARE_ROOT("√") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("unary_small_font", "unary_big_font");
             } else {
                 changeCssClass("unary_big_font", "unary_small_font");
@@ -111,8 +111,8 @@ public enum CalculatorButton {
     FRACTION("1/") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("unary_small_font", "unary_big_font");
             } else {
                 changeCssClass("unary_big_font", "unary_small_font");
@@ -122,8 +122,8 @@ public enum CalculatorButton {
     NEGATE("negate") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("unary_small_font", "unary_big_font");
             } else {
                 changeCssClass("unary_big_font", "unary_small_font");
@@ -133,8 +133,8 @@ public enum CalculatorButton {
     PERCENT("%") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("unary_small_font", "unary_big_font");
             } else {
                 changeCssClass("unary_big_font", "unary_small_font");
@@ -148,8 +148,8 @@ public enum CalculatorButton {
     POINT(".") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("point_small_font", "point_big_font");
             } else {
                 changeCssClass("point_big_font", "point_small_font");
@@ -163,8 +163,8 @@ public enum CalculatorButton {
     CLEAR_ENTRY("CE") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("clear_small_font", "clear_big_font");
             } else {
                 changeCssClass("clear_big_font", "clear_small_font");
@@ -174,8 +174,8 @@ public enum CalculatorButton {
     CLEAR_ALL("C") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("clear_small_font", "clear_big_font");
             } else {
                 changeCssClass("clear_big_font", "clear_small_font");
@@ -189,8 +189,8 @@ public enum CalculatorButton {
     BACKSPACE("<") {
         @Override
         protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, 450) > 0) {
+            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
                 changeCssClass("clear_small_font", "clear_big_font");
             } else {
                 changeCssClass("clear_big_font", "clear_small_font");
@@ -206,6 +206,14 @@ public enum CalculatorButton {
     MEMORY_ADD("M+"),
     MEMORY_SUBTRACT("M-"),
     MEMORY_SAVE("MS");
+
+    /**
+     * Boundary height and width when buttons and display fonts are changes
+     */
+    private static class Constants {
+        public static final int BOUNDARY_WIDTH = 270;
+        public static final int BOUNDARY_HEIGHT = 450;
+    }
 
     /**
      * String presentation operation
@@ -264,8 +272,8 @@ public enum CalculatorButton {
      * Default resize (0-9 buttons)
      */
     protected void resize(double width, double height) {
-        if (Double.compare(width, 270) > 0
-                && Double.compare(height, 450) > 0) {
+        if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
+                && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
             changeCssClass("number_small_font", "number_big_font");
         } else {
             changeCssClass("number_big_font", "number_small_font");
