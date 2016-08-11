@@ -132,7 +132,7 @@ public class Model {
      * Clear stage operand and show on display field
      */
     public void clearEntry() {
-        currentStage.setOperand(null);
+        currentStage.setOperand(BigDecimal.ZERO);
         currentStage.clearUnaryOperators();
     }
 

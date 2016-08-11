@@ -1,5 +1,6 @@
 package org.pepsik.util;
 
+import org.pepsik.controller.buttons.InputNumber;
 import org.pepsik.model.Model;
 import org.pepsik.model.Stage;
 import org.pepsik.model.operation.BinaryOperation;
@@ -112,6 +113,23 @@ public class TextFormatter {
             }
             f.applyPattern(pattern);
             return f.format(input.setScale(scale, BigDecimal.ROUND_HALF_UP));
+        }
+    }
+
+    public static String formatInputNumber(){
+        DecimalFormat f = new DecimalFormat();
+        int scale = InputNumber.getInput().scale();
+        String pattern = "###,##0.";
+
+        if (scale != 0) {
+            for (int i = 0; i < scale; i++) {
+                pattern += "0";
+            }
+            f.applyPattern(pattern);
+            return f.format(InputNumber.getInput());
+        } else {
+            f.applyPattern("###,###");
+            return f.format(InputNumber.getInput());
         }
     }
 

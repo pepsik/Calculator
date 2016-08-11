@@ -46,7 +46,7 @@ public enum UnaryOperation {
      * Scale for unary operation constant
      */
     private static class Constants {
-        private static final int SCALE = 50;
+        private static final int SCALE = 100;
     }
 
     /**

@@ -789,6 +789,25 @@ public class UITest {
         assertKeyPressOnDisplayWithExpressionWithoutClear("10", P, "10", true); //M+
         assertKeyPressOnDisplayWithExpressionWithoutClear("10", Q, "10", true); //M-
         assertKeyPressOnDisplayWithExpressionWithoutClear("10", R, "0", true); //MR
+        assertKeyPressOnDisplayWithExpressionWithoutClear("0", L, "0", true); //MC
+        assertKeyPressOnDisplayWithExpressionWithoutClear("0", R, "0", true); //MR
+
+        assertKeyPressOnDisplayWithExpression("1", BACK_SPACE, "10", true);
+        assertKeyPressOnDisplayWithExpression("0", BACK_SPACE, "1", true);
+
+        //clear_ALL
+        assertKeyPressOnDisplayWithExpression("0", ESCAPE, "10", true);
+        assertKeyPressOnDisplayWithExpression("0", ESCAPE, "1123123", true);
+        assertKeyPressOnDisplayWithExpression("0", ESCAPE, "negate(123123)", true);
+        assertKeyPressOnDisplayWithExpression("0", ESCAPE, "123+ 3213", true);
+
+        //clear_entry
+        assertKeyPressOnDisplayWithExpression("0", DELETE, "10 + 12", true);
+        assertKeyPressOnDisplayWithExpressionWithoutClear("24", M, "14 = ", true);
+
+        //negate
+        assertKeyPressOnDisplayWithExpression("-10", F9, "10", true);
+        assertKeyPressOnDisplayWithExpression("-22", F9, "14 + 22 ", true);
     }
 
     @Test
@@ -806,6 +825,11 @@ public class UITest {
 
         CLEAR_ENTRY.push();
         assertExpressionWithoutClear(0, "");
+
+        assertExpression("-5", "5 + negate(5)");
+        CLEAR_ENTRY.push();
+        assertExpression(0, "");
+        assertExpression(0, "negate()");
     }
 
     private void assertExpression(String expected, String input) {

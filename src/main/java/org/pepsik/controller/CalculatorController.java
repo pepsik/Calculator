@@ -43,8 +43,6 @@ public class CalculatorController implements Initializable {
      */
     private boolean noError = true;
 
-    private DecimalFormat f = new DecimalFormat();
-
     /**
      * Calculator Model witch calculate expression
      */
@@ -63,18 +61,8 @@ public class CalculatorController implements Initializable {
             InputNumber.addToInput(new BigDecimal(number));
             model.addNumber(InputNumber.getInput());
 
-            int scale = InputNumber.getInput().scale();
-            String pattern = "###,##0.";
-            if (scale != 0) {
-                for (int i = 0; i < scale; i++) {
-                    pattern += "0";
-                }
-                f.applyPattern(pattern);
-                displayField.setText(f.format(InputNumber.getInput()));
-            } else {
-                f.applyPattern("###,###");
-                displayField.setText(f.format(InputNumber.getInput()));
-            }
+            displayField.setText(TextFormatter.formatInputNumber());
+
         }
     }
 
@@ -86,6 +74,7 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handlePointAction(ActionEvent event) {
         CalculatorButton.valueOf((Button) event.getSource());
+        DecimalFormat f = new DecimalFormat();
 
         if (noError) {
             f.applyPattern("###,###");
@@ -113,8 +102,8 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
 
-                //scale for binary operations
-                int scale = 16;
+                int scale = 16; //scale for binary operations display output
+
                 displayField.setText(TextFormatter.display(model.getResult(), scale));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
             } catch (ArithmeticException e) {
@@ -139,8 +128,8 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
-                // scale for unary operations
-                int scale = 15;
+                int scale = 15;// scale for unary operations display output
+
                 displayField.setText(TextFormatter.display(model.getOperand(), scale));
                 TextFormatter.setModel(model);
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
@@ -224,7 +213,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecall(false);
+        setDisableMemoryClearAndRecallButton(false);
     }
 
     /**
@@ -241,7 +230,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecall(false);
+        setDisableMemoryClearAndRecallButton(false);
     }
 
     /**
@@ -258,7 +247,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecall(false);
+        setDisableMemoryClearAndRecallButton(false);
     }
 
     /**
@@ -275,7 +264,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecall(true);
+        setDisableMemoryClearAndRecallButton(true);
     }
 
     /**
@@ -286,19 +275,20 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleMemoryRecallAction(ActionEvent event) {
         CalculatorButton.valueOf((Button) event.getSource());
+        int scale = 16; //scale for output memory value
 
         if (noError) {
             BigDecimal memory = model.getMemory();
 
             if (memory != null) {
-                displayField.setText(TextFormatter.display(memory, 16));
+                displayField.setText(TextFormatter.display(memory, scale));
             }
         }
 
         InputNumber.clearInput();
     }
 
-    private void setDisableMemoryClearAndRecall(boolean b) {
+    private void setDisableMemoryClearAndRecallButton(boolean b) {
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(b);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(b);
     }
