@@ -10,17 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.hamcrest.Matchers.instanceOf;
 import static java.lang.Integer.MAX_VALUE;
 import static org.junit.Assert.*;
 
-/**
- * Created by pepsik on 7/27/2016.
- */
 public class ModelTest {
+    /**
+     * Delta for double compare
+     */
     private static final double DELTA = 0.00001;
-    public static final int ITERATE_COUNT = 100;
+    /**
+     * Count for iterated tests
+     */
+    private static final int ITERATE_COUNT = 100;
 
+    /**
+     * Test model
+     */
     private Model model;
     private Random r = new Random();
 

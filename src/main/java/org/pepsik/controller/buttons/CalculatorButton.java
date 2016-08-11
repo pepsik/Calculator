@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import java.util.Set;
 
 /**
- * This enum represents calculator buttons. Each constant consist values as String and Node button which used in Controller class
+ * This enum represents calculator buttons. Each constant consist values as String and JavaFX node button which used in Controller class
  * to handle button events and have resize font logic for each button.
  */
 public enum CalculatorButton {

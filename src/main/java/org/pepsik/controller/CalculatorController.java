@@ -18,7 +18,7 @@ import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 /**
- * Controller for handle calculator events
+ * Controller for handle calculator events and display calculation results and history
  */
 public class CalculatorController implements Initializable {
 

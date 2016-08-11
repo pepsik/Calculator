@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import static java.math.BigDecimal.TEN;
 
 /**
- * Enum represents an input number which used in Controller {@link org.pepsik.controller.CalculatorController#handleDigitAction(ActionEvent)} method
+ * Class represents an input number which used in Controller {@link org.pepsik.controller.CalculatorController#handleDigitAction(ActionEvent)} method
  */
 public class InputNumber {
     /**

@@ -66,15 +66,6 @@ public enum UITestButton {
         throw new IllegalArgumentException("No match buttons found to " + input);
     }
 
-    public static String getShortName(String input) {
-        for (UITestButton button : values()) {
-            if (button.shortName.equals(input)) {
-                return button.name().toLowerCase();
-            }
-        }
-        throw new IllegalArgumentException("No match buttons found to " + input);
-    }
-
     /**
      * Gets button Css style classes
      *
@@ -86,9 +77,5 @@ public enum UITestButton {
 
     public void push() {
         Platform.runLater(() -> button.fire());
-    }
-
-    public String getShortName() {
-        return shortName;
     }
 }

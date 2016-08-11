@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent;
 import static javafx.scene.input.KeyCode.*;
 
 /**
- * Enum represents keyboard shortcuts and simply press correspond calculator buttons
+ * Enum represents keyboard shortcuts and simply fires correspond calculator buttons
  */
 public enum KeyboardShortcut {
     Q_BUTTON(Q) {
@@ -96,7 +96,7 @@ public enum KeyboardShortcut {
     SQUARE_BUTTON(AT) {
         @Override
         protected void execute(KeyEvent event) {
-            CalculatorButton.SQUARE_ROOT.getButton().fire();
+            CalculatorButton.SQUARE.getButton().fire();
         }
     },
     ONE_BUTTON(DIGIT1) {
@@ -108,7 +108,7 @@ public enum KeyboardShortcut {
     TWO_BUTTON(DIGIT2) {
         @Override
         protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.SHIFT_DOWN);
+            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
 
             if (kb.match(event)) {
                 CalculatorButton.SQUARE_ROOT.getButton().fire();
@@ -132,7 +132,7 @@ public enum KeyboardShortcut {
     FIVE_BUTTON(DIGIT5) {
         @Override
         protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.SHIFT_DOWN);
+            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
 
             if (kb.match(event)) {
                 CalculatorButton.PERCENT.getButton().fire();
@@ -156,7 +156,7 @@ public enum KeyboardShortcut {
     EIGHT_BUTTON(DIGIT8) {
         @Override
         protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.SHIFT_DOWN);
+            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
 
             if (kb.match(event)) {
                 CalculatorButton.MULTIPLY.getButton().fire();
@@ -180,7 +180,7 @@ public enum KeyboardShortcut {
     EQUALS_BUTTON(EQUALS) {
         @Override
         protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.SHIFT_DOWN);
+            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
 
             if (kb.match(event)) {
                 CalculatorButton.ADD.getButton().fire();

@@ -15,6 +15,9 @@ import java.util.Deque;
  */
 public class TextFormatter {
 
+    /**
+     * Model with operate to
+     */
     private static Model model;
 
     /**

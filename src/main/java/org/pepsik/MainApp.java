@@ -27,11 +27,11 @@ public class MainApp extends Application {
     /**
      * Calculator pref height
      */
-    private static final int PREF_HEIGHT = 365;
+    private static final int PREF_HEIGHT = 450;
     /**
      * Calculator pref width
      */
-    private static final int PREF_WIDTH = 215;
+    private static final int PREF_WIDTH = 260;
     /**
      * Calculator max width
      */
@@ -52,6 +52,8 @@ public class MainApp extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
+        display = (Label) scene.getRoot().lookup("#display");
+
         //Init max, min, pref sizes
         setUpApplicationSizes(primaryStage);
 
@@ -67,16 +69,6 @@ public class MainApp extends Application {
         //disable memory recall and clear buttons
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
-
-        //get css max display font
-        display.getStyleClass().add("display_max_font");
-        maxDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_max_font");
-
-        //get css min display font
-        display.getStyleClass().add("display_min_font");
-        minDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_min_font");
 
         primaryStage.show();
     }
@@ -146,8 +138,15 @@ public class MainApp extends Application {
      */
 
     private void initResizeListeners(Scene scene) {
-        //get display label for font resizing
-        display = (Label) scene.getRoot().lookup("#display");
+        //get css max display font
+        display.getStyleClass().add("display_max_font");
+        maxDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_max_font");
+
+        //get css min display font
+        display.getStyleClass().add("display_min_font");
+        minDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_min_font");
 
         //Display font resize listener
         display.textProperty().addListener((observable, oldValue, newValue) -> resizeDisplay());

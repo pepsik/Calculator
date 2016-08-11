@@ -5,12 +5,15 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pepsik.MainApp;
+import org.pepsik.controller.buttons.CalculatorButton;
 import org.pepsik.model.helper.UITestButton;
 import org.pepsik.model.operation.BinaryOperation;
 
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Integer.MAX_VALUE;
+import static javafx.scene.input.KeyCode.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pepsik.model.helper.UITestButton.*;
@@ -29,7 +33,13 @@ import static org.pepsik.model.helper.UITestButton.*;
 public class UITest {
 
     private static Stage stage;
+    /**
+     * Represents calculator display
+     */
     private static Label display;
+    /**
+     * Represents calculator history
+     */
     private static Label history;
 
     private NumberFormat formatter = new DecimalFormat("###,###.################");
@@ -702,8 +712,8 @@ public class UITest {
         assertHistoryExpressionDisplay("0 + negate(1,231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
 
         assertHistoryExpressionDisplay("negate(0)", "negate()");
-        assertHistoryExpressionDisplay("negate(1,231)","negate(1231)");
-        assertHistoryExpressionDisplay("negate(negate(1,231)","negate(negate(1231)");
+        assertHistoryExpressionDisplay("negate(1,231)", "negate(1231)");
+        assertHistoryExpressionDisplay("negate(negate(1,231)", "negate(negate(1231)");
         assertHistoryExpressionDisplay("negate(negate(√(1,231)", "negate(negate(sqrt(1231)");
         assertHistoryExpressionDisplay("negate(negate(√(1,231)", "negate(negate(sqrt(1231)");
         assertHistoryExpressionDisplay("0", "negate(negate(percent(percent(1231)");
@@ -738,7 +748,47 @@ public class UITest {
         assertBackspace("1", "12 * 2 - 111 <<");
         assertBackspace("0", "12 * 2 - 111 + 123 <<<");
         assertBackspace("0", "12 * 2 - 111 + 123 <<<");
+    }
 
+    @Test
+    public void testKeyboardShortcut() throws InterruptedException {
+        assertKeyPressOnDisplay("1", DIGIT1);
+        assertKeyPressOnDisplay("2", DIGIT2);
+        assertKeyPressOnDisplay("3", DIGIT3);
+        assertKeyPressOnDisplay("4", DIGIT4);
+        assertKeyPressOnDisplay("5", DIGIT5);
+        assertKeyPressOnDisplay("6", DIGIT6);
+        assertKeyPressOnDisplay("7", DIGIT7);
+        assertKeyPressOnDisplay("8", DIGIT8);
+        assertKeyPressOnDisplay("9", DIGIT9);
+        assertKeyPressOnDisplay("0", DIGIT0);
+        assertKeyPressOnDisplay("0.", PERIOD);
+
+        assertKeyPressOnHistory("*", KeyCode.MULTIPLY);
+        assertKeyPressOnHistory("/", SLASH);
+        assertKeyPressOnHistory("+", PLUS);
+        assertKeyPressOnHistory("-", MINUS);
+
+        assertKeyPressOnDisplayWithExpression("9", EQUALS, "5+4", false);
+        assertKeyPressOnDisplayWithExpression("1", ENTER, "5-4", false);
+
+        assertKeyPressOnDisplayWithExpression("9", KeyCode.AT, "3", false); //square
+        assertKeyPressOnDisplayWithExpression("0", DIGIT5, "3", true); //percent
+        assertKeyPressOnDisplayWithExpression("1.5", DIGIT5, "3 + 50", true); //percent
+        assertKeyPressOnDisplayWithExpression("3", DIGIT2, "9", true); //square root
+        assertKeyPressOnDisplayWithExpression("0.1", R, "10", false); //fraction
+
+        assertKeyPressOnDisplayWithExpression("10", M, "10", true);  //MS
+        assertKeyPressOnDisplayWithExpressionWithoutClear("10", R, "", true);   //MR
+
+        assertKeyPressOnDisplayWithExpression("10", P, "10", true); //M+
+        assertKeyPressOnDisplayWithExpressionWithoutClear("10", P, "10", true); //M+
+        assertKeyPressOnDisplayWithExpressionWithoutClear("20", R, "10", true); //MR
+
+        assertKeyPressOnDisplayWithExpression("10", P, "10", true); //M+
+        assertKeyPressOnDisplayWithExpressionWithoutClear("10", P, "10", true); //M+
+        assertKeyPressOnDisplayWithExpressionWithoutClear("10", Q, "10", true); //M-
+        assertKeyPressOnDisplayWithExpressionWithoutClear("10", R, "0", true); //MR
     }
 
     @Test
@@ -784,6 +834,53 @@ public class UITest {
     private void assertExpressionWithoutClear(int expected, String input) {
         parseAndExecute(input);
         assertEquals(String.valueOf(expected), display.getText());
+    }
+
+    private void assertKeyPressOnDisplay(String expected, KeyCode code) {
+        CLEAR_ALL.push();
+
+        Platform.runLater(() -> CalculatorButton.NUMBER_0.getButton().getParent()
+                .fireEvent(new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, false, false, false, false)));
+
+        waitForCompleteExecution();
+
+        assertEquals(expected, display.getText());
+    }
+
+    private void assertKeyPressOnDisplayWithExpression(String expected, KeyCode code, String expression, boolean isPressedCtrl) {
+        CLEAR_ALL.push();
+
+        parseAndExecute(expression);
+
+        Platform.runLater(() -> CalculatorButton.NUMBER_0.getButton().getParent()
+                .fireEvent(new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, false, isPressedCtrl, false, false)));
+
+        waitForCompleteExecution();
+
+        assertEquals(expected, display.getText());
+    }
+
+    private void assertKeyPressOnDisplayWithExpressionWithoutClear(String expected, KeyCode code, String expression, boolean isPressedCtrl) {
+        parseAndExecute(expression);
+
+        Platform.runLater(() -> CalculatorButton.NUMBER_0.getButton().getParent()
+                .fireEvent(new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, false, isPressedCtrl, false, false)));
+
+        waitForCompleteExecution();
+
+        assertEquals(expected, display.getText());
+    }
+
+    private void assertKeyPressOnHistory(String expected, KeyCode code) {
+        CLEAR_ALL.push();
+
+        Platform.runLater(() -> CalculatorButton.NUMBER_0.getButton().getParent()
+                .fireEvent(new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, false, false, false, false)));
+
+        waitForCompleteExecution();
+
+
+        assertEquals("0 " + expected, history.getText());
     }
 
     private void parseAndExecute(String input) {
@@ -897,11 +994,11 @@ public class UITest {
         assertEquals(d, display.getFont().getSize(), delta);
     }
 
-    private void assertHistoryExpressionDisplay(String expected) {
+    private void assertHistoryExpressionDisplay(String inputAndExpect) {
         CLEAR_ALL.push();
-        parseAndExecute(expected);
+        parseAndExecute(inputAndExpect);
 
-        assertEquals(expected, history.getText());
+        assertEquals(inputAndExpect, history.getText());
     }
 
     private void assertHistoryExpressionDisplay(String expected, String input) {

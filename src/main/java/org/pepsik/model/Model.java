@@ -5,7 +5,6 @@ import org.pepsik.model.operation.UnaryOperation;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.*;
 
 import static org.pepsik.model.operation.BinaryOperation.*;
