@@ -1,6 +1,7 @@
 package org.pepsik.controller.buttons;
 
 import javafx.event.ActionEvent;
+
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.TEN;
@@ -39,18 +40,20 @@ public class InputNumber {
         if (input == null) {
             input = new BigDecimal(0);
         }
-
-        if (!isPointSet()) {
-            scale++;
-        }
+        scale++;
     }
 
     /**
      * Verify is point set
+     *
      * @return bool value if was set
      */
     public static boolean isPointSet() {
         return scale != 0;
+    }
+
+    public static int getScale(){
+        return scale;
     }
 
     /**

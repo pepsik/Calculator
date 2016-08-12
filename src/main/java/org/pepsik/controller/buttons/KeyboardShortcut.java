@@ -63,13 +63,14 @@ public enum KeyboardShortcut {
             }
         }
     },
+
     F9_BUTTON(F9) {
         @Override
         protected void execute(KeyEvent event) {
             CalculatorButton.NEGATE.getButton().fire();
         }
     },
-    DIVIDE_BUTTON(SLASH) {
+    SLASH_BUTTON(SLASH) {
         @Override
         protected void execute(KeyEvent event) {
             CalculatorButton.DIVIDE.getButton().fire();
@@ -81,13 +82,13 @@ public enum KeyboardShortcut {
             CalculatorButton.MULTIPLY.getButton().fire();
         }
     },
-    ADD_BUTTON(PLUS) {
+    PLUS_BUTTON(PLUS) {
         @Override
         protected void execute(KeyEvent event) {
             CalculatorButton.ADD.getButton().fire();
         }
     },
-    SUBTRACT_BUTTON(MINUS) {
+    MINUS_BUTTON(MINUS) {
         @Override
         protected void execute(KeyEvent event) {
             CalculatorButton.SUBTRACT.getButton().fire();
@@ -99,6 +100,7 @@ public enum KeyboardShortcut {
             CalculatorButton.SQUARE.getButton().fire();
         }
     },
+
     ONE_BUTTON(DIGIT1) {
         @Override
         protected void execute(KeyEvent event) {
@@ -177,6 +179,7 @@ public enum KeyboardShortcut {
             CalculatorButton.NUMBER_0.getButton().fire();
         }
     },
+
     EQUALS_BUTTON(EQUALS) {
         @Override
         protected void execute(KeyEvent event) {
@@ -189,7 +192,7 @@ public enum KeyboardShortcut {
             }
         }
     },
-    POINT_BUTTON(PERIOD) {
+    PERIOD_BUTTON(PERIOD) {
         @Override
         protected void execute(KeyEvent event) {
             CalculatorButton.POINT.getButton().fire();
@@ -218,6 +221,92 @@ public enum KeyboardShortcut {
         protected void execute(KeyEvent event) {
             CalculatorButton.EQUAL.getButton().fire();
         }
+    },
+
+    //Numpad buttons
+    NUMPAD_ONE_BUTTON(NUMPAD1) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_1.getButton().fire();
+        }
+    },
+    NUMPAD_TWO_BUTTON(NUMPAD2) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_2.getButton().fire();
+        }
+    },
+    NUMPAD_THREE_BUTTON(NUMPAD3) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_3.getButton().fire();
+        }
+    },
+    NUMPAD_FOUR_BUTTON(NUMPAD4) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_4.getButton().fire();
+        }
+    },
+    NUMPAD_FIVE_BUTTON(NUMPAD5) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_5.getButton().fire();
+        }
+    },
+    NUMPAD_SIX_BUTTON(NUMPAD6) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_6.getButton().fire();
+        }
+    },
+    NUMPAD_SEVEN_BUTTON(NUMPAD7) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_7.getButton().fire();
+        }
+    },
+    NUMPAD_EIGHT_BUTT(NUMPAD8) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_8.getButton().fire();
+        }
+    },
+    NUMPAD_NINE_BUTTON(NUMPAD9) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_9.getButton().fire();
+        }
+    },
+    NUMPAD_ZERO_BUTTON(NUMPAD0) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.NUMBER_0.getButton().fire();
+        }
+    },
+    NUMPAD_ADD_BUTTON(ADD) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.ADD.getButton().fire();
+        }
+    },
+    NUMPAD_SUBTRACT_BUTTON(SUBTRACT) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.SUBTRACT.getButton().fire();
+        }
+    },
+    NUMPAD_DIVIDE_BUTTON(DIVIDE) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.DIVIDE.getButton().fire();
+        }
+    },
+    NUMPAD_DECIMAL_BUTTON(DECIMAL) {
+        @Override
+        protected void execute(KeyEvent event) {
+            CalculatorButton.POINT.getButton().fire();
+        }
     };
 
     /**
@@ -231,6 +320,7 @@ public enum KeyboardShortcut {
 
     /**
      * Finds keyboard key and pushes corresponding calculator button
+     *
      * @param event keyboard key event
      */
     public static void findAncExecuteKey(KeyEvent event) {
@@ -243,6 +333,7 @@ public enum KeyboardShortcut {
 
     /**
      * Push correspond JavaFX node button
+     *
      * @param event keyboard event
      */
     protected abstract void execute(KeyEvent event);

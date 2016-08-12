@@ -116,21 +116,21 @@ public class TextFormatter {
         }
     }
 
-    public static String formatInputNumber(){
+    public static String formatInputNumber() {
         DecimalFormat f = new DecimalFormat();
-        int scale = InputNumber.getInput().scale();
+        int scale = InputNumber.getScale();
         String pattern = "###,##0.";
 
         if (scale != 0) {
-            for (int i = 0; i < scale; i++) {
+            for (int i = 0; i < scale - 1; i++) {
                 pattern += "0";
             }
             f.applyPattern(pattern);
-            return f.format(InputNumber.getInput());
         } else {
             f.applyPattern("###,###");
-            return f.format(InputNumber.getInput());
         }
+
+        return f.format(InputNumber.getInput());
     }
 
     public static void setModel(Model model) {

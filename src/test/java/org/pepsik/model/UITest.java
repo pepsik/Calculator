@@ -32,6 +32,9 @@ import static org.pepsik.model.helper.UITestButton.*;
 
 public class UITest {
 
+    /**
+     * Stage for init tests
+     */
     private static Stage stage;
     /**
      * Represents calculator display
@@ -42,6 +45,9 @@ public class UITest {
      */
     private static Label history;
 
+    /**
+     * Used for format expected double value in asserts
+     */
     private NumberFormat formatter = new DecimalFormat("###,###.################");
 
     @BeforeClass
@@ -104,6 +110,10 @@ public class UITest {
         assertExpression("1.0", "1.0");
         assertExpression(9.9, "9.9");
         assertExpression("1.00", "1.00");
+        assertExpression("1.00", "1..00");
+        assertExpression("1.00", "1.........00");
+        assertExpression("1.00", "1.........0...0");
+        assertExpression("1.00", "1.........0...0....");
         assertExpression(1.11, "1.11");
         assertExpression(11.1, "11.1");
         assertExpression(12.3, "12.3");
@@ -599,11 +609,15 @@ public class UITest {
     }
 
     @Test
-    public void testResizeButtonFont() throws InterruptedException {
+    public void testResizeButtonFont() {
         stage.setWidth(250);
         stage.setHeight(350);
 
-        Thread.sleep(200);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         assertResizeFontButton("number_small_font", UITestButton.NUMBER_1);
         assertResizeFontButton("number_small_font", UITestButton.NUMBER_2);
@@ -643,7 +657,11 @@ public class UITest {
         stage.setWidth(400);
         stage.setHeight(600);
 
-        Thread.sleep(200);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         assertResizeFontButton("number_big_font", UITestButton.NUMBER_1);
         assertResizeFontButton("number_big_font", UITestButton.NUMBER_2);
@@ -682,7 +700,7 @@ public class UITest {
     }
 
     @Test
-    public void testResizeDisplayFont() throws InterruptedException {
+    public void testResizeDisplayFont() {
         stage.setHeight(350);
         stage.setWidth(250);
 
@@ -691,7 +709,11 @@ public class UITest {
         stage.setHeight(550);
         stage.setWidth(350);
 
-        Thread.sleep(200);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         assertResizeFontDisplay(display);
     }
@@ -751,7 +773,7 @@ public class UITest {
     }
 
     @Test
-    public void testKeyboardShortcut() throws InterruptedException {
+    public void testKeyboardShortcut() {
         assertKeyPressOnDisplay("1", DIGIT1);
         assertKeyPressOnDisplay("2", DIGIT2);
         assertKeyPressOnDisplay("3", DIGIT3);
@@ -808,6 +830,22 @@ public class UITest {
         //negate
         assertKeyPressOnDisplayWithExpression("-10", F9, "10", true);
         assertKeyPressOnDisplayWithExpression("-22", F9, "14 + 22 ", true);
+
+        //test numpad buttons
+        assertKeyPressOnDisplay("1", NUMPAD1);
+        assertKeyPressOnDisplay("2", NUMPAD2);
+        assertKeyPressOnDisplay("3", NUMPAD3);
+        assertKeyPressOnDisplay("4", NUMPAD4);
+        assertKeyPressOnDisplay("5", NUMPAD5);
+        assertKeyPressOnDisplay("6", NUMPAD6);
+        assertKeyPressOnDisplay("7", NUMPAD7);
+        assertKeyPressOnDisplay("8", NUMPAD8);
+        assertKeyPressOnDisplay("9", NUMPAD9);
+        assertKeyPressOnDisplay("0", NUMPAD0);
+        assertKeyPressOnDisplay("0.", DECIMAL);
+        assertKeyPressOnHistory("/", KeyCode.DIVIDE);
+        assertKeyPressOnHistory("+", KeyCode.ADD);
+        assertKeyPressOnHistory("-", KeyCode.SUBTRACT);
     }
 
     @Test
@@ -985,12 +1023,12 @@ public class UITest {
         }
     }
 
-    private void assertResizeFontButton(String expected, UITestButton button) throws InterruptedException {
+    private void assertResizeFontButton(String expected, UITestButton button) {
         ObservableList<String> cssClasses = button.getStyleClass();
         assertTrue(cssClasses.contains(expected));
     }
 
-    private void assertResizeFontDisplay(Label display) throws InterruptedException {
+    private void assertResizeFontDisplay(Label display) {
         //get css max display font
         display.getStyleClass().add("display_max_font");
         int maxDisplayFont = (int) display.getFont().getSize();

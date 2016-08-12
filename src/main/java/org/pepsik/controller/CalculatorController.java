@@ -77,14 +77,13 @@ public class CalculatorController implements Initializable {
         DecimalFormat f = new DecimalFormat();
 
         if (noError) {
-            f.applyPattern("###,###");
+            f.applyPattern("###,###.#################");
 
-            if (InputNumber.isPointSet()) {
-                displayField.setText(f.format(InputNumber.getInput()));
-            } else {
+            if (!InputNumber.isPointSet()) {
                 InputNumber.addPoint();
-                displayField.setText(f.format(InputNumber.getInput()) + ".");
             }
+
+            displayField.setText(TextFormatter.formatInputNumber());
         }
     }
 
