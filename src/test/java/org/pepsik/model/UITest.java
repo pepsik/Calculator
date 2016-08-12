@@ -740,6 +740,20 @@ public class UITest {
         assertHistoryExpressionDisplay("negate(negate(√(1,231)", "negate(negate(sqrt(1231)");
         assertHistoryExpressionDisplay("0", "negate(negate(percent(percent(1231)");
         assertHistoryExpressionDisplay("3 + 0.4356", "3 + square(percent(percent(22)");
+        assertHistoryExpressionDisplay("3 - 5 +", "3 + square(percent(percent(22) CE - 5 +");
+
+
+        //checks if history empty after clear-entry in cases where expression have 1 stage and unary operations
+        CLEAR_ALL.push();
+        parseAndExecute("square(5)");
+        CLEAR_ENTRY.push();
+        assertHistoryExpressionDisplayWithoutClear("", "");
+
+        //
+        CLEAR_ALL.push();
+        parseAndExecute("5 + square(7)");
+        CLEAR_ENTRY.push();
+        assertHistoryExpressionDisplayWithoutClear("5 +", "");
     }
 
     @Test
@@ -951,9 +965,26 @@ public class UITest {
         StringBuilder sb = new StringBuilder();
         List<UITestButton> listUnary = new ArrayList<>();
         boolean memory_flag = false;
+        boolean clear_flag = false;
+        boolean unary_flag = false;
 
         for (int i = 0; i < data.length(); i++) {
             String symbol = data.substring(i, i + 1);
+
+            if (symbol.toUpperCase().equals("C") && !unary_flag && !memory_flag) {
+                clear_flag = true;
+                continue;
+            }
+
+            if (clear_flag) {
+                if (symbol.toUpperCase().equals("E")) {
+                    UITestButton.getUIButton("CE").push();
+                } else {
+                    UITestButton.getUIButton("C").push();
+                }
+                clear_flag = false;
+                continue;
+            }
 
             if (StringUtils.isNumeric(symbol)) {
                 UITestButton.getUIButton(symbol).push();
@@ -977,6 +1008,7 @@ public class UITest {
             }
 
             if (StringUtils.isAlpha(symbol)) {
+                unary_flag = true;
                 sb.append(symbol);
                 continue;
             }
@@ -994,6 +1026,7 @@ public class UITest {
             if (symbol.equals("(")) {
                 listUnary.add(UITestButton.getUIButton(sb.toString()));
                 sb = new StringBuilder();
+                unary_flag = false;
                 continue;
             }
 
@@ -1061,6 +1094,12 @@ public class UITest {
         parseAndExecute(inputAndExpect);
 
         assertEquals(inputAndExpect, history.getText());
+    }
+
+    private void assertHistoryExpressionDisplayWithoutClear(String expect, String input) {
+        parseAndExecute(input);
+
+        assertEquals(expect, history.getText());
     }
 
     private void assertHistoryExpressionDisplay(String expected, String input) {

@@ -149,14 +149,16 @@ public class CalculatorController implements Initializable {
     private void handleClearAction(ActionEvent event) {
         CalculatorButton.valueOf((Button) event.getSource());
 
+        model.clearEntry();
+
         if (!noError) {
             displayHistory.setText("");
+        }else {
+            displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
         }
 
         InputNumber.clearInput();
         noError = true;
-        model.clearEntry();
-
         displayField.setText(ZERO);
     }
 

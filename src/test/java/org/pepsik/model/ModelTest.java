@@ -269,7 +269,7 @@ public class ModelTest {
         assertResult(-1, "negate(1)=");
         assertResult(-5, "negate(5)=");
         assertResult(-50, "negate(50)=");
-        assertResult(-MAX_VALUE, -MAX_VALUE + "=");
+        assertResult(MAX_VALUE, MAX_VALUE + "=");
 
         assertResult(0, "0 =");
         assertResult(0, "0 = = =");

@@ -42,6 +42,10 @@ public class Model {
      */
     private BigDecimal memory;
 
+    public Model() {
+        currentExpression.addLast(currentStage);
+    }
+
     /**
      * Adds input digit or point to active stage and show expression on display field
      *
@@ -52,11 +56,7 @@ public class Model {
             calculateEqual();
         }
 
-        if (currentStage.getBinaryOperator() == null && currentStage.getOperand() == null) {
-            currentExpression.addLast(currentStage);
-        }
         currentStage.setOperand(number);
-
     }
 
     /**
@@ -77,28 +77,31 @@ public class Model {
         //operator - exist;  operand - exist
         if (binaryOperator != null && operand != null) {
             calculateBinary();
+
+            currentStage = new Stage();
+            currentExpression.addLast(currentStage);
         }
 
+        //found first stage
         //operator - empty;  operand - exist
         if (binaryOperator == null && operand != null) {
             result = calculateUnary();
+
             currentStage = new Stage();
+            currentExpression.addLast(currentStage);
         }
 
         //operator - empty;  operand - empty
         if (binaryOperator == null && operand == null) {
-            Stage first = new Stage();
-            first.setOperand(getLastBinaryStage().getOperand());
-            currentExpression.addFirst(first);
+            if (currentExpression.size() == 1) {
+                currentStage.setOperand(getLastBinaryStage().getOperand());
+
+                currentStage = new Stage();
+                currentExpression.addLast(currentStage);
+            }
         }
 
-        //operator - exist;  operand - empty
-        if (binaryOperator != null && operand == null) {
-            currentStage.setBinaryOperator(inputOperator);
-        } else {
-            currentStage.setBinaryOperator(inputOperator);
-            currentExpression.addLast(currentStage);
-        }
+        currentStage.setBinaryOperator(inputOperator);
     }
 
     /**
@@ -108,6 +111,16 @@ public class Model {
      */
     public void addUnaryOperator(UnaryOperation operator) {
         currentStage.addUnaryOperator(operator);
+        BigDecimal operand = currentStage.getOperand();
+
+        // operator - empty ; operand - empty
+        // operator - exist; operand - empty
+        if (operand == null) {
+            currentStage.setOperand(result);
+        }
+
+        // operator - empty ; operand - exist
+        //operator - exist;  operand - exist
         calculateUnary();
     }
 
@@ -129,78 +142,6 @@ public class Model {
     }
 
     /**
-     * Clear stage operand and show on display field
-     */
-    public void clearEntry() {
-        currentStage.setOperand(BigDecimal.ZERO);
-        currentStage.clearUnaryOperators();
-    }
-
-    /**
-     * Add to calculator memory
-     */
-    public void addToMemory() {
-        if (memory == null) {
-            memory = new BigDecimal("0");
-        }
-
-        BigDecimal r;
-        if (currentStage.getOperand() != null) {
-            r = currentStage.getOperand();
-        } else {
-            r = result;
-        }
-        memory = memory.add(r);
-    }
-
-    /**
-     * Subtract from calculator memory
-     */
-    public void subtractFromMemory() {
-        if (memory == null) {
-            memory = new BigDecimal(BigInteger.ZERO);
-        }
-
-        BigDecimal r;
-        if (currentStage.getOperand() != null) {
-            r = currentStage.getOperand();
-        } else {
-            r = result;
-        }
-        memory = memory.subtract(r);
-    }
-
-    /**
-     * Save to calculator memory
-     */
-    public void saveMemory() {
-        if (currentStage.getOperand() != null) {
-            memory = currentStage.getOperand();
-        } else {
-            memory = result;
-        }
-    }
-
-    /**
-     * Get from calculator memory
-     * @return stored value
-     */
-    public BigDecimal getMemory() {
-        if (memory != null) {
-            currentStage.setOperand(memory);
-            currentStage.clearUnaryOperators();
-        }
-        return memory;
-    }
-
-    /**
-     * Clear calculator memory
-     */
-    public void clearMemory() {
-        memory = null;
-    }
-
-    /**
      * Calculates result of active stage and adds to expression history
      */
     private void calculateBinary() {
@@ -217,31 +158,18 @@ public class Model {
         }
 
         lastBinaryStage = currentStage;
-        currentStage = new Stage();
     }
 
     /**
      * Calculates unary operation in active stage
      */
     private BigDecimal calculateUnary() {
-        BigDecimal operand = currentStage.getOperand();
-        BigDecimal temp = operand;
+        BigDecimal temp = currentStage.getOperand();
 
-        // operator - empty ; operand - empty
-        // operator - exist; operand - empty
-        if (operand == null) {
-            currentExpression.addLast(currentStage);
-            currentStage.setOperand(result);
-            temp = result;
-        }
-
-        // operator - empty ; operand - exist
-        //operator - exist;  operand - exist
         for (UnaryOperation unary : currentStage.getUnaryOperators()) {
             if (unary.equals(PERCENT)) {
                 UnaryOperation.setOperand(result);
             }
-
             temp = unary.execute(temp);
         }
 
@@ -292,14 +220,16 @@ public class Model {
             }
         }
 
+        currentStage = new Stage();
         currentStage.setBinaryOperator(EQUAL);
         currentStage.setOperand(result);
-
         currentExpression.addLast(currentStage);
+
         history.add(currentExpression);
 
-        currentExpression = new ArrayDeque<>();
         currentStage = new Stage();
+        currentExpression = new ArrayDeque<>();
+        currentExpression.addLast(currentStage);
     }
 
     /**
@@ -329,4 +259,79 @@ public class Model {
             return history.get(history.size() - 1).getLast();
         }
     }
+
+
+    /**
+     * Clear stage operand and show on display field
+     */
+    public void clearEntry() {
+        currentStage.setOperand(null);
+        currentStage.clearUnaryOperators();
+    }
+
+    /**
+     * Add to calculator memory
+     */
+    public void addToMemory() {
+        if (memory == null) {
+            memory = new BigDecimal("0");
+        }
+
+        BigDecimal r;
+        if (currentStage.getOperand() != null) {
+            r = currentStage.getOperand();
+        } else {
+            r = result;
+        }
+        memory = memory.add(r);
+    }
+
+    /**
+     * Subtract from calculator memory
+     */
+    public void subtractFromMemory() {
+        if (memory == null) {
+            memory = new BigDecimal(BigInteger.ZERO);
+        }
+
+        BigDecimal r;
+        if (currentStage.getOperand() != null) {
+            r = currentStage.getOperand();
+        } else {
+            r = result;
+        }
+        memory = memory.subtract(r);
+    }
+
+    /**
+     * Save to calculator memory
+     */
+    public void saveMemory() {
+        if (currentStage.getOperand() != null) {
+            memory = currentStage.getOperand();
+        } else {
+            memory = result;
+        }
+    }
+
+    /**
+     * Get from calculator memory
+     *
+     * @return stored value
+     */
+    public BigDecimal getMemory() {
+        if (memory != null) {
+            currentStage.setOperand(memory);
+            currentStage.clearUnaryOperators();
+        }
+        return memory;
+    }
+
+    /**
+     * Clear calculator memory
+     */
+    public void clearMemory() {
+        memory = null;
+    }
+
 }
