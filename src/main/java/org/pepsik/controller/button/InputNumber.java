@@ -1,7 +1,6 @@
-package org.pepsik.controller.buttons;
+package org.pepsik.controller.button;
 
 import javafx.event.ActionEvent;
-
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.TEN;

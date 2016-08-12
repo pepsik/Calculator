@@ -2,11 +2,11 @@ package org.pepsik.model.helper;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import org.pepsik.controller.button.CalculatorButton;
 
 /**
- * Helper class represents calculator buttons with logic to emulate push button in JavaFX Thread to avoid exceptions. Used only in tests
+ * Helper class represents calculator button with logic to emulate push button in JavaFX Thread to avoid exceptions. Used only in tests
  */
 public enum UITestButton {
     NUMBER_1("1"),
@@ -51,9 +51,9 @@ public enum UITestButton {
         this.shortName = value;
     }
 
-    public static void setUIButtons(Scene scene) {
+    public static void setUIButtons() {
         for (UITestButton button : values()) {
-            button.button = (Button) scene.lookup("#" + button.name().toLowerCase());
+            button.button = CalculatorButton.valueOf(button.name()).getButton();
         }
     }
 
@@ -63,7 +63,7 @@ public enum UITestButton {
                 return button;
             }
         }
-        throw new IllegalArgumentException("No match buttons found to " + input);
+        throw new IllegalArgumentException("No match button found to " + input);
     }
 
     /**

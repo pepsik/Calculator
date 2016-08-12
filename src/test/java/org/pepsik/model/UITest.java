@@ -13,7 +13,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pepsik.MainApp;
-import org.pepsik.controller.buttons.CalculatorButton;
+import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.helper.UITestButton;
 import org.pepsik.model.operation.BinaryOperation;
 
@@ -65,7 +65,8 @@ public class UITest {
             }
 
             Scene scene = stage.getScene();
-            UITestButton.setUIButtons(scene);
+            //setup calculator ui test button
+            UITestButton.setUIButtons();
             display = (Label) scene.lookup("#display");
             history = (Label) scene.lookup("#history");
 
@@ -845,7 +846,7 @@ public class UITest {
         assertKeyPressOnDisplayWithExpression("-10", F9, "10", true);
         assertKeyPressOnDisplayWithExpression("-22", F9, "14 + 22 ", true);
 
-        //test numpad buttons
+        //test numpad button
         assertKeyPressOnDisplay("1", NUMPAD1);
         assertKeyPressOnDisplay("2", NUMPAD2);
         assertKeyPressOnDisplay("3", NUMPAD3);
@@ -1044,7 +1045,7 @@ public class UITest {
     }
 
     /**
-     * Lock test thread and wait for complete coperations in JAvaFX Thread
+     * Lock test thread and wait for complete operations in JAvaFX Thread
      */
     private void waitForCompleteExecution() {
         final CountDownLatch latch = new CountDownLatch(1);

@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import org.pepsik.controller.buttons.CalculatorButton;
-import org.pepsik.controller.buttons.InputNumber;
+import org.pepsik.controller.button.CalculatorButton;
+import org.pepsik.controller.button.InputNumber;
 import org.pepsik.model.Model;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -22,7 +22,13 @@ import java.util.ResourceBundle;
  */
 public class CalculatorController implements Initializable {
 
+    /**
+     * Used for display field
+     */
     private static final String ZERO = "0";
+    /**
+     * Used for history field
+     */
     private static final String EMPTY = "";
 
     /**
@@ -38,8 +44,8 @@ public class CalculatorController implements Initializable {
     private Label displayHistory;
 
     /**
-     * Block calculation buttons if error occurs
-     * Can be removed by Clear, ClearALL buttons
+     * Block calculation button if error occurs
+     * Can be removed by Clear, ClearALL button
      */
     private boolean noError = true;
 

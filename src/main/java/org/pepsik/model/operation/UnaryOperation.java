@@ -47,7 +47,12 @@ public enum UnaryOperation {
      */
     private static class Constants {
         private static final int SCALE = 100;
+
     }
+    /**
+     * String representation of operator
+     */
+    private String operator;
 
     /**
      * Operand which operate to. Used only for PERCENT operation
@@ -76,11 +81,6 @@ public enum UnaryOperation {
         }
         return null;
     }
-
-    /**
-     * String representation of operator
-     */
-    private String operator;
 
     UnaryOperation(String operator) {
         this.operator = operator;

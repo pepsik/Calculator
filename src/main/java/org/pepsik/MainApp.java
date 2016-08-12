@@ -4,15 +4,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.pepsik.controller.buttons.CalculatorButton;
-import org.pepsik.controller.buttons.KeyboardShortcut;
+import org.pepsik.controller.button.CalculatorButton;
+import org.pepsik.controller.button.KeyboardShortcut;
 
 import java.io.IOException;
-import java.util.Set;
 
 public class MainApp extends Application {
 
@@ -20,24 +18,35 @@ public class MainApp extends Application {
      * Calculator min height
      */
     private static final int MIN_HEIGHT = 365;
+
     /**
      * Display min width
      */
     private static final int MIN_WIDTH = 215;
+
     /**
      * Calculator pref height
      */
     private static final int PREF_HEIGHT = 450;
+
     /**
      * Calculator pref width
      */
     private static final int PREF_WIDTH = 260;
+
     /**
      * Calculator max width
      */
     private static final int MAX_WIDTH = 550;
 
+    /**
+     * Max display font taken from css file
+     */
     private int maxDisplayFont;
+
+    /**
+     * Min display font taken from css file
+     */
     private int minDisplayFont;
 
     /**
@@ -57,22 +66,27 @@ public class MainApp extends Application {
         //Init max, min, pref sizes
         setUpApplicationSizes(primaryStage);
 
-        //Setup all node buttons to enums
-        setUpButtons(scene);
+        //Setup all node button to enums
+        setUpButtons(root);
 
         //Init listeners for shortcut keys
         initKeyboardShortcutListeners(scene);
 
-        //Init listeners for resizing buttons
+        //Init listeners for resizing button
         initResizeListeners(scene);
 
-        //disable memory recall and clear buttons
+        //disable memory recall and clear button
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
 
         primaryStage.show();
     }
 
+    /**
+     * Setup min max pref application sizes
+     *
+     * @param primaryStage primary stage
+     */
     private void setUpApplicationSizes(Stage primaryStage) {
         //Min size
         primaryStage.setMinHeight(MIN_HEIGHT);
@@ -87,6 +101,15 @@ public class MainApp extends Application {
     }
 
     /**
+     * Set Javafx node button to enum
+     *
+     * @param root current root
+     */
+    private void setUpButtons(Parent root) {
+        CalculatorButton.setButtons(root);
+    }
+
+    /**
      * Initializes Keyboard shortcuts
      *
      * @param scene current scene
@@ -96,13 +119,35 @@ public class MainApp extends Application {
     }
 
     /**
-     * Set Javafx node buttons to enum and verify it
+     * Resize button font
      *
      * @param scene current scene
      */
-    private void setUpButtons(Scene scene) {
-        Set<Button> buttons = (Set) scene.getRoot().lookupAll((".button"));
-        CalculatorButton.setButtons(buttons);
+    private void initResizeListeners(Scene scene) {
+        //get css max display font
+        display.getStyleClass().add("display_max_font");
+        maxDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_max_font");
+
+        //get css min display font
+        display.getStyleClass().add("display_min_font");
+        minDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_min_font");
+
+        //Display font resize listener
+        display.textProperty().addListener((observable, oldValue, newValue) -> resizeDisplay());
+
+        //add listener to width property
+        scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+            CalculatorButton.resizeButtons(newSceneWidth.doubleValue(), scene.getHeight());
+            resizeDisplay();
+        });
+
+        //add listener to height property
+        scene.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {
+            CalculatorButton.resizeButtons(scene.getWidth(), newSceneHeight.doubleValue());
+            resizeDisplay();
+        });
     }
 
     /**
@@ -129,39 +174,6 @@ public class MainApp extends Application {
                 display.setFont(Font.font(d));
             }
         }
-    }
-
-    /**
-     * Resize buttons font
-     *
-     * @param scene current scene
-     */
-
-    private void initResizeListeners(Scene scene) {
-        //get css max display font
-        display.getStyleClass().add("display_max_font");
-        maxDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_max_font");
-
-        //get css min display font
-        display.getStyleClass().add("display_min_font");
-        minDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_min_font");
-
-        //Display font resize listener
-        display.textProperty().addListener((observable, oldValue, newValue) -> resizeDisplay());
-
-        //add listener to width property
-        scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
-            CalculatorButton.resizeButtons(newSceneWidth.doubleValue(), scene.getHeight());
-            resizeDisplay();
-        });
-
-        //add listener to height property
-        scene.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {
-            CalculatorButton.resizeButtons(scene.getWidth(), newSceneHeight.doubleValue());
-            resizeDisplay();
-        });
     }
 
     public static void main(String[] args) {

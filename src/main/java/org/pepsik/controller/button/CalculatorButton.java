@@ -1,12 +1,11 @@
-package org.pepsik.controller.buttons;
+package org.pepsik.controller.button;
 
 import javafx.collections.ObservableList;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
-import java.util.Set;
-
 /**
- * This enum represents calculator buttons. Each constant consist values as String and JavaFX node button which used in Controller class
+ * This enum represents calculator button. Each constant consist values as String and JavaFX node button which used in Controller class
  * to handle button events and have resize font logic for each button.
  */
 public enum CalculatorButton {
@@ -208,7 +207,7 @@ public enum CalculatorButton {
     MEMORY_SAVE("MS");
 
     /**
-     * Boundary height and width when buttons and display fonts are changes
+     * Boundary height and width when button and display fonts are changes
      */
     private static class Constants {
         static final int BOUNDARY_WIDTH = 270;
@@ -231,17 +230,19 @@ public enum CalculatorButton {
 
     /**
      * Set Button collection to constants
-     *
-     * @param buttons collection FXML buttons
+     * @param root node root hierarchy
      */
-    public static void setButtons(Set<Button> buttons) {
-        for (Button button : buttons) {
-            valueOf(button.getId().toUpperCase()).button = button;
+    public static void setButtons(Parent root) {
+        for (CalculatorButton cb : values()) {
+            cb.button = (Button) root.lookup("#" + cb.name().toLowerCase());
+            if (cb.button == null){
+                throw new RuntimeException("Button NOT FOUND! - " + cb.name());
+            }
         }
     }
 
     /**
-     * Initialize resize logic for all buttons
+     * Initialize resize logic for all button
      *
      * @param width  new stage width
      * @param height new stage height
@@ -265,11 +266,11 @@ public enum CalculatorButton {
                 return cb.value;
             }
         }
-        throw new IllegalArgumentException("No match buttons found to " + button);
+        throw new IllegalArgumentException("No match button found to " + button);
     }
 
     /**
-     * Default resize (0-9 buttons)
+     * Default resize (0-9 button)
      */
     protected void resize(double width, double height) {
         if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0

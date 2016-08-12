@@ -1,4 +1,4 @@
-package org.pepsik.controller.buttons;
+package org.pepsik.controller.button;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent;
 import static javafx.scene.input.KeyCode.*;
 
 /**
- * Enum represents keyboard shortcuts and simply fires correspond calculator buttons
+ * Enum represents keyboard shortcuts and simply fires correspond calculator button
  */
 public enum KeyboardShortcut {
     Q_BUTTON(Q) {
@@ -223,7 +223,7 @@ public enum KeyboardShortcut {
         }
     },
 
-    //Numpad buttons
+    //Numpad button
     NUMPAD_ONE_BUTTON(NUMPAD1) {
         @Override
         protected void execute(KeyEvent event) {
