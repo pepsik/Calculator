@@ -1,9 +1,11 @@
 package org.pepsik.controller.button;
 
 import javafx.event.ActionEvent;
+
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.TEN;
+import static java.math.BigDecimal.ZERO;
 
 /**
  * Class represents an input number which used in Controller {@link org.pepsik.controller.CalculatorController#handleDigitAction(ActionEvent)} method
@@ -51,7 +53,7 @@ public class InputNumber {
         return scale != 0;
     }
 
-    public static int getScale(){
+    public static int getScale() {
         return scale;
     }
 
@@ -64,7 +66,11 @@ public class InputNumber {
                 input = input.divideToIntegralValue(TEN);
             } else {
                 String temp = input.toString(); //crotch
-                input = new BigDecimal(temp.substring(0, temp.length() - 1));
+                if (temp.length() > 1) {
+                    input = new BigDecimal(temp.substring(0, temp.length() - 1));
+                } else {
+                    input = ZERO;
+                }
                 scale--;
             }
         }

@@ -611,11 +611,13 @@ public class UITest {
 
     @Test
     public void testResizeButtonFont() {
+        int sleepTime = 300;
+
         stage.setWidth(250);
         stage.setHeight(350);
 
         try {
-            Thread.sleep(200);
+            Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -659,7 +661,7 @@ public class UITest {
         stage.setHeight(600);
 
         try {
-            Thread.sleep(200);
+            Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -785,6 +787,13 @@ public class UITest {
         assertBackspace("1", "12 * 2 - 111 <<");
         assertBackspace("0", "12 * 2 - 111 + 123 <<<");
         assertBackspace("0", "12 * 2 - 111 + 123 <<<");
+
+        assertBackspace("0", "1.<<<");
+        assertBackspace("0", "11.1<<<");
+        assertBackspace("0", "11.12<<<<<");
+        assertBackspace("0", "0.<");
+        assertBackspace("0", "0.1<");
+        assertBackspace("0.1", "0.12<");
     }
 
     @Test
@@ -1123,5 +1132,4 @@ public class UITest {
 
         assertEquals("Cannot divide by zero", display.getText());
     }
-
 }

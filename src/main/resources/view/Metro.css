@@ -23,9 +23,9 @@
 }
 
 .button:pressed, .button:default:hover:pressed {
-     -fx-background-color: #b8b8b8;
-     -fx-text-fill: black;
- }
+    -fx-background-color: #b8b8b8;
+    -fx-text-fill: black;
+}
 
 .button:disabled {
     /*-fx-border-color: #e6e6e6;*/
