@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
  * to handle button events and have resize font logic for each button.
  */
 public enum CalculatorButton {
+
     /**
      * Button number constants
      */

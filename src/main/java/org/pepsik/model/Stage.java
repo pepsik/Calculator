@@ -21,14 +21,17 @@ import java.util.List;
  * When encounter an EQUAL operator, then expression ends and result stage looks {=, 2}.
  */
 public class Stage {
+
     /**
      * binary operation
      */
     private BinaryOperation binaryOperator;
+
     /**
      * Unary operations
      */
     private List<UnaryOperation> unaryOperators = new ArrayList<>();
+
     /**
      * Operand as right operand in binary operation
      */
@@ -63,12 +66,12 @@ public class Stage {
         return unaryOperators;
     }
 
-    public BigDecimal getOperand() {
-        return operand;
-    }
-
     public void setOperand(BigDecimal operand) {
         this.operand = operand;
+    }
+
+    public BigDecimal getOperand() {
+        return operand;
     }
 
     public void clearUnaryOperators() {

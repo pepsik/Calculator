@@ -223,7 +223,6 @@ public enum KeyboardShortcut {
         }
     },
 
-    //Numpad button
     NUMPAD_ONE_BUTTON(NUMPAD1) {
         @Override
         protected void execute(KeyEvent event) {

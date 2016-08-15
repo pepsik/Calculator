@@ -101,16 +101,15 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleBinaryOperationAction(ActionEvent event) {
         String operator = CalculatorButton.valueOf((Button) event.getSource());
+        int scale = 16; //scale for binary operations display output
 
         if (noError) {
             try {
                 InputNumber.clearInput();
                 model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
 
-                int scale = 16; //scale for binary operations display output
-
                 displayField.setText(TextFormatter.display(model.getResult(), scale));
-                displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
+                displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
             } catch (ArithmeticException e) {
                 noError = false;
 
@@ -127,17 +126,15 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleUnaryOperationAction(ActionEvent event) {
         String operator = CalculatorButton.valueOf((Button) event.getSource());
+        int scale = 15;// scale for unary operations display output
 
         if (noError) {
             try {
                 InputNumber.clearInput();
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
-                int scale = 15;// scale for unary operations display output
-
                 displayField.setText(TextFormatter.display(model.getOperand(), scale));
-                TextFormatter.setModel(model);
-                displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
+                displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
             } catch (ArithmeticException e) {
                 noError = false;
 
@@ -159,8 +156,8 @@ public class CalculatorController implements Initializable {
 
         if (!noError) {
             displayHistory.setText("");
-        }else {
-            displayHistory.setText(TextFormatter.history(model.getCurrentExpression()));
+        } else {
+            displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
         }
 
         InputNumber.clearInput();
@@ -295,6 +292,11 @@ public class CalculatorController implements Initializable {
         InputNumber.clearInput();
     }
 
+    /**
+     * Disable clear and recall buttons
+     *
+     * @param b true when disable
+     */
     private void setDisableMemoryClearAndRecallButton(boolean b) {
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(b);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(b);

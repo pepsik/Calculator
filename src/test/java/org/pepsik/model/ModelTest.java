@@ -14,10 +14,12 @@ import static java.lang.Integer.MAX_VALUE;
 import static org.junit.Assert.*;
 
 public class ModelTest {
+
     /**
      * Delta for double compare
      */
     private static final double DELTA = 0.00001;
+
     /**
      * Count for iterated tests
      */
@@ -662,7 +664,7 @@ public class ModelTest {
     public void testExpressionHistory() {
         model = new Model();
         parseAndExecute("10 - 5 * 2 - 10 * 2.5");
-        assertEquals("10 - 5 * 2 - 10 * 2.5", TextFormatter.history(model.getCurrentExpression()));
+        assertEquals("10 - 5 * 2 - 10 * 2.5", TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
     }
 
     private void assertResult(double expected, String str) {

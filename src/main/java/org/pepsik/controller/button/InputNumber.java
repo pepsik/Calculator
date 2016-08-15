@@ -26,6 +26,24 @@ public class InputNumber {
     private static BigDecimal input;
 
     /**
+     * Add input digit to input number
+     *
+     * @param value input digit
+     */
+    public static void addToInput(BigDecimal value) {
+        if (input == null) {
+            input = value;
+        } else if (canInput(input)) {
+            if (scale != 0) {
+                input = input.add(value.movePointLeft(scale));
+                scale++;
+            } else {
+                input = value.add(input.multiply(TEN));
+            }
+        }
+    }
+
+    /**
      * Returns input number
      *
      * @return actual input number
@@ -53,6 +71,11 @@ public class InputNumber {
         return scale != 0;
     }
 
+    /**
+     * get scale of input number
+     *
+     * @return scale
+     */
     public static int getScale() {
         return scale;
     }
@@ -85,24 +108,6 @@ public class InputNumber {
     }
 
     /**
-     * Add input digit to input number
-     *
-     * @param value input digit
-     */
-    public static void addToInput(BigDecimal value) {
-        if (input == null) {
-            input = value;
-        } else if (canInput(input)) {
-            if (scale != 0) {
-                input = input.add(value.movePointLeft(scale));
-                scale++;
-            } else {
-                input = value.add(input.multiply(TEN));
-            }
-        }
-    }
-
-    /**
      * Checks if limit input digits is reached
      *
      * @param n number to check
@@ -110,6 +115,6 @@ public class InputNumber {
      */
     private static boolean canInput(BigDecimal n) {
         n = n.stripTrailingZeros();
-        return n.precision() - n.scale() < MAX_DIGITS;
+        return n.precision() - scale < MAX_DIGITS && scale < MAX_DIGITS;
     }
 }

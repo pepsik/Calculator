@@ -123,6 +123,7 @@ public class UITest {
         assertExpression("123,456.", "1 2 3 4 5 6.");
         assertExpression("0.12", ".1 2");
         assertExpression("0.1234567890", ".1 2 3 4 5 6 7 8 9 0");
+        assertExpression("0.000000000000000", "0.000000000000000000100120");
 
         assertExpression("1,111,111,111,111,111", "1111111111111111");
 
@@ -431,10 +432,12 @@ public class UITest {
         assertExpression("1.7320508075688773", "sqrt(3) = ");
         assertExpressionWithoutClear(3, "square() = ");
 
-        //boundary expressions
         assertExpression("0.000099", "99/1000000=");
         assertExpression("4.572473708276177E-4", "1/3=======");
         assertExpression("6.774035123372115E-5", "4/3==========");
+
+        //boundary expressions
+//        assertExpression("81", "square(3)==");
     }
 
     @Test

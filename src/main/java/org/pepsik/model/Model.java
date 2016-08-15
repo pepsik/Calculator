@@ -15,10 +15,17 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
  * result of first stage used in second stage and last stage represent result of current expression.
  */
 public class Model {
+
+    /**
+     * Maximum result value
+     */
+    private int MAX_DIGITS = 100;
+
     /**
      * Expression represent sequence of stages
      */
     private Deque<Stage> currentExpression = new ArrayDeque<>();
+
     /**
      * History of last expressions
      */
@@ -28,6 +35,7 @@ public class Model {
      * Current stage operate with
      */
     private Stage currentStage = new Stage();
+
     /**
      * Last binary stage
      */
@@ -37,6 +45,7 @@ public class Model {
      * Result of last complete stage
      */
     private BigDecimal result = new BigDecimal(BigInteger.ZERO);
+
     /**
      * Calculator memory
      */
@@ -94,7 +103,7 @@ public class Model {
         //operator - empty;  operand - empty
         if (binaryOperator == null && operand == null) {
             if (currentExpression.size() == 1) {
-                currentStage.setOperand(getLastBinaryStage().getOperand());
+                currentStage.setOperand(getLastStage().getOperand());
 
                 currentStage = new Stage();
                 currentExpression.addLast(currentStage);
@@ -169,6 +178,24 @@ public class Model {
         }
     }
 
+    /**
+     * Get from calculator memory
+     *
+     * @return stored value
+     */
+    public BigDecimal getMemory() {
+        if (memory != null) {
+            currentStage.setOperand(memory);
+            currentStage.clearUnaryOperators();
+        }
+        return memory;
+    }
+
+    /**
+     * Get current operand of current stage
+     *
+     * @return current stage operand
+     */
     public BigDecimal getOperand() {
         return calculateUnary();
     }
@@ -182,6 +209,11 @@ public class Model {
         return currentExpression;
     }
 
+    /**
+     * Get result of current expression
+     *
+     * @return expression result
+     */
     public BigDecimal getResult() {
         return result;
     }
@@ -191,7 +223,7 @@ public class Model {
      *
      * @return last complete stage
      */
-    private Stage getLastBinaryStage() {
+    private Stage getLastStage() {
         Iterator<Stage> descIterator = currentExpression.descendingIterator();
 
         while (descIterator.hasNext()) {
@@ -199,7 +231,7 @@ public class Model {
             BinaryOperation operator = stage.getBinaryOperator();
             BigDecimal operand = stage.getOperand();
 
-            if (operand != null && operator != null) {
+            if (operand != null && operator != null ) {
                 return stage;
             }
         }
@@ -212,20 +244,6 @@ public class Model {
             //get last stage in previous expression
             return history.get(history.size() - 1).getLast();
         }
-    }
-
-
-    /**
-     * Get from calculator memory
-     *
-     * @return stored value
-     */
-    public BigDecimal getMemory() {
-        if (memory != null) {
-            currentStage.setOperand(memory);
-            currentStage.clearUnaryOperators();
-        }
-        return memory;
     }
 
     /**
@@ -257,6 +275,14 @@ public class Model {
             if (unary.equals(PERCENT)) {
                 UnaryOperation.setOperand(result);
             }
+
+            if (temp.precision() - temp.scale() > MAX_DIGITS) {
+                System.out.println(temp);
+                System.out.println("scale" + temp.scale());
+                System.out.println(temp.precision());
+                throw new RuntimeException("Limit is reached!");
+            }
+
             temp = unary.execute(temp);
         }
 
@@ -297,8 +323,10 @@ public class Model {
 
         // operator - empty ; operand - empty
         if (binaryOperator == null && operand == null) {
-            Stage binaryStage = new Stage(getLastBinaryStage());//clone
-            currentExpression.addFirst(binaryStage);
+            Stage binaryStage = getLastStage();//clone
+            Stage first = new Stage();//clone
+            first.setOperand(binaryStage.getOperand());
+            currentExpression.addFirst(first);
 
             if (lastBinaryStage != null) {
                 currentStage = new Stage(lastBinaryStage); //clone

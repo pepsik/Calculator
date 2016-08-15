@@ -1,7 +1,6 @@
 package org.pepsik.util;
 
 import org.pepsik.controller.button.InputNumber;
-import org.pepsik.model.Model;
 import org.pepsik.model.Stage;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -16,17 +15,13 @@ import java.util.Deque;
 public class TextFormatter {
 
     /**
-     * Model with operate to
-     */
-    private static Model model;
-
-    /**
      * Formats history
      *
      * @param expression list of stages to format
+     * @param curOperand current input operand in expression
      * @return String represents expression
      */
-    public static String history(Deque<Stage> expression) {
+    public static String history(Deque<Stage> expression, BigDecimal curOperand) {
         int scale = 16;
         StringBuilder sb = new StringBuilder();
 
@@ -60,7 +55,7 @@ public class TextFormatter {
                         if (unary.equals(UnaryOperation.PERCENT)) {
                             isPercent = true;
                             unarySB = new StringBuilder(); //clear all recorded unary
-                            unarySB.append(display(model.getOperand(), scale));
+                            unarySB.append(display(curOperand, scale));
                         } else {
                             isPercent = false;
                             unarySB.append(unary.getOperator().toLowerCase());
@@ -115,6 +110,11 @@ public class TextFormatter {
         }
     }
 
+    /**
+     * Formats input number
+     *
+     * @return formatted input number to display
+     */
     public static String formatInputNumber() {
         DecimalFormat f = new DecimalFormat();
         int scale = InputNumber.getScale();
@@ -130,9 +130,5 @@ public class TextFormatter {
         }
 
         return f.format(InputNumber.getInput());
-    }
-
-    public static void setModel(Model model) {
-        TextFormatter.model = model;
     }
 }

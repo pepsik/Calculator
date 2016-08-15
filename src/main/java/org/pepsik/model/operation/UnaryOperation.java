@@ -47,7 +47,6 @@ public enum UnaryOperation {
      */
     private static class Constants {
         private static final int SCALE = 100;
-
     }
     /**
      * String representation of operator
@@ -60,7 +59,7 @@ public enum UnaryOperation {
     private static BigDecimal operand;
 
     /**
-     * Sets operand
+     * Sets operand for percent calculation (first value which is calculated from the percentage)
      *
      * @param operand operand which operate to
      */
