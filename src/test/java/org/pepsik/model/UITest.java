@@ -52,7 +52,7 @@ public class UITest {
 
     @BeforeClass
     public static void initJFX() throws InterruptedException {
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final CountDownLatch countDownLatch = new CountDownLatch(1);//todo remove
 
         new JFXPanel();
 
@@ -435,9 +435,6 @@ public class UITest {
         assertExpression("0.000099", "99/1000000=");
         assertExpression("4.572473708276177E-4", "1/3=======");
         assertExpression("6.774035123372115E-5", "4/3==========");
-
-        //boundary expressions
-//        assertExpression("81", "square(3)==");
     }
 
     @Test

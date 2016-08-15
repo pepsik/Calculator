@@ -211,7 +211,7 @@ public enum CalculatorButton {
      * Boundary height and width when button and display fonts are changes
      */
     private static class Constants {
-        static final int BOUNDARY_WIDTH = 270;
+        static final int BOUNDARY_WIDTH = 270;//todo see Dimension
         static final int BOUNDARY_HEIGHT = 450;
     }
 

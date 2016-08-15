@@ -80,7 +80,7 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handlePointAction(ActionEvent event) {
         CalculatorButton.valueOf((Button) event.getSource());
-        DecimalFormat f = new DecimalFormat();
+        DecimalFormat f = new DecimalFormat(); //todo exlude to field
 
         if (noError) {
             f.applyPattern("###,###.#################");
@@ -106,7 +106,7 @@ public class CalculatorController implements Initializable {
         if (noError) {
             try {
                 InputNumber.clearInput();
-                model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));
+                model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));//todo replace with mapping
 
                 displayField.setText(TextFormatter.display(model.getResult(), scale));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));

@@ -33,7 +33,11 @@ public class InputNumber {
     public static void addToInput(BigDecimal value) {
         if (input == null) {
             input = value;
-        } else if (canInput(input)) {
+            return;
+        }
+
+        boolean b = canInput(input); //todo
+        if (b) {
             if (scale != 0) {
                 input = input.add(value.movePointLeft(scale));
                 scale++;
@@ -57,7 +61,7 @@ public class InputNumber {
      */
     public static void addPoint() {
         if (input == null) {
-            input = new BigDecimal(0);
+            input = ZERO;
         }
         scale++;
     }
@@ -88,7 +92,7 @@ public class InputNumber {
             if (scale == 0) {
                 input = input.divideToIntegralValue(TEN);
             } else {
-                String temp = input.toString(); //crotch
+                String temp = input.toString(); //crotch /// TODO: add comment
                 if (temp.length() > 1) {
                     input = new BigDecimal(temp.substring(0, temp.length() - 1));
                 } else {
@@ -114,7 +118,6 @@ public class InputNumber {
      * @return bool
      */
     private static boolean canInput(BigDecimal n) {
-        n = n.stripTrailingZeros();
         return n.precision() - scale < MAX_DIGITS && scale < MAX_DIGITS;
     }
 }

@@ -62,7 +62,7 @@ public enum BinaryOperation {
      */
     public static BinaryOperation find(char operator) {
         for (BinaryOperation value : values()) {
-            if (value.getOperator().equals(String.valueOf(operator))) {
+            if (value.getOperator().equals(String.valueOf(operator))) { //todo exlude variable
                 return value;
             }
         }

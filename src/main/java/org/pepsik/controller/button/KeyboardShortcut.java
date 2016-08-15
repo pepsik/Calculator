@@ -10,7 +10,7 @@ import static javafx.scene.input.KeyCode.*;
 /**
  * Enum represents keyboard shortcuts and simply fires correspond calculator button
  */
-public enum KeyboardShortcut {
+public enum KeyboardShortcut {//todo simplify
     Q_BUTTON(Q) {
         @Override
         public void execute(KeyEvent event) {

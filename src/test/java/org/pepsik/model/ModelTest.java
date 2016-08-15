@@ -660,13 +660,6 @@ public class ModelTest {
         //---------END MEMORY ----------
     }
 
-    @Test
-    public void testExpressionHistory() {
-        model = new Model();
-        parseAndExecute("10 - 5 * 2 - 10 * 2.5");
-        assertEquals("10 - 5 * 2 - 10 * 2.5", TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
-    }
-
     private void assertResult(double expected, String str) {
         model = new Model();
         parseAndExecute(str);
