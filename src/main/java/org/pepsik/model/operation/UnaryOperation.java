@@ -12,7 +12,7 @@ public enum UnaryOperation {
     SQUARE("sqr") {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return value.multiply(value).setScale(Constants.SCALE, RoundingMode.HALF_UP);
+            return value.multiply(value).setScale(Constant.SCALE, RoundingMode.HALF_UP);
         }
     },
     SQRT("√") {
@@ -24,7 +24,7 @@ public enum UnaryOperation {
     FRACTION("1/") {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return new BigDecimal(BigInteger.ONE).divide(value, Constants.SCALE, RoundingMode.HALF_UP);
+            return new BigDecimal(BigInteger.ONE).divide(value, Constant.SCALE, RoundingMode.HALF_UP);
         }
     },
     NEGATE("negate") {
@@ -36,18 +36,16 @@ public enum UnaryOperation {
     PERCENT("%") {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Constants.SCALE, BigDecimal.ROUND_HALF_UP));
+            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Constant.SCALE, BigDecimal.ROUND_HALF_UP));
             operand = null;
             return result;
         }
     };
 
     /**
-     * Scale for unary operation constant
+     * Constant for unary operation constant
      */
-    private static class Constants {
-        private static final int SCALE = 100;
-    }
+
     /**
      * String representation of operator
      */
@@ -59,7 +57,7 @@ public enum UnaryOperation {
     private static BigDecimal operand;
 
     /**
-     * Sets operand for percent calculation (first value which is calculated from the percentage)
+     * Sets operand for percent calculation (first SCALE which is calculated from the percentage)
      *
      * @param operand operand which operate to
      */
@@ -87,7 +85,8 @@ public enum UnaryOperation {
 
     /**
      * Calculates sqrt operation for enum constant SQRT
-     * @param x input value to operate
+     *
+     * @param x  input SCALE to operate
      * @param mc context
      * @return operation result
      */
@@ -108,9 +107,9 @@ public enum UnaryOperation {
     }
 
     /**
-     * Executes operation on value
+     * Executes operation on SCALE
      *
-     * @param value input value
+     * @param value input SCALE
      * @return result
      */
     public abstract BigDecimal execute(BigDecimal value);

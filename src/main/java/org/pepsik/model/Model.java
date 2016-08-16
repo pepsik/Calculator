@@ -17,11 +17,6 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
 public class Model {
 
     /**
-     * Maximum result value
-     */
-    private int MAX_DIGITS = 100;
-
-    /**
      * Expression represent sequence of stages
      */
     private Deque<Stage> currentExpression = new ArrayDeque<>();
@@ -181,7 +176,7 @@ public class Model {
     /**
      * Get from calculator memory
      *
-     * @return stored value
+     * @return stored SCALE
      */
     public BigDecimal getMemory() {
         if (memory != null) {
@@ -274,13 +269,6 @@ public class Model {
         for (UnaryOperation unary : currentStage.getUnaryOperators()) {
             if (unary.equals(PERCENT)) {
                 UnaryOperation.setOperand(result);
-            }
-
-            if (temp.precision() - temp.scale() > MAX_DIGITS) {
-                System.out.println(temp);
-                System.out.println("scale" + temp.scale());
-                System.out.println(temp.precision());
-                throw new RuntimeException("Limit is reached!");
             }
 
             temp = unary.execute(temp);

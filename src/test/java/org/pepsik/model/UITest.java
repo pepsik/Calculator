@@ -46,7 +46,7 @@ public class UITest {
     private static Label history;
 
     /**
-     * Used for format expected double value in asserts
+     * Used for format expected double SCALE in asserts
      */
     private NumberFormat formatter = new DecimalFormat("###,###.################");
 
@@ -433,8 +433,6 @@ public class UITest {
         assertExpressionWithoutClear(3, "square() = ");
 
         assertExpression("0.000099", "99/1000000=");
-        assertExpression("4.572473708276177E-4", "1/3=======");
-        assertExpression("6.774035123372115E-5", "4/3==========");
     }
 
     @Test
@@ -564,7 +562,6 @@ public class UITest {
         assertExpression(18, "square(square(2) + 2 = ");
 
         assertExpression(9, "square(56)square(9)square(3)=");
-        assertExpression("9.99200279944007E31", "square(square(square(9999)");
     }
 
     @Test
@@ -607,6 +604,44 @@ public class UITest {
         assertExpression(1.5, "fraction(fraction(1) + fraction(2) = ");
         assertExpression(-1.5, " + negate(fraction(fraction(1) + negate(fraction(2) = ");
         assertExpression(10, "sqrt(sqrt(81) + 2*2 = ");
+    }
+
+    @Test
+    public void testEngineeringMode() {
+        assertExpression("4.572473708276177E-4", "1/3=======");
+        assertExpression("6.774035123372115E-5", "4/3==========");
+
+        //test switch engi mode
+        assertExpression("1E16", "9999999999999999 + 1=");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "-1=");
+
+        assertExpression("1.1E16", "9999999999999999 * 1.1=");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "/ 1.1=");
+
+        assertExpression("9.866666666666666E17", "8888888888888888 * 111=");
+        assertExpressionWithoutClear("8,888,888,888,888,888", "/ 111=");
+
+        assertExpression("1.11E18", "9999999999999999 * 111=");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "/ 111=");
+
+        assertExpression("9.999999999999999E16", "9999999999999999 / 0.1=");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "* 0.1=");
+
+        assertExpression("9E16", "9000000000000000 * 10=");
+        assertExpressionWithoutClear("9,000,000,000,000,000", "/ 10=");
+
+        assertExpression("1E-17", "1 / 1000000000000000 / 100=");
+        assertExpressionWithoutClear("0.000000000000001", "*100=");
+
+        assertExpression("9.996000599960001E15", "square(square(9999)");
+        assertExpressionWithoutClear("9,999", "sqrt(sqrt()");
+
+        assertExpression("9.999999999999998E31", "9999999999999999*9999999999999999=");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "/9999999999999999=");
+
+        //test boundary values
+        assertExpression("Limit reached!", "square(square(square(square(square(square(square(9999999999999999)=");
+        assertExpression("Limit reached!", "1/9999999999999999========MS/MR==========");
     }
 
     @Test

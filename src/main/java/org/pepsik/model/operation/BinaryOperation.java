@@ -22,13 +22,13 @@ public enum BinaryOperation {
     DIVIDE("/") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.divide(s, Constants.SCALE, BigDecimal.ROUND_HALF_UP);
+            return f.divide(s, Constant.SCALE, BigDecimal.ROUND_HALF_UP);
         }
     },
     MULTIPLY("*") {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.multiply(s).setScale(Constants.SCALE, RoundingMode.HALF_UP);
+            return f.multiply(s).setScale(Constant.SCALE, RoundingMode.HALF_UP);
         }
     },
     EQUAL("=") {
@@ -39,11 +39,8 @@ public enum BinaryOperation {
     };
 
     /**
-     * Scale for binary operation constant
+     * Constant for binary operation constant
      */
-    private static class Constants {
-        private static final int SCALE = 100;
-    }
 
     /**
      * String representation of operator
@@ -72,8 +69,8 @@ public enum BinaryOperation {
     /**
      * Executes operation with 2 values
      *
-     * @param f first value
-     * @param s second value
+     * @param f first SCALE
+     * @param s second SCALE
      * @return result operation
      */
     public abstract BigDecimal execute(BigDecimal f, BigDecimal s);

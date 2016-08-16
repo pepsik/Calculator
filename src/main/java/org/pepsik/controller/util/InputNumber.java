@@ -1,4 +1,4 @@
-package org.pepsik.controller.button;
+package org.pepsik.controller.util;
 
 import javafx.event.ActionEvent;
 
@@ -16,7 +16,7 @@ public class InputNumber {
      */
     private static final int MAX_DIGITS = 16;
     /**
-     * Scale of input number
+     * Constant of input number
      */
     private static short scale;
 
@@ -69,7 +69,7 @@ public class InputNumber {
     /**
      * Verify is point set
      *
-     * @return bool value if was set
+     * @return bool SCALE if was set
      */
     public static boolean isPointSet() {
         return scale != 0;

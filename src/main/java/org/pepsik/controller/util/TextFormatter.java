@@ -1,6 +1,5 @@
-package org.pepsik.util;
+package org.pepsik.controller.util;
 
-import org.pepsik.controller.button.InputNumber;
 import org.pepsik.model.Stage;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -82,24 +81,37 @@ public class TextFormatter {
     /**
      * Format display output
      *
-     * @param input value to display
-     * @param scale value scale
+     * @param input SCALE to display
+     * @param scale SCALE scale
      * @return formatted string
      */
     public static String display(BigDecimal input, int scale) {
         DecimalFormat f = new DecimalFormat();
+        input = input.stripTrailingZeros();
 
         //if number lower then 0.00 show in engi mode
-        if (input.abs().doubleValue() < 0.001 && input.movePointRight(scale).doubleValue() % 1 != 0) {
+        if (input.abs().compareTo(new BigDecimal("0.001")) == -1 && input.scale() > scale) {
             f.applyPattern("0.###############E0");
             return f.format(input);
         }
 
         //if number have more then scale count digits before point then show in engi mode
         if (input.precision() - input.scale() > scale) {
-            f.applyPattern("0.################E0");
+            String pattern = "0.";
+
+            if (input.scale() > 0) {
+                for (int i = 0; i < input.scale(); i++) {
+                    pattern += "0";
+                }
+            } else {
+                pattern += "###############";
+            }
+            pattern += "E0";
+            f.applyPattern(pattern);
             return f.format(input);
-        } else {
+        }
+
+        if (input.precision() - input.scale() <= scale) {
             //show not more then scale count digits on display
             String pattern = "###,###.#";
             for (int i = 0; i < scale - input.precision() + input.scale(); i++) {
@@ -108,6 +120,8 @@ public class TextFormatter {
             f.applyPattern(pattern);
             return f.format(input.setScale(scale, BigDecimal.ROUND_HALF_UP));
         }
+
+        return input.toPlainString();
     }
 
     /**

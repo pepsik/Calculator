@@ -3,7 +3,6 @@ package org.pepsik.model;
 import org.junit.Test;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
-import org.pepsik.util.TextFormatter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

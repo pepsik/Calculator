@@ -6,11 +6,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import org.pepsik.controller.button.CalculatorButton;
-import org.pepsik.controller.button.InputNumber;
+import org.pepsik.controller.util.InputNumber;
 import org.pepsik.model.Model;
 import org.pepsik.model.operation.BinaryOperation;
+import org.pepsik.model.operation.Constant;
 import org.pepsik.model.operation.UnaryOperation;
-import org.pepsik.util.TextFormatter;
+import org.pepsik.controller.util.TextFormatter;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -108,12 +109,18 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));//todo replace with mapping
 
+                checksLimit(model.getResult());
+
                 displayField.setText(TextFormatter.display(model.getResult(), scale));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
             } catch (ArithmeticException e) {
                 noError = false;
 
                 displayField.setText("Cannot divide by zero");
+            } catch (RuntimeException ex) {
+                noError = false;
+
+                displayField.setText("Limit reached!");
             }
         }
     }
@@ -279,7 +286,7 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handleMemoryRecallAction(ActionEvent event) {
         CalculatorButton.valueOf((Button) event.getSource());
-        int scale = 16; //scale for output memory value
+        int scale = 16; //scale for output memory SCALE
 
         if (noError) {
             BigDecimal memory = model.getMemory();
@@ -300,6 +307,20 @@ public class CalculatorController implements Initializable {
     private void setDisableMemoryClearAndRecallButton(boolean b) {
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(b);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(b);
+    }
+
+    private void checksLimit(BigDecimal bg) {
+        if (bg.compareTo(BigDecimal.ZERO) != 0) {
+            //lower limit
+            if (bg.abs().movePointRight(Constant.SCALE / 2).compareTo(BigDecimal.ONE) < 0) {
+                System.out.println(bg);
+                throw new RuntimeException("Limit is reached!");
+            }
+            //upper limit
+            if (bg.precision() - bg.scale() > Constant.SCALE / 2) {
+                throw new RuntimeException("Limit is reached!");
+            }
+        }
     }
 
     @Override
