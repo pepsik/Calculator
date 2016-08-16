@@ -52,29 +52,31 @@ public class UITest {
 
     @BeforeClass
     public static void initJFX() throws InterruptedException {
-        final CountDownLatch countDownLatch = new CountDownLatch(1);//todo remove
+                //todo remove
+        Object sync = new Object();
 
         new JFXPanel();
 
         Platform.runLater(() -> {
-            stage = new Stage();
-            try {
-                new MainApp().start(stage);
-            } catch (IOException e) {
-                e.printStackTrace();
+            synchronized (sync) {
+                stage = new Stage();
+                try {
+                    new MainApp().start(stage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Scene scene = stage.getScene();
+                //setup calculator ui test button
+                UITestButton.setUIButtons();
+                display = (Label) scene.lookup("#display");
+                history = (Label) scene.lookup("#history");
             }
-
-            Scene scene = stage.getScene();
-            //setup calculator ui test button
-            UITestButton.setUIButtons();
-            display = (Label) scene.lookup("#display");
-            history = (Label) scene.lookup("#history");
-
-            countDownLatch.countDown();
         });
-        countDownLatch.await();
 
-        Thread.sleep(1000);
+        synchronized (sync) {
+            Thread.sleep(1000);
+        }
     }
 
     @AfterClass
@@ -1063,7 +1065,7 @@ public class UITest {
                 continue;
             }
 
-            if (BinaryOperation.find(symbol.toCharArray()[0]) != null) {
+            if (BinaryOperation.find(symbol) != null) {
                 UITestButton.getUIButton(symbol).push();
                 continue;
             }

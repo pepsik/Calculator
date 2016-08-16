@@ -57,9 +57,9 @@ public enum BinaryOperation {
      * @param operator string represents operation
      * @return binary operation or null if no such found
      */
-    public static BinaryOperation find(char operator) {
+    public static BinaryOperation find(String operator) {
         for (BinaryOperation value : values()) {
-            if (value.getOperator().equals(String.valueOf(operator))) { //todo exlude variable
+            if (value.getOperator().equals(operator)) { //todo exlude variable
                 return value;
             }
         }

@@ -36,8 +36,8 @@ public class InputNumber {
             return;
         }
 
-        boolean b = canInput(input); //todo
-        if (b) {
+        boolean hasPermission = canInput(input); //todo name
+        if (hasPermission) {
             if (scale != 0) {
                 input = input.add(value.movePointLeft(scale));
                 scale++;
@@ -91,8 +91,9 @@ public class InputNumber {
         if (input != null) {
             if (scale == 0) {
                 input = input.divideToIntegralValue(TEN);
-            } else {
-                String temp = input.toString(); //crotch /// TODO: add comment
+            } //convert to string and remove last digit
+            else {
+                String temp = input.toString();  /// TODO: add comment
                 if (temp.length() > 1) {
                     input = new BigDecimal(temp.substring(0, temp.length() - 1));
                 } else {

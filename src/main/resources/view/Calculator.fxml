@@ -36,7 +36,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button id="square_root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="√" textAlignment="CENTER" GridPane.columnIndex="1">
+            <Button id="square_root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="&#8730;" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
@@ -66,7 +66,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="backspace" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBackspaceAction" text="&lt;" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Button id="backspace" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBackspaceAction" text="&#9003;" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
@@ -136,7 +136,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="negate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" text="±" textAlignment="CENTER" GridPane.rowIndex="5">
+            <Button id="negate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" text="&#177;" textAlignment="CENTER" GridPane.rowIndex="5">
                <font>
                   <Font size="24.0" />
                </font>

@@ -12,10 +12,10 @@ import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.Constant;
 import org.pepsik.model.operation.UnaryOperation;
 import org.pepsik.controller.util.TextFormatter;
+import org.pepsik.view.UIChanger;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 /**
@@ -81,11 +81,8 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handlePointAction(ActionEvent event) {
         CalculatorButton.valueOf((Button) event.getSource());
-        DecimalFormat f = new DecimalFormat(); //todo exlude to field
-
+       //todo exlude to field
         if (noError) {
-            f.applyPattern("###,###.#################");
-
             if (!InputNumber.isPointSet()) {
                 InputNumber.addPoint();
             }
@@ -107,7 +104,7 @@ public class CalculatorController implements Initializable {
         if (noError) {
             try {
                 InputNumber.clearInput();
-                model.addBinaryOperator(BinaryOperation.find(operator.charAt(0)));//todo replace with mapping
+                model.addBinaryOperator(BinaryOperation.find(operator));//todo replace with mapping
 
                 checksLimit(model.getResult());
 
@@ -160,6 +157,8 @@ public class CalculatorController implements Initializable {
         CalculatorButton.valueOf((Button) event.getSource());
 
         model.clearEntry();
+        InputNumber.clearInput();
+        displayField.setText(ZERO);
 
         if (!noError) {
             displayHistory.setText("");
@@ -167,9 +166,7 @@ public class CalculatorController implements Initializable {
             displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
         }
 
-        InputNumber.clearInput();
         noError = true;
-        displayField.setText(ZERO);
     }
 
     /**
@@ -224,7 +221,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecallButton(false);
+        UIChanger.disableMemoryClearAndRecallButton(false);
     }
 
     /**
@@ -241,7 +238,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecallButton(false);
+        UIChanger.disableMemoryClearAndRecallButton(false);
     }
 
     /**
@@ -258,7 +255,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecallButton(false);
+        UIChanger.disableMemoryClearAndRecallButton(false);
     }
 
     /**
@@ -275,7 +272,7 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-        setDisableMemoryClearAndRecallButton(true);
+        UIChanger.disableMemoryClearAndRecallButton(true);
     }
 
     /**
@@ -297,16 +294,6 @@ public class CalculatorController implements Initializable {
         }
 
         InputNumber.clearInput();
-    }
-
-    /**
-     * Disable clear and recall buttons
-     *
-     * @param b true when disable
-     */
-    private void setDisableMemoryClearAndRecallButton(boolean b) {
-        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(b);
-        CalculatorButton.MEMORY_RECALL.getButton().setDisable(b);
     }
 
     private void checksLimit(BigDecimal bg) {

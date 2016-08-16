@@ -5,316 +5,81 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 
-import static javafx.scene.input.KeyCode.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.pepsik.controller.button.CalculatorButton.*;
 
 /**
- * Enum represents keyboard shortcuts and simply fires correspond calculator button
+ * Class represents keyboard shortcuts and simply fires correspond calculator button
  */
-public enum KeyboardShortcut {//todo simplify
-    Q_BUTTON(Q) {
-        @Override
-        public void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.MEMORY_SUBTRACT.getButton().fire();
-            }
-        }
-    },
-    P_BUTTON(P) {
-        @Override
-        public void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.MEMORY_ADD.getButton().fire();
-            }
-        }
-    },
-    M_BUTTON(M) {
-        @Override
-        public void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.MEMORY_SAVE.getButton().fire();
-            }
-        }
-    },
-    R_BUTTON(R) {
-        @Override
-        public void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.MEMORY_RECALL.getButton().fire();
-            } else {
-                CalculatorButton.FRACTION.getButton().fire();
-            }
-        }
-    },
-    L_BUTTON(L) {
-        @Override
-        public void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.MEMORY_CLEAR.getButton().fire();
-            }
-        }
-    },
-
-    F9_BUTTON(F9) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NEGATE.getButton().fire();
-        }
-    },
-    SLASH_BUTTON(SLASH) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.DIVIDE.getButton().fire();
-        }
-    },
-    MULTIPLY_BUTTON(MULTIPLY) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.MULTIPLY.getButton().fire();
-        }
-    },
-    PLUS_BUTTON(PLUS) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.ADD.getButton().fire();
-        }
-    },
-    MINUS_BUTTON(MINUS) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.SUBTRACT.getButton().fire();
-        }
-    },
-    SQUARE_BUTTON(AT) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.SQUARE.getButton().fire();
-        }
-    },
-
-    ONE_BUTTON(DIGIT1) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_1.getButton().fire();
-        }
-    },
-    TWO_BUTTON(DIGIT2) {
-        @Override
-        protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.SQUARE_ROOT.getButton().fire();
-            } else {
-                CalculatorButton.NUMBER_2.getButton().fire();
-            }
-        }
-    },
-    THREE_BUTTON(DIGIT3) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_3.getButton().fire();
-        }
-    },
-    FOUR_BUTTON(DIGIT4) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_4.getButton().fire();
-        }
-    },
-    FIVE_BUTTON(DIGIT5) {
-        @Override
-        protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.PERCENT.getButton().fire();
-            } else {
-                CalculatorButton.NUMBER_5.getButton().fire();
-            }
-        }
-    },
-    SIX_BUTTON(DIGIT6) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_6.getButton().fire();
-        }
-    },
-    SEVEN_BUTTON(DIGIT7) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_7.getButton().fire();
-        }
-    },
-    EIGHT_BUTTON(DIGIT8) {
-        @Override
-        protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.MULTIPLY.getButton().fire();
-            } else {
-                CalculatorButton.NUMBER_8.getButton().fire();
-            }
-        }
-    },
-    NINE_BUTTON(DIGIT9) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_9.getButton().fire();
-        }
-    },
-    ZERO_BUTTON(DIGIT0) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_0.getButton().fire();
-        }
-    },
-
-    EQUALS_BUTTON(EQUALS) {
-        @Override
-        protected void execute(KeyEvent event) {
-            KeyCombination kb = new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
-
-            if (kb.match(event)) {
-                CalculatorButton.ADD.getButton().fire();
-            } else {
-                CalculatorButton.EQUAL.getButton().fire();
-            }
-        }
-    },
-    PERIOD_BUTTON(PERIOD) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.POINT.getButton().fire();
-        }
-    },
-    BACKSPACE_BUTTON(BACK_SPACE) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.BACKSPACE.getButton().fire();
-        }
-    },
-    ESC_BUTTON(ESCAPE) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.CLEAR_ALL.getButton().fire();
-        }
-    },
-    DEL_BUTTON(DELETE) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.CLEAR_ENTRY.getButton().fire();
-        }
-    },
-    ENTER_BUTTON(ENTER) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.EQUAL.getButton().fire();
-        }
-    },
-
-    NUMPAD_ONE_BUTTON(NUMPAD1) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_1.getButton().fire();
-        }
-    },
-    NUMPAD_TWO_BUTTON(NUMPAD2) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_2.getButton().fire();
-        }
-    },
-    NUMPAD_THREE_BUTTON(NUMPAD3) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_3.getButton().fire();
-        }
-    },
-    NUMPAD_FOUR_BUTTON(NUMPAD4) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_4.getButton().fire();
-        }
-    },
-    NUMPAD_FIVE_BUTTON(NUMPAD5) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_5.getButton().fire();
-        }
-    },
-    NUMPAD_SIX_BUTTON(NUMPAD6) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_6.getButton().fire();
-        }
-    },
-    NUMPAD_SEVEN_BUTTON(NUMPAD7) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_7.getButton().fire();
-        }
-    },
-    NUMPAD_EIGHT_BUTT(NUMPAD8) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_8.getButton().fire();
-        }
-    },
-    NUMPAD_NINE_BUTTON(NUMPAD9) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_9.getButton().fire();
-        }
-    },
-    NUMPAD_ZERO_BUTTON(NUMPAD0) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.NUMBER_0.getButton().fire();
-        }
-    },
-    NUMPAD_ADD_BUTTON(ADD) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.ADD.getButton().fire();
-        }
-    },
-    NUMPAD_SUBTRACT_BUTTON(SUBTRACT) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.SUBTRACT.getButton().fire();
-        }
-    },
-    NUMPAD_DIVIDE_BUTTON(DIVIDE) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.DIVIDE.getButton().fire();
-        }
-    },
-    NUMPAD_DECIMAL_BUTTON(DECIMAL) {
-        @Override
-        protected void execute(KeyEvent event) {
-            CalculatorButton.POINT.getButton().fire();
-        }
-    };
+public class KeyboardShortcut {//todo simplify
+    /**
+     * Map contains single keyboard button shortcut mapping to calculator button
+     */
+    private static Map<KeyCode, CalculatorButton> buttonMap = new HashMap<>();
+    /**
+     * Map contains combination if keyboard buttons shortcut mapping to calculator button
+     */
+    private static Map<KeyCode, CalculatorButton> ctrlCombinationMap = new HashMap<>();
 
     /**
-     * Keyboard button code
+     * Init mappings
      */
-    protected KeyCode code;
+    static {
+        buttonMap.put(KeyCode.DIGIT0, NUMBER_0);
+        buttonMap.put(KeyCode.DIGIT1, NUMBER_1);
+        buttonMap.put(KeyCode.DIGIT2, NUMBER_2);
+        buttonMap.put(KeyCode.DIGIT3, NUMBER_3);
+        buttonMap.put(KeyCode.DIGIT4, NUMBER_4);
+        buttonMap.put(KeyCode.DIGIT5, NUMBER_5);
+        buttonMap.put(KeyCode.DIGIT6, NUMBER_6);
+        buttonMap.put(KeyCode.DIGIT7, NUMBER_7);
+        buttonMap.put(KeyCode.DIGIT8, NUMBER_8);
+        buttonMap.put(KeyCode.DIGIT9, NUMBER_9);
 
-    KeyboardShortcut(KeyCode code) {
-        this.code = code;
+        buttonMap.put(KeyCode.NUMPAD0, NUMBER_0);
+        buttonMap.put(KeyCode.NUMPAD1, NUMBER_1);
+        buttonMap.put(KeyCode.NUMPAD2, NUMBER_2);
+        buttonMap.put(KeyCode.NUMPAD3, NUMBER_3);
+        buttonMap.put(KeyCode.NUMPAD4, NUMBER_4);
+        buttonMap.put(KeyCode.NUMPAD5, NUMBER_5);
+        buttonMap.put(KeyCode.NUMPAD6, NUMBER_6);
+        buttonMap.put(KeyCode.NUMPAD7, NUMBER_7);
+        buttonMap.put(KeyCode.NUMPAD8, NUMBER_8);
+        buttonMap.put(KeyCode.NUMPAD9, NUMBER_9);
+
+        buttonMap.put(KeyCode.PERIOD, POINT);
+        buttonMap.put(KeyCode.DECIMAL, POINT);
+        buttonMap.put(KeyCode.BACK_SPACE, BACKSPACE);
+        buttonMap.put(KeyCode.ESCAPE, CLEAR_ALL);
+        buttonMap.put(KeyCode.DELETE, CLEAR_ENTRY);
+
+        buttonMap.put(KeyCode.ENTER, EQUAL);
+        buttonMap.put(KeyCode.EQUALS, EQUAL);
+        buttonMap.put(KeyCode.PLUS, ADD);
+        buttonMap.put(KeyCode.ADD, ADD);
+        buttonMap.put(KeyCode.MINUS, SUBTRACT);
+        buttonMap.put(KeyCode.SUBTRACT, SUBTRACT);
+        buttonMap.put(KeyCode.DIVIDE, DIVIDE);
+        buttonMap.put(KeyCode.SLASH, DIVIDE);
+        buttonMap.put(KeyCode.MULTIPLY, MULTIPLY);
+        buttonMap.put(KeyCode.STAR, MULTIPLY);
+
+        buttonMap.put(KeyCode.AT, SQUARE);
+        buttonMap.put(KeyCode.F9, NEGATE);
+        buttonMap.put(KeyCode.R, FRACTION);
+
+        ctrlCombinationMap.put(KeyCode.DIGIT2, SQUARE_ROOT);
+        ctrlCombinationMap.put(KeyCode.DIGIT5, PERCENT);
+        ctrlCombinationMap.put(KeyCode.DIGIT8, MULTIPLY);
+        ctrlCombinationMap.put(KeyCode.EQUALS, ADD);
+
+        ctrlCombinationMap.put(KeyCode.P, MEMORY_ADD);
+        ctrlCombinationMap.put(KeyCode.Q, MEMORY_SUBTRACT);
+        ctrlCombinationMap.put(KeyCode.M, MEMORY_SAVE);
+        ctrlCombinationMap.put(KeyCode.R, MEMORY_RECALL);
+        ctrlCombinationMap.put(KeyCode.L, MEMORY_CLEAR);
     }
 
     /**
@@ -323,17 +88,20 @@ public enum KeyboardShortcut {//todo simplify
      * @param event keyboard key event
      */
     public static void findAncExecuteKey(KeyEvent event) {
-        for (KeyboardShortcut ks : values()) {
-            if (ks.code == event.getCode()) {
-                ks.execute(event);
+        KeyCode keyCode = event.getCode();
+
+        if (ctrlCombinationMap.containsKey(keyCode)) {
+            KeyCodeCombination combination = new KeyCodeCombination(keyCode, KeyCombination.CONTROL_DOWN);
+            if (combination.match(event)) {
+                CalculatorButton cb = ctrlCombinationMap.get(keyCode);
+                cb.getButton().fire();
+                return;
             }
         }
-    }
 
-    /**
-     * Push correspond JavaFX node button
-     *
-     * @param event keyboard event
-     */
-    protected abstract void execute(KeyEvent event);
+        if (buttonMap.containsKey(keyCode)) {
+            CalculatorButton cb = buttonMap.get(keyCode);
+            cb.getButton().fire();
+        }
+    }
 }

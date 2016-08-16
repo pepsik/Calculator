@@ -1,12 +1,11 @@
 package org.pepsik.controller.button;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
 /**
  * This enum represents calculator button. Each constant consist values as String and JavaFX node button which used in Controller class
- * to handle button events and have resize font logic for each button.
+ * to handle button events
  */
 public enum CalculatorButton {
 
@@ -27,176 +26,36 @@ public enum CalculatorButton {
     /**
      * Button binary operation constants
      */
-    ADD("+") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, 270) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("binary_small_font", "binary_big_font");
-            } else {
-                changeCssClass("binary_big_font", "binary_small_font");
-            }
-        }
-    },
-    SUBTRACT("-") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("binary_small_font", "binary_big_font");
-            } else {
-                changeCssClass("binary_big_font", "binary_small_font");
-            }
-        }
-    },
-    DIVIDE("/") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("binary_small_font", "binary_big_font");
-            } else {
-                changeCssClass("binary_big_font", "binary_small_font");
-            }
-        }
-    },
-    MULTIPLY("*") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("binary_small_font", "binary_big_font");
-            } else {
-                changeCssClass("binary_big_font", "binary_small_font");
-            }
-        }
-    },
-    EQUAL("=") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("binary_small_font", "binary_big_font");
-            } else {
-                changeCssClass("binary_big_font", "binary_small_font");
-            }
-        }
-    },
+    ADD("+"),
+    SUBTRACT("-") ,
+    DIVIDE("/") ,
+    MULTIPLY("*") ,
+    EQUAL("=") ,
 
     /**
      * Button unary operation constants
      */
-    SQUARE("sqr") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("unary_small_font", "unary_big_font");
-            } else {
-                changeCssClass("unary_big_font", "unary_small_font");
-            }
-        }
-    },
-    SQUARE_ROOT("√") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("unary_small_font", "unary_big_font");
-            } else {
-                changeCssClass("unary_big_font", "unary_small_font");
-            }
-        }
-    },
-    FRACTION("1/") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("unary_small_font", "unary_big_font");
-            } else {
-                changeCssClass("unary_big_font", "unary_small_font");
-            }
-        }
-    },
-    NEGATE("negate") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("unary_small_font", "unary_big_font");
-            } else {
-                changeCssClass("unary_big_font", "unary_small_font");
-            }
-        }
-    },
-    PERCENT("%") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("unary_small_font", "unary_big_font");
-            } else {
-                changeCssClass("unary_big_font", "unary_small_font");
-            }
-        }
-    },
+    SQUARE("sqr") ,
+    SQUARE_ROOT("√") ,
+    FRACTION("1/") ,
+    NEGATE("negate"),
+    PERCENT("%") ,
 
     /**
      * Point constant
      */
-    POINT(".") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("point_small_font", "point_big_font");
-            } else {
-                changeCssClass("point_big_font", "point_small_font");
-            }
-        }
-    },
+    POINT("."),
 
     /**
      * Clear button constants
      */
-    CLEAR_ENTRY("CE") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("clear_small_font", "clear_big_font");
-            } else {
-                changeCssClass("clear_big_font", "clear_small_font");
-            }
-        }
-    },
-    CLEAR_ALL("C") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("clear_small_font", "clear_big_font");
-            } else {
-                changeCssClass("clear_big_font", "clear_small_font");
-            }
-        }
-    },
+    CLEAR_ENTRY("CE"),
+    CLEAR_ALL("C"),
 
     /**
      * Backspace button constant
      */
-    BACKSPACE("<") {
-        @Override
-        protected void resize(double width, double height) {
-            if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                    && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-                changeCssClass("clear_small_font", "clear_big_font");
-            } else {
-                changeCssClass("clear_big_font", "clear_small_font");
-            }
-        }
-    },
+    BACKSPACE("<"),
 
     /**
      * Memory button constants
@@ -206,14 +65,6 @@ public enum CalculatorButton {
     MEMORY_ADD("M+"),
     MEMORY_SUBTRACT("M-"),
     MEMORY_SAVE("MS");
-
-    /**
-     * Boundary height and width when button and display fonts are changes
-     */
-    private static class Constants {
-        static final int BOUNDARY_WIDTH = 270;//todo see Dimension
-        static final int BOUNDARY_HEIGHT = 450;
-    }
 
     /**
      * String presentation operation
@@ -243,18 +94,6 @@ public enum CalculatorButton {
     }
 
     /**
-     * Initialize resize logic for all button
-     *
-     * @param width  new stage width
-     * @param height new stage height
-     */
-    public static void resizeButtons(double width, double height) {
-        for (CalculatorButton value : values()) {
-            value.resize(width, height);
-        }
-    }
-
-    /**
      * Return string button presentation by FXML Button
      *
      * @param button FXML Node Button
@@ -268,28 +107,6 @@ public enum CalculatorButton {
             }
         }
         throw new IllegalArgumentException("No match button found to " + button);
-    }
-
-    /**
-     * Default resize (0-9 button)
-     */
-    protected void resize(double width, double height) {
-        if (Double.compare(width, Constants.BOUNDARY_WIDTH) > 0
-                && Double.compare(height, Constants.BOUNDARY_HEIGHT) > 0) {
-            changeCssClass("number_small_font", "number_big_font");
-        } else {
-            changeCssClass("number_big_font", "number_small_font");
-        }
-    }
-
-    protected void changeCssClass(String oldClass, String newCss) {
-        ObservableList<String> cssList = button.getStyleClass();
-
-        cssList.remove(oldClass);
-
-        if (!cssList.contains(newCss)) {
-            cssList.add(newCss);
-        }
     }
 
     public Button getButton() {
