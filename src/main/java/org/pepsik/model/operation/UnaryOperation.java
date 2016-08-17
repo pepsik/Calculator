@@ -33,7 +33,7 @@ public enum UnaryOperation {
             return value.negate();
         }
     },
-    PERCENT(Constant.PERCENT) {
+    PERCENT(Constant.PERCENT) { //todo
         @Override
         public BigDecimal execute(BigDecimal value) {
             BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Constant.SCALE, BigDecimal.ROUND_HALF_UP));
@@ -41,10 +41,6 @@ public enum UnaryOperation {
             return result;
         }
     };
-
-    /**
-     * Constant for unary operation constant
-     */
 
     /**
      * String representation of operator
@@ -55,6 +51,7 @@ public enum UnaryOperation {
      * Operand which operate to. Used only for PERCENT operation
      */
     private static BigDecimal operand;
+    public static final BigDecimal TWO = BigDecimal.valueOf(2L); //todo
 
     /**
      * Sets operand for percent calculation (first SCALE which is calculated from the percentage)
@@ -68,15 +65,15 @@ public enum UnaryOperation {
     /**
      * Finds unary operation by string
      *
-     * @param value String represent operation
+     * @param operator String represent operation
      * @return unary operation or null if no such found
      */
-    public static UnaryOperation find(String value) {
+    public static UnaryOperation find(String operator) {
         for (UnaryOperation u : values()) {
-            if (u.getOperator().equals(value))
+            if (u.getOperator().equals(operator))
                 return u;
         }
-        return null;
+        throw new RuntimeException("Unary operation not found! " + operator);
     }
 
     UnaryOperation(String operator) {
@@ -91,7 +88,6 @@ public enum UnaryOperation {
      * @return operation result
      */
     private static BigDecimal sqrt(BigDecimal x, MathContext mc) {
-        BigDecimal TWO = BigDecimal.valueOf(2L);
         BigDecimal g = x.divide(TWO, mc);
         boolean done = false;
         final int maxIterations = mc.getPrecision() + 1;

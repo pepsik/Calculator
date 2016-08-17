@@ -63,7 +63,7 @@ public enum BinaryOperation {
                 return value;
             }
         }
-        return null;
+        throw new RuntimeException("Binary operation not found!" + operator);
     }
 
     /**

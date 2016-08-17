@@ -76,9 +76,10 @@ public class UITest {
                 display = (Label) scene.lookup("#display");
                 history = (Label) scene.lookup("#history");
             }
+
         });
 
-        synchronized (sync) {
+        synchronized (sync) { //todo notify
             Thread.sleep(1000);
         }
     }
@@ -621,6 +622,9 @@ public class UITest {
         assertExpression("1E16", "9999999999999999 + 1=");
         assertExpressionWithoutClear("9,999,999,999,999,999", "-1=");
 
+        assertExpression("1E16", "9999999999999999 + 1 ==");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "-1==");
+
         assertExpression("1.1E16", "9999999999999999 * 1.1=");
         assertExpressionWithoutClear("9,999,999,999,999,999", "/ 1.1=");
 
@@ -649,6 +653,7 @@ public class UITest {
         assertExpression("Limit reached!", "square(square(square(square(square(square(square(9999999999999999)=");
         assertExpression("Limit reached!", "square(square(square(square(square(square(square(9999999999999999)");
         assertExpression("Limit reached!", "1/9999999999999999========MS/MR==========");
+        assertExpression("Limit reached!", "1*9999999999999999========MS*MR==========");
     }
 
     @Test
@@ -1095,7 +1100,7 @@ public class UITest {
      * Lock test thread and wait for complete operations in JAvaFX Thread
      */
     private void waitForCompleteExecution() {
-        final CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);//todo remove cd
         Platform.runLater(latch::countDown);
         try {
             latch.await();
@@ -1111,14 +1116,16 @@ public class UITest {
 
     private void assertResizeFontDisplay(Label display) {
         //get css max display font
-        display.getStyleClass().add("display_big_font");
+        ObservableList<String> styleClass = display.getStyleClass();
+
+        styleClass.add("display_big_font");
         int maxDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_big_font");
+        styleClass.remove("display_big_font");
 
         //get css min display font
-        display.getStyleClass().add("display_small_font");
+        styleClass.add("display_small_font");
         int minDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_small_font");
+        styleClass.remove("display_small_font");
 
         double d = display.getWidth() / display.getText().length() * MULTIPLIER;
 

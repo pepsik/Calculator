@@ -53,7 +53,7 @@ public class TextFormatter {
                         //if get percent then clear all previous recorded unary operations
                         if (unary.equals(UnaryOperation.PERCENT)) {
                             isPercent = true;
-                            unarySB = new StringBuilder(); //clear all recorded unary
+                            unarySB.setLength(0); //clear all recorded unary
                             unarySB.append(display(curOperand, scale));
                         } else {
                             isPercent = false;
@@ -63,10 +63,9 @@ public class TextFormatter {
                     }
 
                     //checks if we get percent as last unary
-                    if (isPercent) {
-                        sb.append(unarySB);
-                    } else {
-                        sb.append(unarySB);
+                    sb.append(unarySB);
+
+                    if (!isPercent) {
                         sb.append(display(stage.getOperand(), scale));
                         sb.append(")");
                     }
@@ -86,17 +85,17 @@ public class TextFormatter {
      * @return formatted string
      */
     public static String display(BigDecimal input, int scale) {
-        DecimalFormat f = new DecimalFormat();
+        DecimalFormat f = new DecimalFormat(); //todo
         input = input.stripTrailingZeros();
 
         //if number lower then 0.00 show in engi mode
-        if (input.abs().compareTo(new BigDecimal("0.001")) == -1 && input.scale() > scale) {
+        if (input.abs().compareTo(new BigDecimal("0.001")) == -1 && input.scale() > scale) { //todo
             f.applyPattern("0.###############E0");
             return f.format(input);
         }
 
         //if number have more then scale count digits before point then show in engi mode
-        if (input.precision() - input.scale() > scale) {
+        if (input.precision() - input.scale() > scale) { //todo input.scale to var
             String pattern = "0.";
 
             if (input.scale() > 0) {
@@ -111,7 +110,7 @@ public class TextFormatter {
             return f.format(input);
         }
 
-        if (input.precision() - input.scale() <= scale) {
+        if (input.precision() - input.scale() <= scale) {//todo precision to war
             //show not more then scale count digits on display
             String pattern = "###,###.#";
             for (int i = 0; i < scale - input.precision() + input.scale(); i++) {
