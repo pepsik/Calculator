@@ -28,19 +28,19 @@ public enum CalculatorButton {
      * Button binary operation constants
      */
     ADD(Constant.ADD),
-    SUBTRACT(Constant.SUBTRACT) ,
-    DIVIDE(Constant.DIVIDE) ,
-    MULTIPLY(Constant.MULTIPLY) ,
-    EQUAL(Constant.EQUALS) ,
+    SUBTRACT(Constant.SUBTRACT),
+    DIVIDE(Constant.DIVIDE),
+    MULTIPLY(Constant.MULTIPLY),
+    EQUAL(Constant.EQUALS),
 
     /**
      * Button unary operation constants
      */
-    SQUARE(Constant.SQUARE) ,
-    SQUARE_ROOT(Constant.SQUARE_ROOT) ,
-    FRACTION(Constant.FRACTION) ,
+    SQUARE(Constant.SQUARE),
+    SQUARE_ROOT(Constant.SQUARE_ROOT),
+    FRACTION(Constant.FRACTION),
     NEGATE(Constant.NEGATE),
-    PERCENT(Constant.PERCENT) ,
+    PERCENT(Constant.PERCENT),
 
     /**
      * Point constant
@@ -83,12 +83,13 @@ public enum CalculatorButton {
 
     /**
      * Set Button collection to constants
+     *
      * @param root node root hierarchy
      */
     public static void setButtons(Parent root) {
         for (CalculatorButton cb : values()) {
             cb.button = (Button) root.lookup("#" + cb.name().toLowerCase());
-            if (cb.button == null){
+            if (cb.button == null) {
                 throw new RuntimeException("Button NOT FOUND! - " + cb.name());
             }
         }

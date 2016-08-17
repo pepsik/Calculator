@@ -39,12 +39,19 @@ public class MainApp extends Application {
      */
     private static final int MAX_WIDTH = 550;
 
+    /**
+     * Calculator display
+     */
+    private Label display;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/Calculator.fxml"));
         primaryStage.setTitle("Calculator");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
+
+        display = (Label) scene.getRoot().lookup("#display");
 
         //Init max, min, pref sizes
         setUpApplicationSizes(primaryStage);
@@ -94,7 +101,7 @@ public class MainApp extends Application {
      * @param scene current scene
      */
     private void initKeyboardShortcutListeners(Scene scene) {
-        scene.setOnKeyPressed(KeyboardShortcut::findAndExecuteKey);
+        scene.setOnKeyPressed(KeyboardShortcut::findAncExecuteKey);
     }
 
     /**
@@ -103,7 +110,6 @@ public class MainApp extends Application {
      * @param scene current scene
      */
     private void initResizeListeners(Scene scene) {
-        Label display = (Label) scene.getRoot().lookup("#display");
         UIChanger.setDisplay(display);
 
         //Display font resize listener

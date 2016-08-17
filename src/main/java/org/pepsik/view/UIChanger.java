@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static java.lang.Double.compare;
 import static org.pepsik.controller.button.CalculatorButton.*;
+import static org.pepsik.model.operation.Constant.MULTIPLIER;
 
 /**
  * Class responsible for change buttons, display font size
@@ -84,19 +85,7 @@ public class UIChanger {
         cssMap.put(BACKSPACE, "clear");
 
         //disable memory recall and clear button at startup app
-        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
-        CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
-    }
-
-    /**
-     * Initial resize logic for all calculator buttons
-     *
-     */
-    public static void resizeButtons() {
-        for (CalculatorButton value : CalculatorButton.values()) {
-            button = value;
-            resize();
-        }
+        UIChanger.disableMemoryClearAndRecallButton(true);
     }
 
     /**
@@ -110,18 +99,13 @@ public class UIChanger {
     }
 
     /**
-     * Gets display min max sizes from css file
+     * Initial resize logic for all calculator buttons
      */
-    private static void getMinMaxDisplaySizes() {
-        //get css max display font
-        display.getStyleClass().add("display_max_font");
-        maxDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_max_font");
-
-        //get css min display font
-        display.getStyleClass().add("display_small_font");
-        minDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_small_font");
+    public static void resizeButtons() {
+        for (CalculatorButton value : CalculatorButton.values()) {
+            button = value;
+            resize();
+        }
     }
 
     /**
@@ -129,29 +113,25 @@ public class UIChanger {
      */
     public static void resizeDisplay() {
         Scene scene = display.getScene();
-        double multiplier = 1.6;// multiplier to fill display
 
         //define text font size to fill display when big number is displayed
-        double d = display.getScene().getWidth() / display.getText().length() * multiplier;
-        double result;
+        double d = display.getScene().getWidth() / display.getText().length() * MULTIPLIER;
+        if (Double.compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
 
-        if (compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
-
+            //set max display font size if width > 270 and height > 450
             if (d > maxDisplayFont) {
-                result = maxDisplayFont;
+                display.setFont(Font.font(maxDisplayFont));
             } else {
-                result = d;
+                display.setFont(Font.font(d));
             }
         } else {
             //set min display font size
             if (d > minDisplayFont) {
-                result = minDisplayFont;
+                display.setFont(Font.font(minDisplayFont));
             } else {
-                result = d;
+                display.setFont(Font.font(d));
             }
         }
-
-        display.setFont(Font.font(result));
     }
 
     /**
@@ -165,8 +145,22 @@ public class UIChanger {
     }
 
     /**
+     * Gets display min max sizes from css file
+     */
+    private static void getMinMaxDisplaySizes() {
+        //get css max display font
+        display.getStyleClass().add("display_max_font");
+        maxDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_max_font");
+
+        //get css min display font
+        display.getStyleClass().add("display_min_font");
+        minDisplayFont = (int) display.getFont().getSize();
+        display.getStyleClass().remove("display_min_font");
+    }
+
+    /**
      * Resizes button font text size
-     *
      */
     private static void resize() {
         String prefix = cssMap.get(button);

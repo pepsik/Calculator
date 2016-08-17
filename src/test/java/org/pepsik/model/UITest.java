@@ -30,6 +30,7 @@ import static javafx.scene.input.KeyCode.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pepsik.model.helper.UITestButton.*;
+import static org.pepsik.model.operation.Constant.MULTIPLIER;
 import static org.pepsik.view.UIChanger.BOUNDARY_HEIGHT;
 import static org.pepsik.view.UIChanger.BOUNDARY_WIDTH;
 
@@ -751,6 +752,8 @@ public class UITest {
         stage.setWidth(250);
 
         assertResizeFontDisplay(display);
+        parseAndExecute("1239084723179");
+        assertResizeFontDisplay(display);
 
         stage.setHeight(550);
         stage.setWidth(350);
@@ -1108,19 +1111,16 @@ public class UITest {
 
     private void assertResizeFontDisplay(Label display) {
         //get css max display font
-        display.getStyleClass().add("display_max_font");
+        display.getStyleClass().add("display_big_font");
         int maxDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_max_font");
+        display.getStyleClass().remove("display_big_font");
 
         //get css min display font
-        display.getStyleClass().add("display_min_font");
+        display.getStyleClass().add("display_small_font");
         int minDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_min_font");
+        display.getStyleClass().remove("display_small_font");
 
-        double multiplier = 1.6; // for display text fill
-        double delta = 0.000001; //for compare display font expect and actual
-
-        double d = display.getWidth() / display.getText().length() * multiplier;
+        double d = display.getWidth() / display.getText().length() * MULTIPLIER;
 
         if (Double.compare(display.getScene().getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(display.getScene().getHeight(), BOUNDARY_HEIGHT) > 0) {
             if (d > maxDisplayFont) {
@@ -1132,7 +1132,7 @@ public class UITest {
             }
         }
 
-        assertEquals(d, display.getFont().getSize(), delta);
+        assertEquals((int)d, (int)display.getFont().getSize());
     }
 
     private void assertHistoryExpressionDisplayWithoutClear(String expect, String input) {

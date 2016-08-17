@@ -10,6 +10,11 @@ public class Constant {
     public static final int SCALE = 2_000;
 
     /**
+     * Multiplier to fill display
+     */
+    public static final double MULTIPLIER = 1.6;
+
+    /**
      * Binary operator string presentation constants
      * Tests uses its own binary constants
      */

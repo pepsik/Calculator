@@ -87,7 +87,7 @@ public class KeyboardShortcut {//todo simplify
      *
      * @param event keyboard key event
      */
-    public static void findAndExecuteKey(KeyEvent event) {
+    public static void findAncExecuteKey(KeyEvent event) {
         KeyCode keyCode = event.getCode();
 
         if (ctrlCombinationMap.containsKey(keyCode)) {
