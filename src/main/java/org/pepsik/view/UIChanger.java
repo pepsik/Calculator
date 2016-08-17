@@ -6,10 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import org.pepsik.controller.button.CalculatorButton;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Double.compare;
 import static org.pepsik.controller.button.CalculatorButton.*;
 
 /**
@@ -25,12 +25,12 @@ public class UIChanger {
     /**
      * Boundary calculator width for change font size
      */
-    private static final int BOUNDARY_WIDTH = 270;//todo see Dimension
+    public static final int BOUNDARY_WIDTH = 270;//todo see Dimension
 
     /**
      * Boundary calculator height for change font size
      */
-    private static final int BOUNDARY_HEIGHT = 450;
+    public static final int BOUNDARY_HEIGHT = 450;
 
     /**
      * Display for resize
@@ -83,13 +83,7 @@ public class UIChanger {
         cssMap.put(CLEAR_ENTRY, "clear");
         cssMap.put(BACKSPACE, "clear");
 
-        cssMap.put(MEMORY_ADD, "");
-        cssMap.put(MEMORY_SUBTRACT, "");
-        cssMap.put(MEMORY_SAVE, "");
-        cssMap.put(MEMORY_RECALL, "");
-        cssMap.put(MEMORY_CLEAR, "");
-
-        //disable memory recall and clear button
+        //disable memory recall and clear button at startup app
         CalculatorButton.MEMORY_CLEAR.getButton().setDisable(true);
         CalculatorButton.MEMORY_RECALL.getButton().setDisable(true);
     }
@@ -97,12 +91,11 @@ public class UIChanger {
     /**
      * Initial resize logic for all calculator buttons
      *
-     * @param dimension dimension represent calculator window sizes
      */
-    public static void resizeButtons(Dimension dimension) {
+    public static void resizeButtons() {
         for (CalculatorButton value : CalculatorButton.values()) {
             button = value;
-            resize(dimension);
+            resize();
         }
     }
 
@@ -113,44 +106,52 @@ public class UIChanger {
      */
     public static void setDisplay(Label display) {
         UIChanger.display = display;
+        getMinMaxDisplaySizes();
+    }
+
+    /**
+     * Gets display min max sizes from css file
+     */
+    private static void getMinMaxDisplaySizes() {
         //get css max display font
         display.getStyleClass().add("display_max_font");
         maxDisplayFont = (int) display.getFont().getSize();
         display.getStyleClass().remove("display_max_font");
 
         //get css min display font
-        display.getStyleClass().add("display_min_font");
+        display.getStyleClass().add("display_small_font");
         minDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_min_font");
+        display.getStyleClass().remove("display_small_font");
     }
 
     /**
      * Resize display font size
      */
     public static void resizeDisplay() {
-        if (display == null) {
-            throw new RuntimeException("Display not set for resize!");
-        }
-
         Scene scene = display.getScene();
+        double multiplier = 1.6;// multiplier to fill display
 
         //define text font size to fill display when big number is displayed
-        double d = display.getScene().getWidth() / display.getText().length() * 1.6; // multiplier to fill display
-        if (Double.compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
+        double d = display.getScene().getWidth() / display.getText().length() * multiplier;
+        double result;
+
+        if (compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
 
             if (d > maxDisplayFont) {
-                display.setFont(Font.font(maxDisplayFont));
+                result = maxDisplayFont;
             } else {
-                display.setFont(Font.font(d));
+                result = d;
             }
         } else {
             //set min display font size
             if (d > minDisplayFont) {
-                display.setFont(Font.font(minDisplayFont));
+                result = minDisplayFont;
             } else {
-                display.setFont(Font.font(d));
+                result = d;
             }
         }
+
+        display.setFont(Font.font(result));
     }
 
     /**
@@ -166,17 +167,17 @@ public class UIChanger {
     /**
      * Resizes button font text size
      *
-     * @param dimension dimension represent calculator window sizes
      */
-    private static void resize(Dimension dimension) {
+    private static void resize() {
         String prefix = cssMap.get(button);
 
         if (prefix == null) {
             return;
         }
 
-        if (Double.compare(dimension.getWidth(), BOUNDARY_WIDTH) > 0
-                && Double.compare(dimension.getHeight(), BOUNDARY_HEIGHT) > 0) {
+        Scene scene = display.getScene();
+
+        if (compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
             changeCssClass(prefix + "_small_font", prefix + "_big_font");
         } else {
             changeCssClass(prefix + "_big_font", prefix + "_small_font");

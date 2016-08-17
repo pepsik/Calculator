@@ -10,7 +10,6 @@ import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.view.UIChanger;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class MainApp extends Application {
@@ -95,7 +94,7 @@ public class MainApp extends Application {
      * @param scene current scene
      */
     private void initKeyboardShortcutListeners(Scene scene) {
-        scene.setOnKeyPressed(KeyboardShortcut::findAncExecuteKey);
+        scene.setOnKeyPressed(KeyboardShortcut::findAndExecuteKey);
     }
 
     /**
@@ -112,15 +111,13 @@ public class MainApp extends Application {
 
         //add listener to width property
         scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
-            Dimension dimension = new Dimension((int)newSceneWidth.doubleValue(),(int)scene.getHeight());
-            UIChanger.resizeButtons(dimension);
+            UIChanger.resizeButtons();
             UIChanger.resizeDisplay();
         });
 
         //add listener to height property
         scene.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {
-            Dimension dimension = new Dimension((int)scene.getWidth(),(int)newSceneHeight.doubleValue());
-            UIChanger.resizeButtons(dimension);
+            UIChanger.resizeButtons();
             UIChanger.resizeDisplay();
         });
     }

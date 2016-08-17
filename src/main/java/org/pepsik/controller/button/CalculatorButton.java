@@ -2,6 +2,7 @@ package org.pepsik.controller.button;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import org.pepsik.model.operation.Constant;
 
 /**
  * This enum represents calculator button. Each constant consist values as String and JavaFX node button which used in Controller class
@@ -26,20 +27,20 @@ public enum CalculatorButton {
     /**
      * Button binary operation constants
      */
-    ADD("+"),
-    SUBTRACT("-") ,
-    DIVIDE("/") ,
-    MULTIPLY("*") ,
-    EQUAL("=") ,
+    ADD(Constant.ADD),
+    SUBTRACT(Constant.SUBTRACT) ,
+    DIVIDE(Constant.DIVIDE) ,
+    MULTIPLY(Constant.MULTIPLY) ,
+    EQUAL(Constant.EQUALS) ,
 
     /**
      * Button unary operation constants
      */
-    SQUARE("sqr") ,
-    SQUARE_ROOT("√") ,
-    FRACTION("1/") ,
-    NEGATE("negate"),
-    PERCENT("%") ,
+    SQUARE(Constant.SQUARE) ,
+    SQUARE_ROOT(Constant.SQUARE_ROOT) ,
+    FRACTION(Constant.FRACTION) ,
+    NEGATE(Constant.NEGATE),
+    PERCENT(Constant.PERCENT) ,
 
     /**
      * Point constant

@@ -7,31 +7,31 @@ import java.math.RoundingMode;
  * This enum represents binary operation. Each constant consist correspond string presentation and logic to operate.
  */
 public enum BinaryOperation {
-    ADD("+") {
+    ADD(Constant.ADD) {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             return f.add(s);
         }
     },
-    SUBTRACT("-") {
+    SUBTRACT(Constant.SUBTRACT) {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             return f.subtract(s);
         }
     },
-    DIVIDE("/") {
+    DIVIDE(Constant.DIVIDE) {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             return f.divide(s, Constant.SCALE, BigDecimal.ROUND_HALF_UP);
         }
     },
-    MULTIPLY("*") {
+    MULTIPLY(Constant.MULTIPLY) {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             return f.multiply(s).setScale(Constant.SCALE, RoundingMode.HALF_UP);
         }
     },
-    EQUAL("=") {
+    EQUAL(Constant.EQUALS) {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             throw new RuntimeException("EQUAL NOT EXECUTES HERE");

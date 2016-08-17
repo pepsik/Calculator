@@ -81,7 +81,7 @@ public class CalculatorController implements Initializable {
     @FXML
     private void handlePointAction(ActionEvent event) {
         CalculatorButton.valueOf((Button) event.getSource());
-       //todo exlude to field
+        //todo exlude to field
         if (noError) {
             if (!InputNumber.isPointSet()) {
                 InputNumber.addPoint();
@@ -137,12 +137,18 @@ public class CalculatorController implements Initializable {
                 InputNumber.clearInput();
                 model.addUnaryOperator(UnaryOperation.find(operator));
 
+                checksLimit(model.getOperand());
+
                 displayField.setText(TextFormatter.display(model.getOperand(), scale));
                 displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
             } catch (ArithmeticException e) {
                 noError = false;
 
                 displayField.setText("Cannot divide by zero");
+            } catch (RuntimeException ex) {
+                noError = false;
+
+                displayField.setText("Limit reached!");
             }
         }
     }
@@ -300,7 +306,6 @@ public class CalculatorController implements Initializable {
         if (bg.compareTo(BigDecimal.ZERO) != 0) {
             //lower limit
             if (bg.abs().movePointRight(Constant.SCALE / 2).compareTo(BigDecimal.ONE) < 0) {
-                System.out.println(bg);
                 throw new RuntimeException("Limit is reached!");
             }
             //upper limit

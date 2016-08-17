@@ -15,16 +15,16 @@ import static org.pepsik.controller.button.CalculatorButton.*;
  */
 public class KeyboardShortcut {//todo simplify
     /**
-     * Map contains single keyboard button shortcut mapping to calculator button
+     * Map contains single keyboard button shortcut maps to calculator button
      */
     private static Map<KeyCode, CalculatorButton> buttonMap = new HashMap<>();
     /**
-     * Map contains combination if keyboard buttons shortcut mapping to calculator button
+     * Map contains combination keyboard buttons shortcut maps to calculator button
      */
     private static Map<KeyCode, CalculatorButton> ctrlCombinationMap = new HashMap<>();
 
     /**
-     * Init mappings
+     * Shortcut to calculator button mapping
      */
     static {
         buttonMap.put(KeyCode.DIGIT0, NUMBER_0);
@@ -87,7 +87,7 @@ public class KeyboardShortcut {//todo simplify
      *
      * @param event keyboard key event
      */
-    public static void findAncExecuteKey(KeyEvent event) {
+    public static void findAndExecuteKey(KeyEvent event) {
         KeyCode keyCode = event.getCode();
 
         if (ctrlCombinationMap.containsKey(keyCode)) {

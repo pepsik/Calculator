@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="main_grid" minHeight="200.0" minWidth="325.0" prefHeight="500.0" prefWidth="300.0" style="-fx-background-color: #f2f2f2;" styleClass="body" stylesheets="@Metro.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pepsik.controller.CalculatorController">
+<GridPane fx:id="main_grid" minHeight="200.0" minWidth="325.0" prefHeight="500.0" prefWidth="300.0" style="-fx-background-color: #f2f2f2;" styleClass="body" stylesheets="@Metro.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pepsik.controller.CalculatorController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="100.0" />
    </columnConstraints>
@@ -36,7 +36,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button id="square_root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="&#8730;" textAlignment="CENTER" GridPane.columnIndex="1">
+            <Button id="square_root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="√" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
@@ -51,7 +51,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="fraction" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="1/x" textAlignment="CENTER" GridPane.columnIndex="3">
+            <Button id="fraction" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="¹/x" textAlignment="CENTER" GridPane.columnIndex="3">
                <font>
                   <Font size="24.0" />
                </font>
@@ -66,7 +66,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="backspace" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBackspaceAction" text="&#9003;" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Button id="backspace" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBackspaceAction" text="⌫" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
@@ -136,7 +136,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="negate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" text="&#177;" textAlignment="CENTER" GridPane.rowIndex="5">
+            <Button id="negate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" text="±" textAlignment="CENTER" GridPane.rowIndex="5">
                <font>
                   <Font size="24.0" />
                </font>
@@ -207,10 +207,14 @@
                </styleClass></Button>
          </children>
       </GridPane>
-      <Label id="display" fx:id="displayField" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="display" GridPane.rowIndex="2">
+      <Label id="display" fx:id="displayField" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.rowIndex="2">
          <font>
             <Font size="36.0" />
          </font>
+         <styleClass>
+            <String fx:value="display" />
+            <String fx:value="display_small_font" />
+         </styleClass>
       </Label>
    </children>
 </GridPane>

@@ -9,31 +9,31 @@ import java.math.RoundingMode;
  * This enum represents unary operation. Each constant consist correspond string presentation and logic to operate.
  */
 public enum UnaryOperation {
-    SQUARE("sqr") {
+    SQUARE(Constant.SQUARE) {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return value.multiply(value).setScale(Constant.SCALE, RoundingMode.HALF_UP);
         }
     },
-    SQRT("√") {
+    SQRT(Constant.SQUARE_ROOT) {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return sqrt(value, MathContext.DECIMAL128);
         }
     },
-    FRACTION("1/") {
+    FRACTION(Constant.FRACTION) {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return new BigDecimal(BigInteger.ONE).divide(value, Constant.SCALE, RoundingMode.HALF_UP);
         }
     },
-    NEGATE("negate") {
+    NEGATE(Constant.NEGATE) {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return value.negate();
         }
     },
-    PERCENT("%") {
+    PERCENT(Constant.PERCENT) {
         @Override
         public BigDecimal execute(BigDecimal value) {
             BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Constant.SCALE, BigDecimal.ROUND_HALF_UP));

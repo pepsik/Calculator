@@ -29,7 +29,7 @@
 
 .button:disabled {
     /*-fx-border-color: #e6e6e6;*/
-    -fx-border-width: 0 0 0 0;
+    /*-fx-border-width: 0 0 0 0;*/
     /*-fx-opacity: 0.4;*/
     /*-fx-background-color: red;*/
     /*-fx-text-fill: #212121;*/

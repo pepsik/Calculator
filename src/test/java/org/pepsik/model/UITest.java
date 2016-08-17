@@ -16,6 +16,7 @@ import org.pepsik.MainApp;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.helper.UITestButton;
 import org.pepsik.model.operation.BinaryOperation;
+import org.pepsik.model.operation.Constant;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -29,6 +30,8 @@ import static javafx.scene.input.KeyCode.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pepsik.model.helper.UITestButton.*;
+import static org.pepsik.view.UIChanger.BOUNDARY_HEIGHT;
+import static org.pepsik.view.UIChanger.BOUNDARY_WIDTH;
 
 public class UITest {
 
@@ -52,7 +55,7 @@ public class UITest {
 
     @BeforeClass
     public static void initJFX() throws InterruptedException {
-                //todo remove
+        //todo remove
         Object sync = new Object();
 
         new JFXPanel();
@@ -643,6 +646,7 @@ public class UITest {
 
         //test boundary values
         assertExpression("Limit reached!", "square(square(square(square(square(square(square(9999999999999999)=");
+        assertExpression("Limit reached!", "square(square(square(square(square(square(square(9999999999999999)");
         assertExpression("Limit reached!", "1/9999999999999999========MS/MR==========");
     }
 
@@ -741,6 +745,8 @@ public class UITest {
 
     @Test
     public void testResizeDisplayFont() {
+        waitForCompleteExecution();
+
         stage.setHeight(350);
         stage.setWidth(250);
 
@@ -760,18 +766,18 @@ public class UITest {
 
     @Test
     public void testHistoryDisplay() {
-        assertHistoryExpressionDisplay("5 + 1 -");
-        assertHistoryExpressionDisplay("4 - 1 /");
-        assertHistoryExpressionDisplay("3 * sqr(3)", "3 * square(3)");
-        assertHistoryExpressionDisplay("2 / 4 +");
-        assertHistoryExpressionDisplay("1 + 5 -");
-        assertHistoryExpressionDisplay("0 - 6 *");
+        assertHistoryExpressionDisplay("5 + 1 −", "5 + 1 -");
+        assertHistoryExpressionDisplay("4 − 1 ÷", "4 - 1 /");
+        assertHistoryExpressionDisplay("3 × sqr(3)", "3 * square(3)");
+        assertHistoryExpressionDisplay("2 ÷ 4 +", "2 / 4 +");
+        assertHistoryExpressionDisplay("1 + 5 −", "1 + 5 -");
+        assertHistoryExpressionDisplay("0 − 6 ×", "0 - 6 *");
 
         assertHistoryExpressionDisplay("5 + 6 + sqr(7)", "5 + 6 + square(7)");
-        assertHistoryExpressionDisplay("124 - 6 / √(7)", "124 - 6 / sqrt(7)");
+        assertHistoryExpressionDisplay("124 − 6 ÷ √(7)", "124 - 6 / sqrt(7)");
         assertHistoryExpressionDisplay("3 + negate(233) + 1/(7)", "3 + negate(233) + fraction(7)");
-        assertHistoryExpressionDisplay("1 * negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
-        assertHistoryExpressionDisplay("0 + negate(1,231) / negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
+        assertHistoryExpressionDisplay("1 × negate(6) + 1/(71)", "1 * negate(6) + fraction(71)");
+        assertHistoryExpressionDisplay("0 + negate(1,231) ÷ negate(negate(6) + √(sqr(71)", "0 + negate(1231) / negate(negate(6) + sqrt(square(71)");
 
         assertHistoryExpressionDisplay("negate(0)", "negate()");
         assertHistoryExpressionDisplay("negate(1,231)", "negate(1231)");
@@ -780,8 +786,7 @@ public class UITest {
         assertHistoryExpressionDisplay("negate(negate(√(1,231)", "negate(negate(sqrt(1231)");
         assertHistoryExpressionDisplay("0", "negate(negate(percent(percent(1231)");
         assertHistoryExpressionDisplay("3 + 0.4356", "3 + square(percent(percent(22)");
-        assertHistoryExpressionDisplay("3 - 5 +", "3 + square(percent(percent(22) CE - 5 +");
-
+        assertHistoryExpressionDisplay("3 − 5 +", "3 + square(percent(percent(22) CE - 5 +");
 
         //checks if history empty after clear-entry in cases where expression have 1 stage and unary operations
         CLEAR_ALL.push();
@@ -847,10 +852,10 @@ public class UITest {
         assertKeyPressOnDisplay("0", DIGIT0);
         assertKeyPressOnDisplay("0.", PERIOD);
 
-        assertKeyPressOnHistory("*", KeyCode.MULTIPLY);
-        assertKeyPressOnHistory("/", SLASH);
-        assertKeyPressOnHistory("+", PLUS);
-        assertKeyPressOnHistory("-", MINUS);
+        assertKeyPressOnHistory(Constant.MULTIPLY, KeyCode.MULTIPLY);
+        assertKeyPressOnHistory(Constant.DIVIDE, SLASH);
+        assertKeyPressOnHistory(Constant.ADD, PLUS);
+        assertKeyPressOnHistory(Constant.SUBTRACT, MINUS);
 
         assertKeyPressOnDisplayWithExpression("9", EQUALS, "5+4", false);
         assertKeyPressOnDisplayWithExpression("1", ENTER, "5-4", false);
@@ -904,9 +909,9 @@ public class UITest {
         assertKeyPressOnDisplay("9", NUMPAD9);
         assertKeyPressOnDisplay("0", NUMPAD0);
         assertKeyPressOnDisplay("0.", DECIMAL);
-        assertKeyPressOnHistory("/", KeyCode.DIVIDE);
-        assertKeyPressOnHistory("+", KeyCode.ADD);
-        assertKeyPressOnHistory("-", KeyCode.SUBTRACT);
+        assertKeyPressOnHistory(Constant.DIVIDE, KeyCode.DIVIDE);
+        assertKeyPressOnHistory(Constant.ADD, KeyCode.ADD);
+        assertKeyPressOnHistory(Constant.SUBTRACT, KeyCode.SUBTRACT);
     }
 
     @Test
@@ -1002,7 +1007,6 @@ public class UITest {
 
         waitForCompleteExecution();
 
-
         assertEquals("0 " + expected, history.getText());
     }
 
@@ -1065,11 +1069,6 @@ public class UITest {
                 continue;
             }
 
-            if (BinaryOperation.find(symbol) != null) {
-                UITestButton.getUIButton(symbol).push();
-                continue;
-            }
-
             if (symbol.equals("(")) {
                 listUnary.add(UITestButton.getUIButton(sb.toString()));
                 sb = new StringBuilder();
@@ -1079,12 +1078,11 @@ public class UITest {
 
             if (symbol.equals(")")) {
                 listUnary.forEach(UITestButton::push);
-
                 listUnary.clear();
                 continue;
             }
 
-            throw new IllegalStateException("FAIL" + symbol);
+            UITestButton.getUIButton(symbol).push();
         }
 
         waitForCompleteExecution();
@@ -1124,7 +1122,7 @@ public class UITest {
 
         double d = display.getWidth() / display.getText().length() * multiplier;
 
-        if (Double.compare(display.getScene().getWidth(), 270) > 0 && Double.compare(display.getScene().getHeight(), 450) > 0) {
+        if (Double.compare(display.getScene().getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(display.getScene().getHeight(), BOUNDARY_HEIGHT) > 0) {
             if (d > maxDisplayFont) {
                 d = maxDisplayFont;
             }
@@ -1133,14 +1131,8 @@ public class UITest {
                 d = minDisplayFont;
             }
         }
+
         assertEquals(d, display.getFont().getSize(), delta);
-    }
-
-    private void assertHistoryExpressionDisplay(String inputAndExpect) {
-        CLEAR_ALL.push();
-        parseAndExecute(inputAndExpect);
-
-        assertEquals(inputAndExpect, history.getText());
     }
 
     private void assertHistoryExpressionDisplayWithoutClear(String expect, String input) {

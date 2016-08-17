@@ -311,10 +311,8 @@ public class Model {
 
         // operator - empty ; operand - empty
         if (binaryOperator == null && operand == null) {
-            Stage binaryStage = getLastStage();//clone
-            Stage first = new Stage();//clone
-            first.setOperand(binaryStage.getOperand());
-            currentExpression.addFirst(first);
+            currentStage.setOperand(getLastStage().getOperand());
+            currentExpression.addFirst(currentStage);
 
             if (lastBinaryStage != null) {
                 currentStage = new Stage(lastBinaryStage); //clone
