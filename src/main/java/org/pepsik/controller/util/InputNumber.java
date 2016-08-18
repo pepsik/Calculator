@@ -35,17 +35,16 @@ public class InputNumber {
     /**
      * Add input digit to input number
      *
-     * @param str input digit
+     * @param digit input digit
      */
-    public static void addToInput(String str) {
-        BigDecimal value = new BigDecimal(str);
+    public static void addToInput(int digit) {
         boolean hasPermission = canInput();
         if (hasPermission) {
             if (isPointSet) {
                 scale++;
             }
 
-            input = input.multiply(TEN).add(value);
+            input = input.multiply(TEN).add(new BigDecimal(digit));
         }
     }
 

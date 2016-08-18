@@ -17,7 +17,11 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
  */
 public class TextFormatter {
 
-    private static final String BACKSPACE = " ";
+    //todo comments
+    private static final String SPACE = " ";
+    /**
+     * represents left bracket
+     */
     private static final String LEFT_BRACKET = "(";
     private static final String RIGHT_BRACKET = ")";
 
@@ -29,7 +33,7 @@ public class TextFormatter {
     /**
      * Input formatter
      */
-    private static final DecimalFormat f = new DecimalFormat();
+    private static final DecimalFormat f = new DecimalFormat(); //todo
 
     /**
      * Build history expression
@@ -58,14 +62,14 @@ public class TextFormatter {
 
             //adds binary operation if exist
             if (operator != null) {
-                SB.append(BACKSPACE);
+                SB.append(SPACE);
                 SB.append(valueOf(operator.name()).getValue());
             }
 
             //if we get first stage without operator add space
             if (stageOperand != null) {
                 if (SB.length() != 0) {
-                    SB.append(BACKSPACE);
+                    SB.append(SPACE);
                 }
 
                 List<UnaryOperation> unaryOperators = stage.getUnaryOperators();
@@ -116,7 +120,7 @@ public class TextFormatter {
         int inputPrecision = input.precision();
         String pattern;
 
-        //if number lower then 0.00 show in engi mode
+        //if number lower then 0.001 show in engi mode
         if (input.abs().compareTo(CRITERIA) == -1 && inputScale > displayScale) {
             pattern = "0.###############E0";
         } else

@@ -190,7 +190,7 @@ public class UIChanger {
         double height = scene.getHeight();
 
         if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
-            changeCssClass(prefix + "_small_font", prefix + "_big_font");
+            changeCssClass(prefix + "_small_font", prefix + "_big_font"); //todo
         } else {
             changeCssClass(prefix + "_big_font", prefix + "_small_font");
         }

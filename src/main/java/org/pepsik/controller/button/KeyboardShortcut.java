@@ -99,7 +99,7 @@ public class KeyboardShortcut {
             }
         }
 
-        if (buttonMap.containsKey(keyCode)) {
+        if (buttonMap.containsKey(keyCode)) { //todo map contains
             CalculatorButton cb = buttonMap.get(keyCode);
             cb.getButton().fire();
         }

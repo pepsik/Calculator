@@ -132,7 +132,7 @@ public class CalculatorController {
         CalculatorButton cb = valueOf(event);
 
         if (noError) {
-            addToInput(cb.getValue());
+            addToInput(Integer.valueOf(cb.getValue()));
             model.addNumber(getInput());
 
             displayField.setText(formatInput());
@@ -167,7 +167,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleBinaryOperationAction(ActionEvent event) {
-        CalculatorButton cb = valueOf(event);
+        CalculatorButton cb = valueOf(event); //// TODO: 8/18/2016
 
         String toDisplay;
         if (noError) {
@@ -205,7 +205,7 @@ public class CalculatorController {
         if (noError) {
             try {
                 clearInput();
-                model.addUnaryOperator(cb.name());
+                model.addUnaryOperator(cb.name());//todo mapping operators
 
                 BigDecimal operand = model.getOperand();
                 checksLimit(operand);
@@ -240,7 +240,7 @@ public class CalculatorController {
         if (noError) {
             result = history(model.getCurrentExpression(), model.getOperand(), SCALE);
         } else {
-            noError = true;
+            noError = true; /// TODO: 8/18/2016
         }
 
         displayField.setText(ZERO);
@@ -378,7 +378,7 @@ public class CalculatorController {
         if (bg.compareTo(BigDecimal.ZERO) != 0) {
             //lower limit
             if (bg.movePointRight(Model.SCALE).abs().compareTo(ONE) < 0) {
-                throw new RuntimeException(LIMIT_MSG);
+                throw new RuntimeException(LIMIT_MSG); //// TODO: 8/18/2016  more info
             }
             //upper limit
             if (bg.precision() - bg.scale() > Model.SCALE) {
