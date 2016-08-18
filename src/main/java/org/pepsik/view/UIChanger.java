@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Double.compare;
+import static javafx.scene.text.Font.font;
 import static org.pepsik.controller.button.CalculatorButton.*;
-import static org.pepsik.model.operation.Constant.MULTIPLIER;
 
 /**
  * Class responsible for change buttons, display font size
@@ -32,6 +32,11 @@ public class UIChanger {
      * Boundary calculator height for change font size
      */
     public static final int BOUNDARY_HEIGHT = 450;
+
+    /**
+     * Multiplier to fill display
+     */
+    public static final double MULTIPLIER = 1.6;
 
     /**
      * Display for resize
@@ -102,7 +107,7 @@ public class UIChanger {
      * Initial resize logic for all calculator buttons
      */
     public static void resizeButtons() {
-        for (CalculatorButton value : CalculatorButton.values()) {
+        for (CalculatorButton value : values()) {
             button = value;
             resize();
         }
@@ -113,25 +118,25 @@ public class UIChanger {
      */
     public static void resizeDisplay() {
         Scene scene = display.getScene();
+        double width = scene.getWidth();
+        double height = scene.getHeight();
 
         //define text font size to fill display when big number is displayed
-        double d = display.getScene().getWidth() / display.getText().length() * MULTIPLIER;
-        if (Double.compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
+        double d = width / display.getText().length() * MULTIPLIER;
+        if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
 
             //set max display font size if width > 270 and height > 450
             if (d > maxDisplayFont) {
-                display.setFont(Font.font(maxDisplayFont));
-            } else {
-                display.setFont(Font.font(d));
+                d = maxDisplayFont;
             }
         } else {
             //set min display font size
             if (d > minDisplayFont) {
-                display.setFont(Font.font(minDisplayFont));
-            } else {
-                display.setFont(Font.font(d));
+                d = minDisplayFont;
             }
         }
+
+        display.setFont(font(d));
     }
 
     /**
@@ -140,8 +145,8 @@ public class UIChanger {
      * @param b true when disable
      */
     public static void disableMemoryClearAndRecallButton(boolean b) {
-        CalculatorButton.MEMORY_CLEAR.getButton().setDisable(b);
-        CalculatorButton.MEMORY_RECALL.getButton().setDisable(b);
+        MEMORY_CLEAR.getButton().setDisable(b);
+        MEMORY_RECALL.getButton().setDisable(b);
     }
 
     /**
@@ -149,14 +154,25 @@ public class UIChanger {
      */
     private static void getMinMaxDisplaySizes() {
         //get css max display font
-        display.getStyleClass().add("display_max_font");
-        maxDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_max_font");
+        ObservableList<String> styleClass = display.getStyleClass();
+        Font font = display.getFont();
+
+        styleClass.add("display_max_font");
+        maxDisplayFont = (int) font.getSize();
+        styleClass.remove("display_max_font");
 
         //get css min display font
-        display.getStyleClass().add("display_min_font");
-        minDisplayFont = (int) display.getFont().getSize();
-        display.getStyleClass().remove("display_min_font");
+        styleClass.add("display_min_font");
+        minDisplayFont = (int) font.getSize();
+        styleClass.remove("display_min_font");
+    }
+
+    public static int getMaxDisplayFont() {
+        return maxDisplayFont;
+    }
+
+    public static int getMinDisplayFont() {
+        return minDisplayFont;
     }
 
     /**
@@ -170,8 +186,10 @@ public class UIChanger {
         }
 
         Scene scene = display.getScene();
+        double width = scene.getWidth();
+        double height = scene.getHeight();
 
-        if (compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
+        if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
             changeCssClass(prefix + "_small_font", prefix + "_big_font");
         } else {
             changeCssClass(prefix + "_big_font", prefix + "_small_font");

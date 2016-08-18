@@ -1,19 +1,13 @@
 package org.pepsik.controller.button;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import org.pepsik.model.operation.Constant;
 
 /**
- * This enum represents calculator button. Each constant consist values as String and JavaFX node button which used in Controller class
+ * This enum represents calculator button. Each constant consist string representation and button node which used in Controller class
  * to handle button events
  */
 public enum CalculatorButton {
-
-    /**
-     * Button number constants
-     */
     NUMBER_1("1"),
     NUMBER_2("2"),
     NUMBER_3("3"),
@@ -25,44 +19,24 @@ public enum CalculatorButton {
     NUMBER_9("9"),
     NUMBER_0("0"),
 
-    /**
-     * Button binary operation constants
-     */
     ADD("+"),
     SUBTRACT("−"),
     DIVIDE("÷"),
     MULTIPLY("×"),
     EQUAL("="),
 
-    /**
-     * Button unary operation constants
-     */
     SQUARE("sqr"),
     SQUARE_ROOT("√"),
     FRACTION("1/"),
     NEGATE("negate"),
     PERCENT("%"),
 
-    /**
-     * Point constant
-     */
     POINT("."),
 
-    /**
-     * Clear button constants
-     */
-    @FXML
     CLEAR_ENTRY("CE"),
     CLEAR_ALL("C"),
-
-    /**
-     * Backspace button constant
-     */
     BACKSPACE("<"),
 
-    /**
-     * Memory button constants
-     */
     MEMORY_CLEAR("MC"),
     MEMORY_RECALL("MR"),
     MEMORY_ADD("M+"),

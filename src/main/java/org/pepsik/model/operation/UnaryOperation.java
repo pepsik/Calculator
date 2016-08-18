@@ -9,12 +9,13 @@ import java.math.RoundingMode;
 
 /**
  * This enum represents unary operation. Each constant consist correspond string presentation and logic to operate.
+ * Used double scale
  */
 public enum UnaryOperation {
     SQUARE {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return value.multiply(value).setScale(Model.SCALE, RoundingMode.HALF_UP);
+            return value.multiply(value).setScale(Model.SCALE * 2, RoundingMode.HALF_UP);
         }
     },
     SQUARE_ROOT {
@@ -35,30 +36,17 @@ public enum UnaryOperation {
             return value.negate();
         }
     },
-    PERCENT { //todo
-
+    PERCENT {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Model.SCALE * 2, BigDecimal.ROUND_HALF_UP));
-            operand = null;
-            return result;
+            throw new RuntimeException("PERCENT NOT EXECUTES HERE");
         }
     };
 
     /**
-     * Operand which operate to. Used only for PERCENT operation
+     * Support value for sqrt calculation
      */
-    private static BigDecimal operand;
-    private static final BigDecimal TWO = BigDecimal.valueOf(2); //todo
-
-    /**
-     * Sets operand for percent calculation (first SCALE which is calculated from the percentage)
-     *
-     * @param operand operand which operate to
-     */
-    public static void setOperand(BigDecimal operand) {
-        UnaryOperation.operand = operand;
-    }
+    private static final BigDecimal TWO = BigDecimal.valueOf(2);
 
     /**
      * Calculates sqrt operation for enum constant SQRT

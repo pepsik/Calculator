@@ -2,7 +2,6 @@ package org.pepsik.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,6 +68,21 @@ public class CalculatorController {
     private static final String ZERO = "0";
 
     /**
+     * String contains point
+     */
+    private static final String POINT = ".";
+
+    /**
+     * Error message occurs when divide by zero
+     */
+    private static final String DIVIDE_ZERO_MSG = "Cannot divide by zero";
+
+    /**
+     * Error message occurs when limit is reached
+     */
+    private static final String LIMIT_MSG = "Limit reached!";
+
+    /**
      * Calculator display field
      */
     @FXML
@@ -81,7 +95,7 @@ public class CalculatorController {
     private Label displayHistory;
 
     /**
-     * Block calculation button if error occurs
+     * Block input buttons if error occurs
      * Can be removed by Clear, ClearALL button
      */
     private boolean noError = true;
@@ -91,7 +105,7 @@ public class CalculatorController {
      */
     private Model model = new Model();
 
-    public void setStageAndSetupListeners(Stage stage) { //// TODO: refact
+    public void setStageAndSetupListeners(Stage stage) {
         stage.setTitle("Calculator");
         Scene scene = displayField.getScene();
 
@@ -99,7 +113,7 @@ public class CalculatorController {
         setUpApplicationSizes(stage);
 
         //Setup all node button to enums
-        setUpButtons(scene.getRoot());
+        setUpButtons(scene);
 
         //Init listeners for shortcut keys
         initKeyboardShortcutListeners(scene);
@@ -141,7 +155,7 @@ public class CalculatorController {
 
             if (!InputNumber.isPointSet()) {
                 InputNumber.addPoint();
-                toDisplay += ".";
+                toDisplay += POINT;
             }
 
             displayField.setText(toDisplay);
@@ -170,10 +184,10 @@ public class CalculatorController {
                 displayHistory.setText(history(model.getCurrentExpression(), model.getOperand(), SCALE));
             } catch (ArithmeticException e) {
                 noError = false;
-                toDisplay = "Cannot divide by zero";
+                toDisplay = DIVIDE_ZERO_MSG;
             } catch (RuntimeException ex) {
                 noError = false;
-                toDisplay = "Limit reached!";
+                toDisplay = LIMIT_MSG;
             }
 
             displayField.setText(toDisplay);
@@ -202,10 +216,10 @@ public class CalculatorController {
                 displayHistory.setText(history(model.getCurrentExpression(), operand, SCALE));
             } catch (ArithmeticException e) {
                 noError = false;
-                toDisplay = "Cannot divide by zero";
+                toDisplay = DIVIDE_ZERO_MSG;
             } catch (RuntimeException ex) {
                 noError = false;
-                toDisplay = "Limit reached!";
+                toDisplay = LIMIT_MSG;
             }
 
             displayField.setText(toDisplay);
@@ -267,7 +281,7 @@ public class CalculatorController {
 
             String toDisplay = formatInputNumber();
             if (InputNumber.getScale() == 0 && InputNumber.isPointSet()) {
-                toDisplay += ".";
+                toDisplay += POINT;
             }
 
             displayField.setText(toDisplay);
@@ -366,11 +380,11 @@ public class CalculatorController {
         if (bg.compareTo(BigDecimal.ZERO) != 0) {
             //lower limit
             if (bg.movePointRight(Model.SCALE).abs().compareTo(ONE) < 0) {
-                throw new RuntimeException("Limit is reached!");
+                throw new RuntimeException(LIMIT_MSG);
             }
             //upper limit
             if (bg.precision() - bg.scale() > Model.SCALE) {
-                throw new RuntimeException("Limit is reached!");
+                throw new RuntimeException(LIMIT_MSG);
             }
         }
     }
@@ -397,11 +411,11 @@ public class CalculatorController {
     /**
      * Set Javafx node button to enum
      *
-     * @param root current root
+     * @param scene current scene
      */
-    private void setUpButtons(Parent root) {
+    private void setUpButtons(Scene scene) {
         for (CalculatorButton cb : CalculatorButton.values()) {
-            cb.setButton((Button) root.lookup("#" + cb.name().toLowerCase()));
+            cb.setButton((Button) scene.lookup("#" + cb.name().toLowerCase()));
             if (cb.getButton() == null) {
                 throw new RuntimeException("Button NOT FOUND! - " + cb.name());
             }

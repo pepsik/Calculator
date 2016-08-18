@@ -15,23 +15,22 @@ import org.junit.Test;
 import org.pepsik.MainApp;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.helper.UITestButton;
-import org.pepsik.model.operation.Constant;
+import org.pepsik.view.UIChanger;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Integer.MAX_VALUE;
 import static javafx.scene.input.KeyCode.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pepsik.model.helper.UITestButton.*;
-import static org.pepsik.model.operation.Constant.MULTIPLIER;
 import static org.pepsik.view.UIChanger.BOUNDARY_HEIGHT;
 import static org.pepsik.view.UIChanger.BOUNDARY_WIDTH;
+import static org.pepsik.view.UIChanger.MULTIPLIER;
 
 public class UITest {
 
@@ -55,7 +54,6 @@ public class UITest {
 
     @BeforeClass
     public static void initJFX() throws InterruptedException {
-        //todo remove
         Object sync = new Object();
 
         new JFXPanel();
@@ -74,12 +72,12 @@ public class UITest {
                 UITestButton.setUIButtons();
                 display = (Label) scene.lookup("#display");
                 history = (Label) scene.lookup("#history");
+                sync.notify();
             }
-
         });
 
-        synchronized (sync) { //todo notify
-            Thread.sleep(1000);
+        synchronized (sync) {
+            sync.wait();
         }
     }
 
@@ -1119,12 +1117,20 @@ public class UITest {
      * Lock test thread and wait for complete operations in JAvaFX Thread
      */
     private void waitForCompleteExecution() {
-        final CountDownLatch latch = new CountDownLatch(1);//todo remove cd
-        Platform.runLater(latch::countDown);
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        Object sync = new Object();
+
+        Platform.runLater(() -> {
+            synchronized (sync){
+                sync.notify();
+            }
+        });
+
+        synchronized (sync){
+            try {
+                sync.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1134,17 +1140,8 @@ public class UITest {
     }
 
     private void assertResizeFontDisplay(Label display) {
-        //get css max display font
-        ObservableList<String> styleClass = display.getStyleClass();
-
-        styleClass.add("display_big_font");
-        int maxDisplayFont = (int) display.getFont().getSize();
-        styleClass.remove("display_big_font");
-
-        //get css min display font
-        styleClass.add("display_small_font");
-        int minDisplayFont = (int) display.getFont().getSize();
-        styleClass.remove("display_small_font");
+        int maxDisplayFont = UIChanger.getMaxDisplayFont();
+        int minDisplayFont = UIChanger.getMinDisplayFont();
 
         double d = display.getWidth() / display.getText().length() * MULTIPLIER;
 

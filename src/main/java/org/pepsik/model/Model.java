@@ -4,7 +4,6 @@ import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 
 import static java.math.BigDecimal.ZERO;
@@ -16,11 +15,6 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
  * result of first stage used in second stage and last stage represent result of current expression.
  */
 public class Model {
-
-    /**
-     * Calculation scale
-     */
-    public static final int SCALE = 1_000;
 
     /**
      * Expression represent sequence of stages
@@ -43,14 +37,24 @@ public class Model {
     private Stage lastBinaryStage;
 
     /**
+     * Calculator memory
+     */
+    private BigDecimal memory;
+
+    /**
      * Result of last complete stage
      */
     private BigDecimal result = ZERO;
 
     /**
-     * Calculator memory
+     * Calculation scale
      */
-    private BigDecimal memory;
+    public static final int SCALE = 1_000;
+
+    /**
+     * Divisor for percent calculation
+     */
+    private static final BigDecimal DIVISOR = new BigDecimal(100);
 
     public Model() {
         currentExpression.addLast(currentStage);
@@ -275,10 +279,10 @@ public class Model {
 
         for (UnaryOperation unary : currentStage.getUnaryOperators()) {
             if (unary.equals(PERCENT)) {
-                UnaryOperation.setOperand(result);
+                temp = result.multiply(temp.divide(DIVISOR, Model.SCALE * 2, BigDecimal.ROUND_HALF_UP));
+            }else {
+                temp = unary.execute(temp);
             }
-
-            temp = unary.execute(temp);
         }
 
         return temp;

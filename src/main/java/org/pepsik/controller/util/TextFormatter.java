@@ -1,6 +1,5 @@
 package org.pepsik.controller.util;
 
-import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.Stage;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -22,9 +21,24 @@ public class TextFormatter {
     private static final String LEFT_BRACKET = "(";
     private static final String RIGHT_BRACKET = ")";
 
+    /**
+     * Criteria for switch to engi mode
+     */
     private static final BigDecimal CRITERIA = new BigDecimal("0.001");
+
+    /**
+     * Input formatter
+     */
     private static final DecimalFormat f = new DecimalFormat();
+
+    /**
+     * Build history expression
+     */
     private static final StringBuilder SB = new StringBuilder();
+
+    /**
+     * Build unary expression
+     */
     private static final StringBuilder UNARY_SB = new StringBuilder();
 
     /**

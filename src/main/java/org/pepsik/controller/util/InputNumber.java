@@ -22,6 +22,9 @@ public class InputNumber {
      */
     private static short scale;
 
+    /**
+     * Show if point set
+     */
     private static boolean isPointSet = false;
 
     /**

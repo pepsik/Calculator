@@ -66,10 +66,6 @@ public enum UITestButton {
         throw new IllegalArgumentException("No match button found to " + input);
     }
 
-    public Button getButton(){
-        return button;
-    }
-
     /**
      * Gets button Css style classes
      *
