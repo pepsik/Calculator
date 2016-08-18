@@ -72,7 +72,7 @@ public class UITest {
                 UITestButton.setUIButtons();
                 display = (Label) scene.lookup("#display");
                 history = (Label) scene.lookup("#history");
-                sync.notify();
+                sync.notifyAll();
             }
         });
 
@@ -1120,12 +1120,12 @@ public class UITest {
         Object sync = new Object();
 
         Platform.runLater(() -> {
-            synchronized (sync){
-                sync.notify();
+            synchronized (sync) {
+                sync.notifyAll();
             }
         });
 
-        synchronized (sync){
+        synchronized (sync) {
             try {
                 sync.wait();
             } catch (InterruptedException e) {

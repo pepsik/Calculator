@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 
 /**
  * This enum represents binary operation. Each constant consist correspond string presentation and logic to operate.
+ * Used double model scale
  */
 public enum BinaryOperation {
     ADD {

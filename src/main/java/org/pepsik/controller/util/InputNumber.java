@@ -35,9 +35,10 @@ public class InputNumber {
     /**
      * Add input digit to input number
      *
-     * @param value input digit
+     * @param str input digit
      */
-    public static void addToInput(BigDecimal value) {
+    public static void addToInput(String str) {
+        BigDecimal value = new BigDecimal(str);
         boolean hasPermission = canInput();
         if (hasPermission) {
             if (isPointSet) {
@@ -60,7 +61,7 @@ public class InputNumber {
     /**
      * Adds point to input number
      */
-    public static void addPoint() {
+    public static void addPointToInput() {
         isPointSet = true;
     }
 
@@ -69,7 +70,7 @@ public class InputNumber {
      *
      * @return bool SCALE if was set
      */
-    public static boolean isPointSet() {
+    public static boolean isInputPointSet() {
         return isPointSet;
     }
 
@@ -78,14 +79,14 @@ public class InputNumber {
      *
      * @return scale
      */
-    public static int getScale() {
+    public static int getInputScale() {
         return scale;
     }
 
     /**
      * Backspace operation on input number
      */
-    public static void backspace() {
+    public static void backspaceInput() {
         if (isPointSet) {
             if (scale > 0) {
                 input = input.divideToIntegralValue(TEN);

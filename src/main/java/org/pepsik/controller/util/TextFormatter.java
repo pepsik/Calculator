@@ -155,8 +155,8 @@ public class TextFormatter {
      *
      * @return formatted input number to display
      */
-    public static String formatInputNumber() {
-        int scale = InputNumber.getScale();
+    public static String formatInput() {
+        int scale = InputNumber.getInputScale();
         String pattern = "###,##0.";
 
         if (scale != 0) {

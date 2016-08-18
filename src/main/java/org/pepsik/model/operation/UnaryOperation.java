@@ -7,9 +7,11 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+import static java.math.BigDecimal.ONE;
+
 /**
  * This enum represents unary operation. Each constant consist correspond string presentation and logic to operate.
- * Used double scale
+ * Used double model scale
  */
 public enum UnaryOperation {
     SQUARE {
@@ -27,7 +29,7 @@ public enum UnaryOperation {
     FRACTION {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return new BigDecimal(BigInteger.ONE).divide(value, Model.SCALE * 2, RoundingMode.HALF_UP);
+            return ONE.divide(value, Model.SCALE * 2, RoundingMode.HALF_UP);
         }
     },
     NEGATE {

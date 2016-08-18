@@ -8,18 +8,16 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
-import org.pepsik.controller.util.InputNumber;
 import org.pepsik.model.Model;
-import org.pepsik.model.operation.BinaryOperation;
-import org.pepsik.model.operation.UnaryOperation;
 import org.pepsik.view.UIChanger;
 
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.ONE;
 import static org.pepsik.controller.button.CalculatorButton.valueOf;
+import static org.pepsik.controller.util.InputNumber.*;
 import static org.pepsik.controller.util.TextFormatter.display;
-import static org.pepsik.controller.util.TextFormatter.formatInputNumber;
+import static org.pepsik.controller.util.TextFormatter.formatInput;
 import static org.pepsik.controller.util.TextFormatter.history;
 
 /**
@@ -113,7 +111,7 @@ public class CalculatorController {
         setUpApplicationSizes(stage);
 
         //Setup all node button to enums
-        setUpButtons(scene);
+        setUpCalculatorButtons(scene);
 
         //Init listeners for shortcut keys
         initKeyboardShortcutListeners(scene);
@@ -121,7 +119,7 @@ public class CalculatorController {
         //Init listeners for resizing button
         initResizeListeners(scene);
 
-        displayField.setText(formatInputNumber());
+        displayField.setText(formatInput());
     }
 
     /**
@@ -134,10 +132,10 @@ public class CalculatorController {
         CalculatorButton cb = valueOf(event);
 
         if (noError) {
-            InputNumber.addToInput(new BigDecimal(cb.getValue()));
-            model.addNumber(InputNumber.getInput());
+            addToInput(cb.getValue());
+            model.addNumber(getInput());
 
-            displayField.setText(formatInputNumber());
+            displayField.setText(formatInput());
         }
     }
 
@@ -151,10 +149,10 @@ public class CalculatorController {
         valueOf(event);
 
         if (noError) {
-            String toDisplay = formatInputNumber();
+            String toDisplay = formatInput();
 
-            if (!InputNumber.isPointSet()) {
-                InputNumber.addPoint();
+            if (!isInputPointSet()) {
+                addPointToInput();
                 toDisplay += POINT;
             }
 
@@ -174,8 +172,8 @@ public class CalculatorController {
         String toDisplay;
         if (noError) {
             try {
-                InputNumber.clearInput();
-                model.addBinaryOperator(BinaryOperation.valueOf(cb.name()));
+                clearInput();
+                model.addBinaryOperator(cb.name());
 
                 BigDecimal modelResult = model.getResult();
                 checksLimit(modelResult);
@@ -206,8 +204,8 @@ public class CalculatorController {
         String toDisplay;
         if (noError) {
             try {
-                InputNumber.clearInput();
-                model.addUnaryOperator(UnaryOperation.valueOf(cb.name()));
+                clearInput();
+                model.addUnaryOperator(cb.name());
 
                 BigDecimal operand = model.getOperand();
                 checksLimit(operand);
@@ -236,7 +234,7 @@ public class CalculatorController {
         valueOf(event);
 
         model.clearEntry();
-        InputNumber.clearInput();
+        clearInput();
 
         String result = EMPTY;
         if (noError) {
@@ -259,7 +257,7 @@ public class CalculatorController {
         valueOf(event);
 
         model = new Model();
-        InputNumber.clearInput();
+        clearInput();
         noError = true;
 
         displayField.setText(ZERO);
@@ -267,20 +265,20 @@ public class CalculatorController {
     }
 
     /**
-     * Handles backspace event
+     * Handles backspaceInput event
      *
-     * @param event backspace event
+     * @param event backspaceInput event
      */
     @FXML
     private void handleBackspaceAction(ActionEvent event) {
         valueOf(event);
 
         if (noError) {
-            InputNumber.backspace();
-            model.addNumber(InputNumber.getInput());
+            backspaceInput();
+            model.addNumber(getInput());
 
-            String toDisplay = formatInputNumber();
-            if (InputNumber.getScale() == 0 && InputNumber.isPointSet()) {
+            String toDisplay = formatInput();
+            if (getInputScale() == 0 && isInputPointSet()) {
                 toDisplay += POINT;
             }
 
@@ -301,7 +299,7 @@ public class CalculatorController {
             model.addToMemory();
         }
 
-        InputNumber.clearInput();
+        clearInput();
         UIChanger.disableMemoryClearAndRecallButton(false);
     }
 
@@ -318,7 +316,7 @@ public class CalculatorController {
             model.subtractFromMemory();
         }
 
-        InputNumber.clearInput();
+        clearInput();
         UIChanger.disableMemoryClearAndRecallButton(false);
     }
 
@@ -335,7 +333,7 @@ public class CalculatorController {
             model.saveMemory();
         }
 
-        InputNumber.clearInput();
+        clearInput();
         UIChanger.disableMemoryClearAndRecallButton(false);
     }
 
@@ -352,7 +350,7 @@ public class CalculatorController {
             model.clearMemory();
         }
 
-        InputNumber.clearInput();
+        clearInput();
         UIChanger.disableMemoryClearAndRecallButton(true);
     }
 
@@ -373,7 +371,7 @@ public class CalculatorController {
             }
         }
 
-        InputNumber.clearInput();
+        clearInput();
     }
 
     private void checksLimit(BigDecimal bg) {
@@ -413,7 +411,7 @@ public class CalculatorController {
      *
      * @param scene current scene
      */
-    private void setUpButtons(Scene scene) {
+    private void setUpCalculatorButtons(Scene scene) {
         for (CalculatorButton cb : CalculatorButton.values()) {
             cb.setButton((Button) scene.lookup("#" + cb.name().toLowerCase()));
             if (cb.getButton() == null) {
