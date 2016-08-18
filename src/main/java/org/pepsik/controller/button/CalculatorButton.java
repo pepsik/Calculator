@@ -1,6 +1,7 @@
 package org.pepsik.controller.button;
 
-import javafx.scene.Parent;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.pepsik.model.operation.Constant;
 
@@ -27,20 +28,20 @@ public enum CalculatorButton {
     /**
      * Button binary operation constants
      */
-    ADD(Constant.ADD),
-    SUBTRACT(Constant.SUBTRACT),
-    DIVIDE(Constant.DIVIDE),
-    MULTIPLY(Constant.MULTIPLY),
-    EQUAL(Constant.EQUALS),
+    ADD("+"),
+    SUBTRACT("−"),
+    DIVIDE("÷"),
+    MULTIPLY("×"),
+    EQUAL("="),
 
     /**
      * Button unary operation constants
      */
-    SQUARE(Constant.SQUARE),
-    SQUARE_ROOT(Constant.SQUARE_ROOT),
-    FRACTION(Constant.FRACTION),
-    NEGATE(Constant.NEGATE),
-    PERCENT(Constant.PERCENT),
+    SQUARE("sqr"),
+    SQUARE_ROOT("√"),
+    FRACTION("1/"),
+    NEGATE("negate"),
+    PERCENT("%"),
 
     /**
      * Point constant
@@ -50,6 +51,7 @@ public enum CalculatorButton {
     /**
      * Clear button constants
      */
+    @FXML
     CLEAR_ENTRY("CE"),
     CLEAR_ALL("C"),
 
@@ -82,43 +84,32 @@ public enum CalculatorButton {
     }
 
     /**
-     * Set Button collection to constants
-     *
-     * @param root node root hierarchy
-     */
-    public static void setButtons(Parent root) {
-        for (CalculatorButton cb : values()) {
-            cb.button = (Button) root.lookup("#" + cb.name().toLowerCase());
-            if (cb.button == null) {
-                throw new RuntimeException("Button NOT FOUND! - " + cb.name());
-            }
-        }
-    }
-
-    /**
      * Return string button presentation by FXML Button
      *
-     * @param button FXML Node Button
+     * @param event FXML Node Button
      * @return String represents correspond button
      * @throws IllegalArgumentException in case button not found
      */
-    public static String valueOf(Button button) {
+    public static CalculatorButton valueOf(ActionEvent event) {
+        Button button = (Button) event.getSource();
+
         for (CalculatorButton cb : values()) {
             if (cb.button.equals(button)) {
-                return cb.value;
+                return cb;
             }
         }
         throw new IllegalArgumentException("No match button found to " + button);
+    }
+
+    public void setButton(Button button) {
+        this.button = button;
     }
 
     public Button getButton() {
         return button;
     }
 
-    @Override
-    public String toString() {
-        return "CalculatorButton{" +
-                ", button=" + button +
-                '}';
+    public String getValue() {
+        return value;
     }
 }

@@ -11,19 +11,23 @@ import static java.math.BigDecimal.ZERO;
  * Class represents an input number which used in Controller {@link org.pepsik.controller.CalculatorController#handleDigitAction(ActionEvent)} method
  */
 public class InputNumber {
+
     /**
-     * Maximum input number
+     * Maximum digits count
      */
     private static final int MAX_DIGITS = 16;
+
     /**
-     * Constant of input number
+     * Decimal part
      */
     private static short scale;
+
+    private static boolean isPointSet = false;
 
     /**
      * Input number
      */
-    private static BigDecimal input;
+    private static BigDecimal input = ZERO;
 
     /**
      * Add input digit to input number
@@ -31,19 +35,13 @@ public class InputNumber {
      * @param value input digit
      */
     public static void addToInput(BigDecimal value) {
-        if (input == null) {
-            input = value;
-            return;
-        }
-
-        boolean hasPermission = canInput(input); //todo name
+        boolean hasPermission = canInput();
         if (hasPermission) {
-            if (scale != 0) {
-                input = input.add(value.movePointLeft(scale));
+            if (isPointSet) {
                 scale++;
-            } else {
-                input = value.add(input.multiply(TEN));
             }
+
+            input = input.multiply(TEN).add(value);
         }
     }
 
@@ -53,17 +51,14 @@ public class InputNumber {
      * @return actual input number
      */
     public static BigDecimal getInput() {
-        return input;
+        return input.movePointLeft(scale);
     }
 
     /**
      * Adds point to input number
      */
     public static void addPoint() {
-        if (input == null) {
-            input = ZERO;
-        }
-        scale++;
+        isPointSet = true;
     }
 
     /**
@@ -72,7 +67,7 @@ public class InputNumber {
      * @return bool SCALE if was set
      */
     public static boolean isPointSet() {
-        return scale != 0;
+        return isPointSet;
     }
 
     /**
@@ -88,19 +83,15 @@ public class InputNumber {
      * Backspace operation on input number
      */
     public static void backspace() {
-        if (input != null) {
-            if (scale == 0) {
+        if (isPointSet) {
+            if (scale > 0) {
                 input = input.divideToIntegralValue(TEN);
-            } //convert to string and remove last digit
-            else {
-                String temp = input.toString();  /// TODO: add comment
-                if (temp.length() > 1) {
-                    input = new BigDecimal(temp.substring(0, temp.length() - 1));
-                } else {
-                    input = ZERO;
-                }
                 scale--;
+            } else {
+                isPointSet = false;
             }
+        } else {
+            input = input.divideToIntegralValue(TEN);
         }
     }
 
@@ -109,16 +100,16 @@ public class InputNumber {
      */
     public static void clearInput() {
         scale = 0;
-        input = null;
+        input = ZERO;
+        isPointSet = false;
     }
 
     /**
      * Checks if limit input digits is reached
      *
-     * @param n number to check
      * @return bool
      */
-    private static boolean canInput(BigDecimal n) {
-        return n.precision() - scale < MAX_DIGITS && scale < MAX_DIGITS;
+    private static boolean canInput() {
+        return input.precision() < MAX_DIGITS && scale < MAX_DIGITS;
     }
 }

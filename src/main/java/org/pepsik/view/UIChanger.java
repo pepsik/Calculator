@@ -26,7 +26,7 @@ public class UIChanger {
     /**
      * Boundary calculator width for change font size
      */
-    public static final int BOUNDARY_WIDTH = 270;//todo see Dimension
+    public static final int BOUNDARY_WIDTH = 270;
 
     /**
      * Boundary calculator height for change font size

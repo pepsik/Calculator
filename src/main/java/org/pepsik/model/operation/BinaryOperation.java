@@ -1,5 +1,7 @@
 package org.pepsik.model.operation;
 
+import org.pepsik.model.Model;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -7,64 +9,36 @@ import java.math.RoundingMode;
  * This enum represents binary operation. Each constant consist correspond string presentation and logic to operate.
  */
 public enum BinaryOperation {
-    ADD(Constant.ADD) {
+    ADD {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             return f.add(s);
         }
     },
-    SUBTRACT(Constant.SUBTRACT) {
+    SUBTRACT {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             return f.subtract(s);
         }
     },
-    DIVIDE(Constant.DIVIDE) {
+    DIVIDE {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.divide(s, Constant.SCALE, BigDecimal.ROUND_HALF_UP);
+            return f.divide(s, Model.SCALE * 2, BigDecimal.ROUND_HALF_UP);
         }
     },
-    MULTIPLY(Constant.MULTIPLY) {
+    MULTIPLY {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
-            return f.multiply(s).setScale(Constant.SCALE, RoundingMode.HALF_UP);
+            return f.multiply(s).setScale(Model.SCALE * 2, RoundingMode.HALF_UP);
         }
     },
-    EQUAL(Constant.EQUALS) {
+    EQUAL {
         @Override
         public BigDecimal execute(BigDecimal f, BigDecimal s) {
             throw new RuntimeException("EQUAL NOT EXECUTES HERE");
         }
     };
-
-    /**
-     * Constant for binary operation constant
-     */
-
-    /**
-     * String representation of operator
-     */
-    private String operator;
-
-    BinaryOperation(String operator) {
-        this.operator = operator;
-    }
-
-    /**
-     * Finds binary operation by string
-     *
-     * @param operator string represents operation
-     * @return binary operation or null if no such found
-     */
-    public static BinaryOperation find(String operator) {
-        for (BinaryOperation value : values()) {
-            if (value.getOperator().equals(operator)) { //todo exlude variable
-                return value;
-            }
-        }
-        throw new RuntimeException("Binary operation not found!" + operator);
-    }
 
     /**
      * Executes operation with 2 values
@@ -74,8 +48,4 @@ public enum BinaryOperation {
      * @return result operation
      */
     public abstract BigDecimal execute(BigDecimal f, BigDecimal s);
-
-    public String getOperator() {
-        return operator;
-    }
 }

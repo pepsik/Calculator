@@ -2,7 +2,6 @@ package org.pepsik.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,14 +12,16 @@ import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.controller.util.InputNumber;
 import org.pepsik.model.Model;
 import org.pepsik.model.operation.BinaryOperation;
-import org.pepsik.model.operation.Constant;
 import org.pepsik.model.operation.UnaryOperation;
-import org.pepsik.controller.util.TextFormatter;
 import org.pepsik.view.UIChanger;
 
 import java.math.BigDecimal;
 
-import static java.math.BigDecimal.ZERO;
+import static java.math.BigDecimal.ONE;
+import static org.pepsik.controller.button.CalculatorButton.valueOf;
+import static org.pepsik.controller.util.TextFormatter.display;
+import static org.pepsik.controller.util.TextFormatter.formatInputNumber;
+import static org.pepsik.controller.util.TextFormatter.history;
 
 /**
  * Controller for handle calculator events and display calculation results and history
@@ -53,6 +54,21 @@ public class CalculatorController {
     private static final int MAX_WIDTH = 550;
 
     /**
+     * Default scale for binary operations
+     */
+    private static final int SCALE = 16;
+
+    /**
+     * Empty string
+     */
+    private static final String EMPTY = "";
+
+    /**
+     * String contains zero number
+     */
+    private static final String ZERO = "0";
+
+    /**
      * Calculator display field
      */
     @FXML
@@ -75,6 +91,25 @@ public class CalculatorController {
      */
     private Model model = new Model();
 
+    public void setStageAndSetupListeners(Stage stage) { //// TODO: refact
+        stage.setTitle("Calculator");
+        Scene scene = displayField.getScene();
+
+        //Init max, min, pref sizes
+        setUpApplicationSizes(stage);
+
+        //Setup all node button to enums
+        setUpButtons(scene.getRoot());
+
+        //Init listeners for shortcut keys
+        initKeyboardShortcutListeners(scene);
+
+        //Init listeners for resizing button
+        initResizeListeners(scene);
+
+        displayField.setText(formatInputNumber());
+    }
+
     /**
      * Handles digit event
      *
@@ -82,14 +117,13 @@ public class CalculatorController {
      */
     @FXML
     private void handleDigitAction(ActionEvent event) {
-        String number = CalculatorButton.valueOf((Button) event.getSource());
+        CalculatorButton cb = valueOf(event);
 
         if (noError) {
-            InputNumber.addToInput(new BigDecimal(number));
+            InputNumber.addToInput(new BigDecimal(cb.getValue()));
             model.addNumber(InputNumber.getInput());
 
-            displayField.setText(TextFormatter.formatInputNumber());
-
+            displayField.setText(formatInputNumber());
         }
     }
 
@@ -100,14 +134,17 @@ public class CalculatorController {
      */
     @FXML
     private void handlePointAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
-        //todo exlude to field
+        valueOf(event);
+
         if (noError) {
+            String toDisplay = formatInputNumber();
+
             if (!InputNumber.isPointSet()) {
                 InputNumber.addPoint();
+                toDisplay += ".";
             }
 
-            displayField.setText(TextFormatter.formatInputNumber());
+            displayField.setText(toDisplay);
         }
     }
 
@@ -118,27 +155,28 @@ public class CalculatorController {
      */
     @FXML
     private void handleBinaryOperationAction(ActionEvent event) {
-        String operator = CalculatorButton.valueOf((Button) event.getSource());
-        int scale = 16; //scale for binary operations display output
+        CalculatorButton cb = valueOf(event);
 
+        String toDisplay;
         if (noError) {
             try {
                 InputNumber.clearInput();
-                model.addBinaryOperator(BinaryOperation.find(operator));//todo replace with mapping
+                model.addBinaryOperator(BinaryOperation.valueOf(cb.name()));
 
-                checksLimit(model.getResult());
+                BigDecimal modelResult = model.getResult();
+                checksLimit(modelResult);
 
-                displayField.setText(TextFormatter.display(model.getResult(), scale));
-                displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
+                toDisplay = display(modelResult, SCALE);
+                displayHistory.setText(history(model.getCurrentExpression(), model.getOperand(), SCALE));
             } catch (ArithmeticException e) {
                 noError = false;
-
-                displayField.setText("Cannot divide by zero");
+                toDisplay = "Cannot divide by zero";
             } catch (RuntimeException ex) {
                 noError = false;
-
-                displayField.setText("Limit reached!");
+                toDisplay = "Limit reached!";
             }
+
+            displayField.setText(toDisplay);
         }
     }
 
@@ -149,27 +187,28 @@ public class CalculatorController {
      */
     @FXML
     private void handleUnaryOperationAction(ActionEvent event) {
-        String operator = CalculatorButton.valueOf((Button) event.getSource());
-        int scale = 15;// scale for unary operations display output
+        CalculatorButton cb = valueOf(event);
 
+        String toDisplay;
         if (noError) {
             try {
                 InputNumber.clearInput();
-                model.addUnaryOperator(UnaryOperation.find(operator));
+                model.addUnaryOperator(UnaryOperation.valueOf(cb.name()));
 
-                checksLimit(model.getOperand());
+                BigDecimal operand = model.getOperand();
+                checksLimit(operand);
 
-                displayField.setText(TextFormatter.display(model.getOperand(), scale));
-                displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
+                toDisplay = display(operand, SCALE - 1); //unary scale less then binary by 1
+                displayHistory.setText(history(model.getCurrentExpression(), operand, SCALE));
             } catch (ArithmeticException e) {
                 noError = false;
-
-                displayField.setText("Cannot divide by zero");
+                toDisplay = "Cannot divide by zero";
             } catch (RuntimeException ex) {
                 noError = false;
-
-                displayField.setText("Limit reached!");
+                toDisplay = "Limit reached!";
             }
+
+            displayField.setText(toDisplay);
         }
     }
 
@@ -180,19 +219,20 @@ public class CalculatorController {
      */
     @FXML
     private void handleClearAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
+        valueOf(event);
 
         model.clearEntry();
         InputNumber.clearInput();
-        displayField.setText(ZERO.toString());
 
-        if (!noError) {
-            displayHistory.setText("");
+        String result = EMPTY;
+        if (noError) {
+            result = history(model.getCurrentExpression(), model.getOperand(), SCALE);
         } else {
-            displayHistory.setText(TextFormatter.history(model.getCurrentExpression(), model.getOperand()));
+            noError = true;
         }
 
-        noError = true;
+        displayField.setText(ZERO);
+        displayHistory.setText(result);
     }
 
     /**
@@ -202,14 +242,14 @@ public class CalculatorController {
      */
     @FXML
     private void handleClearAllAction(ActionEvent event) {
-        CalculatorButton.valueOf(((Button) event.getSource()));
+        valueOf(event);
 
         model = new Model();
         InputNumber.clearInput();
         noError = true;
 
-        displayField.setText("0");
-        displayHistory.setText("");
+        displayField.setText(ZERO);
+        displayHistory.setText(EMPTY);
     }
 
     /**
@@ -219,17 +259,18 @@ public class CalculatorController {
      */
     @FXML
     private void handleBackspaceAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
+        valueOf(event);
 
         if (noError) {
             InputNumber.backspace();
-            if (InputNumber.getInput() != null) {
-                model.addNumber(InputNumber.getInput());
+            model.addNumber(InputNumber.getInput());
 
-                displayField.setText(InputNumber.getInput().toPlainString());
-            } else {
-                displayField.setText("0");
+            String toDisplay = formatInputNumber();
+            if (InputNumber.getScale() == 0 && InputNumber.isPointSet()) {
+                toDisplay += ".";
             }
+
+            displayField.setText(toDisplay);
         }
     }
 
@@ -240,7 +281,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleMemoryAddAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
+        valueOf(event);
 
         if (noError) {
             model.addToMemory();
@@ -257,7 +298,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleMemorySubtractAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
+        valueOf(event);
 
         if (noError) {
             model.subtractFromMemory();
@@ -274,7 +315,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleMemorySaveAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
+        valueOf(event);
 
         if (noError) {
             model.saveMemory();
@@ -291,7 +332,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleMemoryClearAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
+        valueOf(event);
 
         if (noError) {
             model.clearMemory();
@@ -308,14 +349,13 @@ public class CalculatorController {
      */
     @FXML
     private void handleMemoryRecallAction(ActionEvent event) {
-        CalculatorButton.valueOf((Button) event.getSource());
-        int scale = 16; //scale for output memory SCALE
+        valueOf(event);
 
         if (noError) {
             BigDecimal memory = model.getMemory();
 
             if (memory != null) {
-                displayField.setText(TextFormatter.display(memory, scale));
+                displayField.setText(display(memory, SCALE));
             }
         }
 
@@ -323,13 +363,13 @@ public class CalculatorController {
     }
 
     private void checksLimit(BigDecimal bg) {
-        if (bg.compareTo(ZERO) != 0) {
+        if (bg.compareTo(BigDecimal.ZERO) != 0) {
             //lower limit
-            if (bg.abs().movePointRight(Constant.SCALE / 2).compareTo(BigDecimal.ONE) < 0) {
+            if (bg.movePointRight(Model.SCALE).abs().compareTo(ONE) < 0) {
                 throw new RuntimeException("Limit is reached!");
             }
             //upper limit
-            if (bg.precision() - bg.scale() > Constant.SCALE / 2) {
+            if (bg.precision() - bg.scale() > Model.SCALE) {
                 throw new RuntimeException("Limit is reached!");
             }
         }
@@ -360,7 +400,12 @@ public class CalculatorController {
      * @param root current root
      */
     private void setUpButtons(Parent root) {
-        CalculatorButton.setButtons(root);
+        for (CalculatorButton cb : CalculatorButton.values()) {
+            cb.setButton((Button) root.lookup("#" + cb.name().toLowerCase()));
+            if (cb.getButton() == null) {
+                throw new RuntimeException("Button NOT FOUND! - " + cb.name());
+            }
+        }
     }
 
     /**
@@ -394,23 +439,5 @@ public class CalculatorController {
             UIChanger.resizeButtons();
             UIChanger.resizeDisplay();
         });
-    }
-
-    public void setStageAndSetupListeners(Stage stage) {
-        stage.setTitle("Calculator");
-
-        //Init max, min, pref sizes
-        setUpApplicationSizes(stage);
-
-        //Setup all node button to enums
-        setUpButtons(displayField.getParent());
-
-        //Init listeners for shortcut keys
-        initKeyboardShortcutListeners(displayField.getScene());
-
-        //Init listeners for resizing button
-        initResizeListeners(displayField.getScene());
-
-        displayField.setText("0");
     }
 }

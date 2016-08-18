@@ -13,7 +13,7 @@ import static org.pepsik.controller.button.CalculatorButton.*;
 /**
  * Class represents keyboard shortcuts and simply fires correspond calculator button
  */
-public class KeyboardShortcut {//todo simplify
+public class KeyboardShortcut {
     /**
      * Map contains single keyboard button shortcut maps to calculator button
      */

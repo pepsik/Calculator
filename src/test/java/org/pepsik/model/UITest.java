@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.pepsik.MainApp;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.helper.UITestButton;
-import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.Constant;
 
 import java.io.IOException;
@@ -130,7 +129,10 @@ public class UITest {
         assertExpression("123,456.", "1 2 3 4 5 6.");
         assertExpression("0.12", ".1 2");
         assertExpression("0.1234567890", ".1 2 3 4 5 6 7 8 9 0");
-        assertExpression("0.000000000000000", "0.000000000000000000100120");
+        assertExpression("0.0000000000000000", "0.000000000000000000100120");
+        assertExpression("123,456,789,012,345.1", "123456789012345.123456");
+
+        assertBackspace("0.0000000000000001", "0.0000000000000001");
 
         assertExpression("1,111,111,111,111,111", "1111111111111111");
 
@@ -654,6 +656,9 @@ public class UITest {
         assertExpression("Limit reached!", "square(square(square(square(square(square(square(9999999999999999)");
         assertExpression("Limit reached!", "1/9999999999999999========MS/MR==========");
         assertExpression("Limit reached!", "1*9999999999999999========MS*MR==========");
+
+        assertExpression("9.999999999999968E511", "1*9999999999999999================================");
+        assertExpression("9.999999999999938E991", "1*9999999999999999==============================================================");
     }
 
     @Test
@@ -826,24 +831,38 @@ public class UITest {
 
     @Test
     public void testBackspaceButton() {
-        assertBackspace("1234", "1234567<<<");
+        assertBackspace("1,234", "1234567<<<");
         assertBackspace("0", "1234567<<<<<<<");
         assertBackspace("0", "1234567<<<<<<<<<<<<");
         assertBackspace("5.0", "5.0123<<<");
         assertBackspace("5.1234", "5.12340<");
-        assertBackspace("5", "5.12340<<<<<");
+        assertBackspace("5.", "5.12340<<<<<");
+        assertBackspace("5", "5.12340<<<<<<");
+
+        assertBackspace("0.00", "0.001<");
+        assertBackspace("0.0", "0.001<<");
+        assertBackspace("0.", "0.001<<<");
+        assertBackspace("0", "0.001<<<<");
+        assertBackspace("0", "0.001<<<<<");
+
+        assertBackspace("0.000000000000000", "0.0000000000000001<");
+        assertBackspace("0.00000000000000", "0.0000000000000001<<");
+        assertBackspace("0.0", "0.0000000000000001<<<<<<<<<<<<<<<");
+        assertBackspace("0.", "0.0000000000000001<<<<<<<<<<<<<<<<");
+        assertBackspace("0", "0.0000000000000001<<<<<<<<<<<<<<<<<");
 
         assertBackspace("53", "12 + 538< ");
         assertBackspace("1", "12 * 2 - 111 <<");
         assertBackspace("0", "12 * 2 - 111 + 123 <<<");
-        assertBackspace("0", "12 * 2 - 111 + 123 <<<");
+        assertBackspace("0", "12 * 2 - 111 + 123 <<<<<");
 
         assertBackspace("0", "1.<<<");
-        assertBackspace("0", "11.1<<<");
+        assertBackspace("1", "11.1<<<");
         assertBackspace("0", "11.12<<<<<");
         assertBackspace("0", "0.<");
-        assertBackspace("0", "0.1<");
+        assertBackspace("0.", "0.1<");
         assertBackspace("0.1", "0.12<");
+        assertBackspace("1", "1.12<<<");
     }
 
     @Test
@@ -860,10 +879,10 @@ public class UITest {
         assertKeyPressOnDisplay("0", DIGIT0);
         assertKeyPressOnDisplay("0.", PERIOD);
 
-        assertKeyPressOnHistory(Constant.MULTIPLY, KeyCode.MULTIPLY);
-        assertKeyPressOnHistory(Constant.DIVIDE, SLASH);
-        assertKeyPressOnHistory(Constant.ADD, PLUS);
-        assertKeyPressOnHistory(Constant.SUBTRACT, MINUS);
+        assertKeyPressOnHistory(CalculatorButton.MULTIPLY.getValue(), KeyCode.MULTIPLY);
+        assertKeyPressOnHistory(CalculatorButton.DIVIDE.getValue(), SLASH);
+        assertKeyPressOnHistory(CalculatorButton.ADD.getValue(), PLUS);
+        assertKeyPressOnHistory(CalculatorButton.SUBTRACT.getValue(), MINUS);
 
         assertKeyPressOnDisplayWithExpression("9", EQUALS, "5+4", false);
         assertKeyPressOnDisplayWithExpression("1", ENTER, "5-4", false);
@@ -917,9 +936,9 @@ public class UITest {
         assertKeyPressOnDisplay("9", NUMPAD9);
         assertKeyPressOnDisplay("0", NUMPAD0);
         assertKeyPressOnDisplay("0.", DECIMAL);
-        assertKeyPressOnHistory(Constant.DIVIDE, KeyCode.DIVIDE);
-        assertKeyPressOnHistory(Constant.ADD, KeyCode.ADD);
-        assertKeyPressOnHistory(Constant.SUBTRACT, KeyCode.SUBTRACT);
+        assertKeyPressOnHistory(CalculatorButton.DIVIDE.getValue(), KeyCode.DIVIDE);
+        assertKeyPressOnHistory(CalculatorButton.ADD.getValue(), KeyCode.ADD);
+        assertKeyPressOnHistory(CalculatorButton.SUBTRACT.getValue(), KeyCode.SUBTRACT);
     }
 
     @Test
@@ -1139,7 +1158,7 @@ public class UITest {
             }
         }
 
-        assertEquals((int)d, (int)display.getFont().getSize());
+        assertEquals((int) d, (int) display.getFont().getSize());
     }
 
     private void assertHistoryExpressionDisplayWithoutClear(String expect, String input) {

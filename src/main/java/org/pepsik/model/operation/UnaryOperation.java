@@ -1,5 +1,7 @@
 package org.pepsik.model.operation;
 
+import org.pepsik.model.Model;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -9,49 +11,45 @@ import java.math.RoundingMode;
  * This enum represents unary operation. Each constant consist correspond string presentation and logic to operate.
  */
 public enum UnaryOperation {
-    SQUARE(Constant.SQUARE) {
+    SQUARE {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return value.multiply(value).setScale(Constant.SCALE, RoundingMode.HALF_UP);
+            return value.multiply(value).setScale(Model.SCALE, RoundingMode.HALF_UP);
         }
     },
-    SQRT(Constant.SQUARE_ROOT) {
+    SQUARE_ROOT {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return sqrt(value, MathContext.DECIMAL128);
         }
     },
-    FRACTION(Constant.FRACTION) {
+    FRACTION {
         @Override
         public BigDecimal execute(BigDecimal value) {
-            return new BigDecimal(BigInteger.ONE).divide(value, Constant.SCALE, RoundingMode.HALF_UP);
+            return new BigDecimal(BigInteger.ONE).divide(value, Model.SCALE * 2, RoundingMode.HALF_UP);
         }
     },
-    NEGATE(Constant.NEGATE) {
+    NEGATE {
         @Override
         public BigDecimal execute(BigDecimal value) {
             return value.negate();
         }
     },
-    PERCENT(Constant.PERCENT) { //todo
+    PERCENT { //todo
+
         @Override
         public BigDecimal execute(BigDecimal value) {
-            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Constant.SCALE, BigDecimal.ROUND_HALF_UP));
+            BigDecimal result = operand.multiply(value.divide(new BigDecimal(100), Model.SCALE * 2, BigDecimal.ROUND_HALF_UP));
             operand = null;
             return result;
         }
     };
 
     /**
-     * String representation of operator
-     */
-    private String operator;
-
-    /**
      * Operand which operate to. Used only for PERCENT operation
      */
     private static BigDecimal operand;
-    public static final BigDecimal TWO = BigDecimal.valueOf(2L); //todo
+    private static final BigDecimal TWO = BigDecimal.valueOf(2); //todo
 
     /**
      * Sets operand for percent calculation (first SCALE which is calculated from the percentage)
@@ -60,24 +58,6 @@ public enum UnaryOperation {
      */
     public static void setOperand(BigDecimal operand) {
         UnaryOperation.operand = operand;
-    }
-
-    /**
-     * Finds unary operation by string
-     *
-     * @param operator String represent operation
-     * @return unary operation or null if no such found
-     */
-    public static UnaryOperation find(String operator) {
-        for (UnaryOperation u : values()) {
-            if (u.getOperator().equals(operator))
-                return u;
-        }
-        throw new RuntimeException("Unary operation not found! " + operator);
-    }
-
-    UnaryOperation(String operator) {
-        this.operator = operator;
     }
 
     /**
@@ -109,8 +89,4 @@ public enum UnaryOperation {
      * @return result
      */
     public abstract BigDecimal execute(BigDecimal value);
-
-    public String getOperator() {
-        return operator;
-    }
 }

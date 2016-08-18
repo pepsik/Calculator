@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+import static java.math.BigDecimal.ZERO;
 import static org.pepsik.model.operation.BinaryOperation.*;
 import static org.pepsik.model.operation.UnaryOperation.PERCENT;
 
@@ -15,6 +16,11 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
  * result of first stage used in second stage and last stage represent result of current expression.
  */
 public class Model {
+
+    /**
+     * Calculation scale
+     */
+    public static final int SCALE = 1_000;
 
     /**
      * Expression represent sequence of stages
@@ -39,7 +45,7 @@ public class Model {
     /**
      * Result of last complete stage
      */
-    private BigDecimal result = new BigDecimal(BigInteger.ZERO);
+    private BigDecimal result = ZERO;
 
     /**
      * Calculator memory
@@ -133,16 +139,16 @@ public class Model {
      */
     public void addToMemory() {
         if (memory == null) {
-            memory = new BigDecimal("0");
+            memory = ZERO;
         }
 
-        BigDecimal r;
-        if (currentStage.getOperand() != null) {
-            r = currentStage.getOperand();
-        } else {
-            r = result;
+        BigDecimal toMemory = result;
+        BigDecimal operand = currentStage.getOperand();
+        if (operand != null) {
+            toMemory = operand;
         }
-        memory = memory.add(r);
+
+        memory = memory.add(toMemory);
     }
 
     /**
@@ -150,27 +156,28 @@ public class Model {
      */
     public void subtractFromMemory() {
         if (memory == null) {
-            memory = new BigDecimal(BigInteger.ZERO);
+            memory = ZERO;
         }
 
-        BigDecimal r;
-        if (currentStage.getOperand() != null) {
-            r = currentStage.getOperand();
-        } else {
-            r = result;
+        BigDecimal toMemory = result;
+        BigDecimal operand = currentStage.getOperand();
+        if (operand != null) {
+            toMemory = operand;
         }
-        memory = memory.subtract(r);
+
+        memory = memory.subtract(toMemory);
     }
 
     /**
      * Save to calculator memory
      */
     public void saveMemory() {
-        if (currentStage.getOperand() != null) {
-            memory = currentStage.getOperand();
-        } else {
-            memory = result;
+        BigDecimal toMemory = result;
+        BigDecimal operand = currentStage.getOperand();
+        if (operand != null) {
+            toMemory = operand;
         }
+        memory = toMemory;
     }
 
     /**
@@ -226,14 +233,14 @@ public class Model {
             BinaryOperation operator = stage.getBinaryOperator();
             BigDecimal operand = stage.getOperand();
 
-            if (operand != null && operator != null ) {
+            if (operand != null && operator != null) {
                 return stage;
             }
         }
 
         if (history.isEmpty()) {
             Stage stage = new Stage();
-            stage.setOperand(new BigDecimal(BigInteger.ZERO));
+            stage.setOperand(ZERO);
             return stage;
         } else {
             //get last stage in previous expression
