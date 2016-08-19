@@ -37,7 +37,7 @@ public class InputNumber {
      *
      * @param digit input digit
      */
-    public static void addToInput(int digit) {
+    public static void addToInput(String digit) {
         boolean hasPermission = canInput();
         if (hasPermission) {
             if (isPointSet) {

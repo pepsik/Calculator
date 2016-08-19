@@ -1,6 +1,5 @@
 package org.pepsik.controller.button;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
 /**
@@ -60,14 +59,12 @@ public enum CalculatorButton {
     /**
      * Return string button presentation by FXML Button
      *
-     * @param event FXML Node Button
+     * @param button FXML Node Button
      * @return String represents correspond button
      * @throws IllegalArgumentException in case button not found
      */
-    public static CalculatorButton valueOf(ActionEvent event) {
-        Button button = (Button) event.getSource();
-
-        for (CalculatorButton cb : values()) {
+    public static CalculatorButton valueOf(Button button) {
+        for (CalculatorButton cb : values()) { //todo map
             if (cb.button.equals(button)) {
                 return cb;
             }

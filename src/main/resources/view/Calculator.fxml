@@ -36,22 +36,22 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button id="square_root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="√" textAlignment="CENTER" GridPane.columnIndex="1">
+            <Button id="square_root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" styleClass="top-button" text="√" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="percent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="\%" textAlignment="CENTER">
+            <Button id="percent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" styleClass="top-button" text="\%" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="square" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="x²" textAlignment="CENTER" GridPane.columnIndex="2">
+            <Button id="square" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" styleClass="top-button" text="x²" textAlignment="CENTER" GridPane.columnIndex="2">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="fraction" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" styleClass="top-button" text="¹/x" textAlignment="CENTER" GridPane.columnIndex="3">
+            <Button id="fraction" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" styleClass="top-button" text="¹/x" textAlignment="CENTER" GridPane.columnIndex="3">
                <font>
                   <Font size="24.0" />
                </font>
@@ -71,7 +71,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="divide" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBinaryOperationAction" text="÷" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <Button id="divide" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" text="÷" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
@@ -91,7 +91,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="multiply" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBinaryOperationAction" text="×" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <Button id="multiply" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" text="×" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2">
                <font>
                   <Font size="24.0" />
                </font>
@@ -111,7 +111,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="subtract" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBinaryOperationAction" text="−" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="3">
+            <Button id="subtract" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" text="−" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="3">
                <font>
                   <Font size="24.0" />
                </font>
@@ -131,12 +131,12 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="add" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBinaryOperationAction" text="+" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <Button id="add" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" text="+" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="4">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="negate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleUnaryOperationAction" text="±" textAlignment="CENTER" GridPane.rowIndex="5">
+            <Button id="negate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" text="±" textAlignment="CENTER" GridPane.rowIndex="5">
                <font>
                   <Font size="24.0" />
                </font>
@@ -151,7 +151,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button id="equal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBinaryOperationAction" styleClass="equal" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="5">
+            <Button id="equal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" styleClass="equal" text="=" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="5">
                <font>
                   <Font size="24.0" />
                </font>
@@ -175,31 +175,31 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button id="memory_add" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryAddAction" text="M+" GridPane.columnIndex="2">
+            <Button id="memory_add" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryAction" text="M+" GridPane.columnIndex="2">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                   <String fx:value="memory_font" />
                </styleClass></Button>
-            <Button id="memory_recall" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryRecallAction" text="MR" GridPane.columnIndex="1">
+            <Button id="memory_recall" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryAction" text="MR" GridPane.columnIndex="1">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                   <String fx:value="memory_font" />
                </styleClass></Button>
-            <Button id="memory_subtract" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemorySubtractAction" text="M-" GridPane.columnIndex="3">
+            <Button id="memory_subtract" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryAction" text="M-" GridPane.columnIndex="3">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                   <String fx:value="memory_font" />
                </styleClass></Button>
-            <Button id="memory_save" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemorySaveAction" text="MS" GridPane.columnIndex="4">
+            <Button id="memory_save" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryAction" text="MS" GridPane.columnIndex="4">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />
                   <String fx:value="memory_font" />
                </styleClass></Button>
-            <Button id="memory_clear" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryClearAction" text="MC">
+            <Button id="memory_clear" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleMemoryAction" text="MC">
                <styleClass>
                   <String fx:value="top-button" />
                   <String fx:value="memory-button" />

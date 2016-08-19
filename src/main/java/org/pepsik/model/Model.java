@@ -76,11 +76,9 @@ public class Model {
     /**
      * Adds binary operator to expression and show show expression on display field
      *
-     * @param str input binary operator
+     * @param inputOperator input binary operator
      */
-    public void addBinaryOperator(String str) {
-        BinaryOperation inputOperator = BinaryOperation.valueOf(str);
-
+    public void addBinaryOperator(BinaryOperation inputOperator) {
         //EQUAL operator is unique and calculated separately
         if (inputOperator.equals(EQUAL)) {
             calculateEqual();
@@ -123,10 +121,9 @@ public class Model {
     /**
      * Adds and calculates unary operator and show expression on display field
      *
-     * @param str unary operator
+     * @param operator unary operator
      */
-    public void addUnaryOperator(String str) {
-        UnaryOperation operator = UnaryOperation.valueOf(str);
+    public void addUnaryOperator(UnaryOperation operator) {
         currentStage.addUnaryOperator(operator);
         BigDecimal operand = currentStage.getOperand();
 

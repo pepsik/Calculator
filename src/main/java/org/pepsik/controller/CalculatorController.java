@@ -9,16 +9,21 @@ import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.model.Model;
+import org.pepsik.model.operation.BinaryOperation;
+import org.pepsik.model.operation.UnaryOperation;
 import org.pepsik.view.UIChanger;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.math.BigDecimal.ONE;
-import static org.pepsik.controller.button.CalculatorButton.valueOf;
+import static org.pepsik.controller.button.CalculatorButton.*;
 import static org.pepsik.controller.util.InputNumber.*;
 import static org.pepsik.controller.util.TextFormatter.display;
 import static org.pepsik.controller.util.TextFormatter.formatInput;
 import static org.pepsik.controller.util.TextFormatter.history;
+import static org.pepsik.view.UIChanger.disableMemoryClearAndRecallButton;
 
 /**
  * Controller for handle calculator events and display calculation results and history
@@ -129,10 +134,10 @@ public class CalculatorController {
      */
     @FXML
     private void handleDigitAction(ActionEvent event) {
-        CalculatorButton cb = valueOf(event);
+        CalculatorButton cb = valueOf((Button) event.getSource());
 
         if (noError) {
-            addToInput(Integer.valueOf(cb.getValue()));
+            addToInput(cb.getValue());
             model.addNumber(getInput());
 
             displayField.setText(formatInput());
@@ -146,7 +151,7 @@ public class CalculatorController {
      */
     @FXML
     private void handlePointAction(ActionEvent event) {
-        valueOf(event);
+        valueOf((Button) event.getSource());
 
         if (noError) {
             String toDisplay = formatInput();
@@ -160,62 +165,63 @@ public class CalculatorController {
         }
     }
 
+    private static Map<CalculatorButton, BinaryOperation> binaryMapping = new HashMap<>();
+    private static Map<CalculatorButton, UnaryOperation> unaryMapping = new HashMap<>();
+
+    static {
+        binaryMapping.put(ADD, BinaryOperation.ADD);
+        binaryMapping.put(SUBTRACT, BinaryOperation.SUBTRACT);
+        binaryMapping.put(MULTIPLY, BinaryOperation.MULTIPLY);
+        binaryMapping.put(DIVIDE, BinaryOperation.DIVIDE);
+        binaryMapping.put(EQUAL, BinaryOperation.EQUAL);
+
+        unaryMapping.put(SQUARE, UnaryOperation.SQUARE);
+        unaryMapping.put(SQUARE_ROOT, UnaryOperation.SQUARE_ROOT);
+        unaryMapping.put(NEGATE, UnaryOperation.NEGATE);
+        unaryMapping.put(PERCENT, UnaryOperation.PERCENT);
+        unaryMapping.put(FRACTION, UnaryOperation.FRACTION);
+    }
+
     /**
      * Handles binary operation event
      *
      * @param event binary event
      */
     @FXML
-    private void handleBinaryOperationAction(ActionEvent event) {
-        CalculatorButton cb = valueOf(event); //// TODO: 8/18/2016
+    private void handleOperationAction(ActionEvent event) {
+        CalculatorButton cb = valueOf((Button) event.getSource()); //// TODO: 8/18/2016
 
         String toDisplay;
         if (noError) {
             try {
                 clearInput();
-                model.addBinaryOperator(cb.name());
+                BinaryOperation bo = binaryMapping.get(cb);
+                BigDecimal modelValue;
 
-                BigDecimal modelResult = model.getResult();
-                checksLimit(modelResult);
+                if (bo != null) {
+                    model.addBinaryOperator(bo); //todo mapping operators
+                    modelValue = model.getResult();
 
-                toDisplay = display(modelResult, SCALE);
+                    checksLimit(modelValue);
+                    toDisplay = display(modelValue, SCALE);
+                } else {
+                    UnaryOperation uo = unaryMapping.get(cb);
+                    if (uo != null) {
+                        model.addUnaryOperator(uo);
+                        modelValue = model.getOperand();
+
+                        checksLimit(modelValue);
+                        toDisplay = display(modelValue, SCALE - 1); //unary scale less then binary by 1
+                    } else {
+                        throw new RuntimeException("No such operation found by button - " + cb); //todo custom except
+                    }
+                }
+
                 displayHistory.setText(history(model.getCurrentExpression(), model.getOperand(), SCALE));
             } catch (ArithmeticException e) {
                 noError = false;
                 toDisplay = DIVIDE_ZERO_MSG;
-            } catch (RuntimeException ex) {
-                noError = false;
-                toDisplay = LIMIT_MSG;
-            }
-
-            displayField.setText(toDisplay);
-        }
-    }
-
-    /**
-     * Handles unary operation event
-     *
-     * @param event unary event
-     */
-    @FXML
-    private void handleUnaryOperationAction(ActionEvent event) {
-        CalculatorButton cb = valueOf(event);
-
-        String toDisplay;
-        if (noError) {
-            try {
-                clearInput();
-                model.addUnaryOperator(cb.name());//todo mapping operators
-
-                BigDecimal operand = model.getOperand();
-                checksLimit(operand);
-
-                toDisplay = display(operand, SCALE - 1); //unary scale less then binary by 1
-                displayHistory.setText(history(model.getCurrentExpression(), operand, SCALE));
-            } catch (ArithmeticException e) {
-                noError = false;
-                toDisplay = DIVIDE_ZERO_MSG;
-            } catch (RuntimeException ex) {
+            } catch (RuntimeException ex) { //todo handle custom
                 noError = false;
                 toDisplay = LIMIT_MSG;
             }
@@ -231,7 +237,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleClearAction(ActionEvent event) {
-        valueOf(event);
+        valueOf((Button) event.getSource());
 
         model.clearEntry();
         clearInput();
@@ -254,7 +260,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleClearAllAction(ActionEvent event) {
-        valueOf(event);
+        valueOf((Button) event.getSource());
 
         model = new Model();
         clearInput();
@@ -271,7 +277,7 @@ public class CalculatorController {
      */
     @FXML
     private void handleBackspaceAction(ActionEvent event) {
-        valueOf(event);
+        valueOf((Button) event.getSource());
 
         if (noError) {
             backspaceInput();
@@ -292,82 +298,36 @@ public class CalculatorController {
      * @param event memory add event
      */
     @FXML
-    private void handleMemoryAddAction(ActionEvent event) {
-        valueOf(event);
+    private void handleMemoryAction(ActionEvent event) {
+        CalculatorButton cb = valueOf((Button) event.getSource());
 
         if (noError) {
-            model.addToMemory();
-        }
+            if (cb.equals(MEMORY_RECALL)) {
+                BigDecimal memory = model.getMemory();
 
-        clearInput();
-        UIChanger.disableMemoryClearAndRecallButton(false);
-    }
+                if (memory != null) {
+                    displayField.setText(display(memory, SCALE));
+                }
+            }
 
-    /**
-     * Handles memory subtract event
-     *
-     * @param event memory subtract event
-     */
-    @FXML
-    private void handleMemorySubtractAction(ActionEvent event) {
-        valueOf(event);
+            if (cb.equals(MEMORY_CLEAR)) {
+                model.clearMemory();
+                disableMemoryClearAndRecallButton(true);
+            }
 
-        if (noError) {
-            model.subtractFromMemory();
-        }
+            if (cb.equals(MEMORY_ADD)) {
+                model.addToMemory();
+                disableMemoryClearAndRecallButton(false);
+            }
 
-        clearInput();
-        UIChanger.disableMemoryClearAndRecallButton(false);
-    }
+            if (cb.equals(MEMORY_SUBTRACT)) {
+                model.subtractFromMemory();
+                disableMemoryClearAndRecallButton(false);
+            }
 
-    /**
-     * Handles memory save event
-     *
-     * @param event memory save event
-     */
-    @FXML
-    private void handleMemorySaveAction(ActionEvent event) {
-        valueOf(event);
-
-        if (noError) {
-            model.saveMemory();
-        }
-
-        clearInput();
-        UIChanger.disableMemoryClearAndRecallButton(false);
-    }
-
-    /**
-     * Handles memory clear event
-     *
-     * @param event memory clear event
-     */
-    @FXML
-    private void handleMemoryClearAction(ActionEvent event) {
-        valueOf(event);
-
-        if (noError) {
-            model.clearMemory();
-        }
-
-        clearInput();
-        UIChanger.disableMemoryClearAndRecallButton(true);
-    }
-
-    /**
-     * Handles memory recall event
-     *
-     * @param event memory recall event
-     */
-    @FXML
-    private void handleMemoryRecallAction(ActionEvent event) {
-        valueOf(event);
-
-        if (noError) {
-            BigDecimal memory = model.getMemory();
-
-            if (memory != null) {
-                displayField.setText(display(memory, SCALE));
+            if (cb.equals(MEMORY_SAVE)) {
+                model.saveMemory();
+                disableMemoryClearAndRecallButton(false);
             }
         }
 

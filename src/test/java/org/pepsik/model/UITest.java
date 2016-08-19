@@ -58,25 +58,26 @@ public class UITest {
 
         new JFXPanel();
 
-        Platform.runLater(() -> {
-            synchronized (sync) {
-                stage = new Stage();
-                try {
-                    new MainApp().start(stage);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Scene scene = stage.getScene();
-                //setup calculator ui test button
-                UITestButton.setUIButtons();
-                display = (Label) scene.lookup("#display");
-                history = (Label) scene.lookup("#history");
-                sync.notifyAll();
-            }
-        });
-
         synchronized (sync) {
+            Platform.runLater(() -> {
+                synchronized (sync) {
+                    stage = new Stage();
+                    try {
+                        new MainApp().start(stage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Scene scene = stage.getScene();
+                    //setup calculator ui test button
+                    UITestButton.setUIButtons();
+                    display = (Label) scene.lookup("#display");
+                    history = (Label) scene.lookup("#history");
+                    sync.notify();
+                }
+            });
+
+            sync.notify();
             sync.wait();
         }
     }
@@ -1119,14 +1120,15 @@ public class UITest {
     private void waitForCompleteExecution() {
         Object sync = new Object();
 
-        Platform.runLater(() -> {
-            synchronized (sync) {
-                sync.notifyAll();
-            }
-        });
-
         synchronized (sync) {
+            Platform.runLater(() -> {
+                synchronized (sync) {
+                    sync.notify();
+                }
+            });
+
             try {
+                sync.notify();
                 sync.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
