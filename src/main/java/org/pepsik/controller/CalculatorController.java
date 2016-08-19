@@ -200,25 +200,28 @@ public class CalculatorController {
      * Handles binary operation event
      *
      * @param event binary event
+     * @throws OperationNotExistException
      */
     @FXML
     private void handleOperationAction(ActionEvent event) {
-        CalculatorButton cb = valueOf((Button) event.getSource()); //// TODO: 8/18/2016
+        CalculatorButton cb = valueOf((Button) event.getSource());
 
         String toDisplay;
         if (noError) {
             try {
                 clearInput();
-                BinaryOperation binaryOperation = binaryMapping.get(cb);
                 BigDecimal modelValue;
 
+                //if binary operator - calculate binary operation
+                BinaryOperation binaryOperation = binaryMapping.get(cb);
                 if (binaryOperation != null) {
-                    model.addBinaryOperator(binaryOperation);        //todo mapping operators
+                    model.addBinaryOperator(binaryOperation);
                     modelValue = model.getResult();
 
                     checksLimit(modelValue);
                     toDisplay = display(modelValue, SCALE);
                 } else {
+                    //if unary operation - calculate unary operation
                     UnaryOperation unaryOperation = unaryMapping.get(cb);
                     if (unaryOperation != null) {
                         model.addUnaryOperator(unaryOperation);
@@ -227,12 +230,12 @@ public class CalculatorController {
                         checksLimit(modelValue);
                         toDisplay = display(modelValue, SCALE - 1); //unary scale less then binary by 1
                     } else {
-                        throw new OperationNotExistException("No such operation found - " + cb.name()); //todo custom except
+                        throw new OperationNotExistException("No such operation found - " + cb.name());
                     }
                 }
 
                 displayHistory.setText(history(model.getCurrentExpression(), model.getOperand(), SCALE));
-            } catch (LimitException ex) { //todo handle custom
+            } catch (LimitException ex) {
                 noError = false;
                 toDisplay = LIMIT_MSG;
             } catch (ArithmeticException ex) {
@@ -266,7 +269,7 @@ public class CalculatorController {
         if (noError) {
             result = history(model.getCurrentExpression(), model.getOperand(), SCALE);
         }
-        noError = true; /// TODO: 8/18/2016
+        noError = true;
 
 
         displayField.setText(ZERO);
@@ -328,37 +331,31 @@ public class CalculatorController {
                 if (memory != null) {
                     displayField.setText(display(memory, SCALE));
                 }
-            }
-
-            if (cb.equals(MEMORY_CLEAR)) {
+            } else if (cb.equals(MEMORY_CLEAR)) {
                 model.clearMemory();
                 disableMemoryClearAndRecallButton(true);
-            }
-
-            if (cb.equals(MEMORY_ADD)) {
+            } else if (cb.equals(MEMORY_ADD)) {
                 model.addToMemory();
                 disableMemoryClearAndRecallButton(false);
-            }
-
-            if (cb.equals(MEMORY_SUBTRACT)) {
+            } else if (cb.equals(MEMORY_SUBTRACT)) {
                 model.subtractFromMemory();
                 disableMemoryClearAndRecallButton(false);
-            }
-
-            if (cb.equals(MEMORY_SAVE)) {
+            } else if (cb.equals(MEMORY_SAVE)) {
                 model.saveMemory();
                 disableMemoryClearAndRecallButton(false);
+            } else {
+                throw new OperationNotExistException("No such operation found - " + cb.name());
             }
         }
 
         clearInput();
     }
 
-    private void checksLimit(BigDecimal bg) {
+    private void checksLimit(BigDecimal bg) throws LimitException {
         if (bg.compareTo(BigDecimal.ZERO) != 0) {
             //lower limit by checking digits count to the right of decimal point
             if (bg.movePointRight(Model.SCALE).abs().compareTo(ONE) < 0) {
-                throw new LimitException("Lower limit reached - " + display(bg, SCALE) + " but scale is " + Model.SCALE); //// TODO: 8/18/2016  more info
+                throw new LimitException("Lower limit reached - " + display(bg, SCALE) + " but scale is " + Model.SCALE);
             }
             //upper limit by checking digits count to the left of decimal point
             if (bg.precision() - bg.scale() > Model.SCALE) {
@@ -394,9 +391,6 @@ public class CalculatorController {
     private void setUpCalculatorButtons(Scene scene) {
         for (CalculatorButton cb : CalculatorButton.values()) {
             cb.setButton((Button) scene.lookup("#" + cb.name().toLowerCase()));
-            if (cb.getButton() == null) {
-                throw new ButtonNotExistException("Button NOT FOUND! - " + cb.name());
-            }
         }
     }
 

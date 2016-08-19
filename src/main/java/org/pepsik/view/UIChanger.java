@@ -90,7 +90,7 @@ public class UIChanger {
         cssMap.put(BACKSPACE, "clear");
 
         //disable memory recall and clear button at startup app
-        UIChanger.disableMemoryClearAndRecallButton(true);
+        disableMemoryClearAndRecallButton(true);
     }
 
     /**
@@ -120,9 +120,10 @@ public class UIChanger {
         Scene scene = display.getScene();
         double width = scene.getWidth();
         double height = scene.getHeight();
+        int textLength = display.getText().length();
 
         //define text font size to fill display when big number is displayed
-        double d = width / display.getText().length() * MULTIPLIER;
+        double d = width / textLength * MULTIPLIER;
         if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
 
             //set max display font size if width > 270 and height > 450
@@ -157,31 +158,26 @@ public class UIChanger {
         ObservableList<String> styleClass = display.getStyleClass();
         Font font = display.getFont();
 
-        styleClass.add("display_max_font");
+        String maxFont = "display_max_font";
+        styleClass.add(maxFont);
         maxDisplayFont = (int) font.getSize();
-        styleClass.remove("display_max_font");
+        styleClass.remove(maxFont);
 
         //get css min display font
-        styleClass.add("display_min_font");
+        String minFont = "display_min_font";
+        styleClass.add(minFont);
         minDisplayFont = (int) font.getSize();
-        styleClass.remove("display_min_font");
-    }
-
-    public static int getMaxDisplayFont() {
-        return maxDisplayFont;
-    }
-
-    public static int getMinDisplayFont() {
-        return minDisplayFont;
+        styleClass.remove(minFont);
     }
 
     /**
      * Resizes button font text size
      */
     private static void resize() {
-        //get css prefix
+        //get button css prefix
         String prefix = cssMap.get(button);
 
+        //nothing for resize
         if (prefix == null) {
             return;
         }
@@ -190,13 +186,16 @@ public class UIChanger {
         double width = scene.getWidth();
         double height = scene.getHeight();
 
-        //if true switch button css class from "prefix_small_font" to "prefix_big_font"
+        //Switches button css class uses button prefix
+        String oldCssClass = prefix + "_small_font"; // css class consist small font
+        String newCssClass = prefix + "_big_font";// css class consist big font
+
         if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
-            //change small font to big font switches css classes
-            changeCssClass(prefix + "_small_font", prefix + "_big_font"); //todo
+            //change small font to big font
+            changeCssClass(oldCssClass, newCssClass);
         } else {
             //change big font to small font
-            changeCssClass(prefix + "_big_font", prefix + "_small_font");
+            changeCssClass(newCssClass, oldCssClass);
         }
     }
 

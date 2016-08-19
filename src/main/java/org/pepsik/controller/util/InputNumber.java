@@ -33,7 +33,7 @@ public class InputNumber {
     private static BigDecimal input = ZERO;
 
     /**
-     * Add input digit to input number
+     * Add digit to input number
      *
      * @param digit input digit
      */
@@ -75,7 +75,7 @@ public class InputNumber {
     }
 
     /**
-     * get scale of input number
+     * Get scale of input number
      *
      * @return scale
      */
@@ -109,11 +109,13 @@ public class InputNumber {
     }
 
     /**
-     * Checks if limit input digits is reached
+     * Checks input number reach limit
      *
      * @return bool
      */
     private static boolean canInput() {
-        return input.precision() < MAX_DIGITS && scale < MAX_DIGITS;
+        boolean isNotUpperLimit = input.precision() < MAX_DIGITS;
+        boolean isNotLowerLimit = scale < MAX_DIGITS;
+        return isNotUpperLimit && isNotLowerLimit;
     }
 }

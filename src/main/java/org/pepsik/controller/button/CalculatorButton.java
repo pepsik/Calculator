@@ -57,7 +57,7 @@ public enum CalculatorButton {
     private Button button;
 
     /**
-     * Map contains Javafx Button mapping on CalculatorButton
+     * Map contains Javafx Button mapping to CalculatorButton
      */
     private static Map<Button, CalculatorButton> buttonMap = new HashMap<>();
 
@@ -66,18 +66,18 @@ public enum CalculatorButton {
     }
 
     /**
-     * Return string button presentation by FXML Button
+     * Return CalculatorButton presentation for JavaFx Button
      *
      * @param button FXML Node Button
      * @return String represents correspond button
-     * @throws IllegalArgumentException in case button not found
+     * @throws ButtonNotExistException in case button not found
      */
-    public static CalculatorButton valueOf(Button button) {//todo map
+    public static CalculatorButton valueOf(Button button) {
         CalculatorButton cb = buttonMap.get(button);
         if (cb != null) {
             return cb;
         }
-        throw new ButtonNotExistException("No match button found to " + button);
+        throw new ButtonNotExistException("No match CalculatorButton found to map to" + button);
     }
 
     public void setButton(Button button) {
@@ -89,6 +89,10 @@ public enum CalculatorButton {
         return button;
     }
 
+    /**
+     * Returns button name
+     * @return button name
+     */
     public String getValue() {
         return value;
     }

@@ -71,7 +71,7 @@ public enum UITestButton {
         if (button != null) {
             return button;
         }
-        throw new ButtonNotExistException("No match button found to " + input);
+        throw new ButtonNotExistException("No match button found to map to" + input);
     }
 
     /**

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
@@ -15,7 +16,6 @@ import org.junit.Test;
 import org.pepsik.MainApp;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.helper.UITestButton;
-import org.pepsik.view.UIChanger;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -77,7 +77,6 @@ public class UITest {
                 }
             });
 
-            sync.notify();
             sync.wait();
         }
     }
@@ -1128,7 +1127,6 @@ public class UITest {
             });
 
             try {
-                sync.notify();
                 sync.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -1142,12 +1140,23 @@ public class UITest {
     }
 
     private void assertResizeFontDisplay(Label display) {
-        int maxDisplayFont = UIChanger.getMaxDisplayFont();
-        int minDisplayFont = UIChanger.getMinDisplayFont();
+        //get css max display font
+        ObservableList<String> styleClass = display.getStyleClass();
+        Font font = display.getFont();
+
+        styleClass.add("display_max_font");
+        int maxDisplayFont = (int) font.getSize();
+        styleClass.remove("display_max_font");
+
+        //get css min display font
+        styleClass.add("display_min_font");
+        int minDisplayFont = (int) font.getSize();
+        styleClass.remove("display_min_font");
 
         double d = display.getWidth() / display.getText().length() * MULTIPLIER;
 
-        if (Double.compare(display.getScene().getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(display.getScene().getHeight(), BOUNDARY_HEIGHT) > 0) {
+        Scene scene = display.getScene();
+        if (Double.compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
             if (d > maxDisplayFont) {
                 d = maxDisplayFont;
             }

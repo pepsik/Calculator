@@ -8,6 +8,7 @@ import javafx.scene.input.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import static javafx.scene.input.KeyCombination.CONTROL_DOWN;
 import static org.pepsik.controller.button.CalculatorButton.*;
 
 /**
@@ -92,7 +93,7 @@ public class KeyboardShortcut {
 
         CalculatorButton cb = ctrlCombinationMap.get(keyCode);
         if (cb != null) {
-            KeyCodeCombination combination = new KeyCodeCombination(keyCode, KeyCombination.CONTROL_DOWN);
+            KeyCodeCombination combination = new KeyCodeCombination(keyCode, CONTROL_DOWN);
             if (combination.match(event)) {
                 cb = ctrlCombinationMap.get(keyCode);
                 cb.getButton().fire();
@@ -101,7 +102,7 @@ public class KeyboardShortcut {
         }
 
         cb = buttonMap.get(keyCode);
-        if (cb != null) { //todo map contains
+        if (cb != null) {
             cb = buttonMap.get(keyCode);
             cb.getButton().fire();
         }

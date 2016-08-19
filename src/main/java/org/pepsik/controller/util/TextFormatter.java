@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.util.Deque;
 import java.util.List;
 
+import static java.math.BigDecimal.ROUND_HALF_UP;
 import static org.pepsik.controller.button.CalculatorButton.valueOf;
 import static org.pepsik.model.operation.UnaryOperation.PERCENT;
 
@@ -77,22 +78,22 @@ public class TextFormatter {
                 } else {
                     // separately collect unary operators, not collect unary operators before PERCENT
                     boolean isPercent = false; //last unary percent flag
-                    StringBuilder unary_sb = new StringBuilder();
+                    StringBuilder unarySb = new StringBuilder();
 
                     for (UnaryOperation unary : unaryOperators) {
                         //if get percent then clear all previous recorded unary operations
                         if (unary.equals(PERCENT)) {
                             isPercent = true;
-                            unary_sb.setLength(0); //clear all recorded unary
-                            unary_sb.append(display(currentOperand, scale));
+                            unarySb.setLength(0); //clear all recorded unary
+                            unarySb.append(display(currentOperand, scale));
                         } else {
                             isPercent = false;
-                            unary_sb.append(valueOf(unary.name()).getValue());
-                            unary_sb.append(LEFT_BRACKET);
+                            unarySb.append(valueOf(unary.name()).getValue()); //todo name
+                            unarySb.append(LEFT_BRACKET);
                         }
                     }
                     //checks if we get percent as last unary
-                    sb.append(unary_sb);
+                    sb.append(unarySb);
 
                     if (!isPercent) {
                         sb.append(display(stageOperand, scale));
@@ -115,8 +116,8 @@ public class TextFormatter {
         input = input.stripTrailingZeros();
         int inputScale = input.scale();
         int inputPrecision = input.precision();
-        String pattern;
 
+        String pattern;
         //if number lower then 0.001 show in engi mode
         if (input.abs().compareTo(CRITERIA) == -1 && inputScale > displayScale) {
             pattern = "0.###############E0";
@@ -144,7 +145,7 @@ public class TextFormatter {
                     pattern += "#";
                 }
 
-                input = input.setScale(displayScale, BigDecimal.ROUND_HALF_UP);
+                input = input.setScale(displayScale, ROUND_HALF_UP);
             }
         }
         f.applyPattern(pattern);
