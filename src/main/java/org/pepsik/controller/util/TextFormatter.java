@@ -88,7 +88,8 @@ public class TextFormatter {
                             unarySb.append(display(currentOperand, scale));
                         } else {
                             isPercent = false;
-                            unarySb.append(valueOf(unary.name()).getValue()); //todo name
+                            String unaryName = unary.name();
+                            unarySb.append(valueOf(unaryName).getValue());
                             unarySb.append(LEFT_BRACKET);
                         }
                     }

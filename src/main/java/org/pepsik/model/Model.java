@@ -1,5 +1,6 @@
 package org.pepsik.model;
 
+import org.pepsik.controller.exception.DivideByZeroException;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
 
@@ -78,7 +79,7 @@ public class Model {
      *
      * @param inputOperator input binary operator
      */
-    public void addBinaryOperator(BinaryOperation inputOperator) {
+    public void addBinaryOperator(BinaryOperation inputOperator) throws DivideByZeroException {
         //EQUAL operator is unique and calculated separately
         if (inputOperator.equals(EQUAL)) {
             calculateEqual();
@@ -123,7 +124,7 @@ public class Model {
      *
      * @param operator unary operator
      */
-    public void addUnaryOperator(UnaryOperation operator) {
+    public void addUnaryOperator(UnaryOperation operator) throws DivideByZeroException {
         currentStage.addUnaryOperator(operator);
         BigDecimal operand = currentStage.getOperand();
 
@@ -255,7 +256,7 @@ public class Model {
     /**
      * Calculates result of active stage and adds to expression history
      */
-    private void calculateBinary() {
+    private void calculateBinary() throws DivideByZeroException {
         BigDecimal operand = calculateUnary();
         BinaryOperation binaryOperator = currentStage.getBinaryOperator();
 
@@ -274,15 +275,24 @@ public class Model {
     /**
      * Calculates unary operation in active stage
      */
-    private BigDecimal calculateUnary() {
+    private BigDecimal calculateUnary() throws DivideByZeroException {
         BigDecimal temp = currentStage.getOperand();
 
-        for (UnaryOperation unary : currentStage.getUnaryOperators()) {
-            if (unary.equals(PERCENT)) {
-                temp = result.multiply(temp.divide(DIVISOR, Model.SCALE * 2, BigDecimal.ROUND_HALF_UP));
-            } else {
-                temp = unary.execute(temp);
+        try {
+            for (UnaryOperation unary : currentStage.getUnaryOperators()) {
+                if (unary.equals(PERCENT)) {
+                    temp = result.multiply(temp.divide(DIVISOR, Model.SCALE * 2, BigDecimal.ROUND_HALF_UP));
+                } else {
+                    temp = unary.execute(temp);
+                }
             }
+        } catch (ArithmeticException ex) {
+            if (ex.getMessage().equals("BigInteger divide by zero")) {
+                throw new DivideByZeroException(ex.getMessage());
+            } else {
+                throw ex;
+            }
+
         }
 
         return temp;
@@ -291,7 +301,7 @@ public class Model {
     /**
      * Calculates EQUAL operation and adds to expression history.
      */
-    private void calculateEqual() {
+    private void calculateEqual() throws DivideByZeroException {
         final BigDecimal operand = currentStage.getOperand();
         final BinaryOperation binaryOperator = currentStage.getBinaryOperator();
 

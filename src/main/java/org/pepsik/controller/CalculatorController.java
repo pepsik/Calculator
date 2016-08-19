@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.controller.exception.ButtonNotExistException;
+import org.pepsik.controller.exception.DivideByZeroException;
 import org.pepsik.controller.exception.LimitException;
 import org.pepsik.controller.exception.OperationNotExistException;
 import org.pepsik.model.Model;
@@ -200,7 +201,7 @@ public class CalculatorController {
      * Handles binary operation event
      *
      * @param event binary event
-     * @throws OperationNotExistException
+     * @throws OperationNotExistException in cases if operation not found
      */
     @FXML
     private void handleOperationAction(ActionEvent event) {
@@ -238,14 +239,9 @@ public class CalculatorController {
             } catch (LimitException ex) {
                 noError = false;
                 toDisplay = LIMIT_MSG;
-            } catch (ArithmeticException ex) {
-                if (ex.getMessage().equals("BigInteger divide by zero")) {
-                    noError = false;
-                    toDisplay = DIVIDE_ZERO_MSG;
-                } else {
-                    throw ex;
-                }
-
+            } catch (DivideByZeroException ex) {
+                noError = false;
+                toDisplay = DIVIDE_ZERO_MSG;
             }
 
             displayField.setText(toDisplay);
@@ -351,6 +347,12 @@ public class CalculatorController {
         clearInput();
     }
 
+    /**
+     * Checks if value between upper and lower boundary limit values
+     *
+     * @param bg calculation result
+     * @throws LimitException in case if it reach boundary value
+     */
     private void checksLimit(BigDecimal bg) throws LimitException {
         if (bg.compareTo(BigDecimal.ZERO) != 0) {
             //lower limit by checking digits count to the right of decimal point
