@@ -17,12 +17,19 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
  */
 public class TextFormatter {
 
-    //todo comments
+    /**
+     * represents space
+     */
     private static final String SPACE = " ";
+
     /**
      * represents left bracket
      */
     private static final String LEFT_BRACKET = "(";
+
+    /**
+     * represents right bracket
+     */
     private static final String RIGHT_BRACKET = ")";
 
     /**
@@ -33,18 +40,8 @@ public class TextFormatter {
     /**
      * Input formatter
      */
-    private static final DecimalFormat f = new DecimalFormat(); //todo
-
-    /**
-     * Build history expression
-     */
-    private static final StringBuilder SB = new StringBuilder();
-
-    /**
-     * Build unary expression
-     */
-    private static final StringBuilder UNARY_SB = new StringBuilder();
-
+    private static final DecimalFormat f = new DecimalFormat();
+    
     /**
      * Formats history
      *
@@ -53,7 +50,7 @@ public class TextFormatter {
      * @return String represents expression
      */
     public static String history(Deque<Stage> expression, BigDecimal currentOperand, int scale) {
-        SB.setLength(0);
+        StringBuilder sb = new StringBuilder();
 
         //iterate though expression stages and assemble string to show on display
         for (Stage stage : expression) {
@@ -62,49 +59,49 @@ public class TextFormatter {
 
             //adds binary operation if exist
             if (operator != null) {
-                SB.append(SPACE);
-                SB.append(valueOf(operator.name()).getValue());
+                sb.append(SPACE);
+                sb.append(valueOf(operator.name()).getValue());
             }
 
             //if we get first stage without operator add space
             if (stageOperand != null) {
-                if (SB.length() != 0) {
-                    SB.append(SPACE);
+                if (sb.length() != 0) {
+                    sb.append(SPACE);
                 }
 
                 List<UnaryOperation> unaryOperators = stage.getUnaryOperators();
 
                 //adds unary operations if exist
                 if (unaryOperators.isEmpty()) {
-                    SB.append(display(stageOperand, scale));
+                    sb.append(display(stageOperand, scale));
                 } else {
                     // separately collect unary operators, not collect unary operators before PERCENT
                     boolean isPercent = false; //last unary percent flag
-                    UNARY_SB.setLength(0);
+                    StringBuilder unary_sb = new StringBuilder();
 
                     for (UnaryOperation unary : unaryOperators) {
                         //if get percent then clear all previous recorded unary operations
                         if (unary.equals(PERCENT)) {
                             isPercent = true;
-                            UNARY_SB.setLength(0); //clear all recorded unary
-                            UNARY_SB.append(display(currentOperand, scale));
+                            unary_sb.setLength(0); //clear all recorded unary
+                            unary_sb.append(display(currentOperand, scale));
                         } else {
                             isPercent = false;
-                            UNARY_SB.append(valueOf(unary.name()).getValue());
-                            UNARY_SB.append(LEFT_BRACKET);
+                            unary_sb.append(valueOf(unary.name()).getValue());
+                            unary_sb.append(LEFT_BRACKET);
                         }
                     }
                     //checks if we get percent as last unary
-                    SB.append(UNARY_SB);
+                    sb.append(unary_sb);
 
                     if (!isPercent) {
-                        SB.append(display(stageOperand, scale));
-                        SB.append(RIGHT_BRACKET);
+                        sb.append(display(stageOperand, scale));
+                        sb.append(RIGHT_BRACKET);
                     }
                 }
             }
         }
-        return SB.toString();
+        return sb.toString();
     }
 
     /**

@@ -179,6 +179,7 @@ public class UIChanger {
      * Resizes button font text size
      */
     private static void resize() {
+        //get css prefix
         String prefix = cssMap.get(button);
 
         if (prefix == null) {
@@ -189,9 +190,12 @@ public class UIChanger {
         double width = scene.getWidth();
         double height = scene.getHeight();
 
+        //if true switch button css class from "prefix_small_font" to "prefix_big_font"
         if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
+            //change small font to big font switches css classes
             changeCssClass(prefix + "_small_font", prefix + "_big_font"); //todo
         } else {
+            //change big font to small font
             changeCssClass(prefix + "_big_font", prefix + "_small_font");
         }
     }

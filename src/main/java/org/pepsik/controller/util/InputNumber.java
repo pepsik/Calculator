@@ -38,6 +38,7 @@ public class InputNumber {
      * @param digit input digit
      */
     public static void addToInput(String digit) {
+        digit = digit.substring(0, 1); // make sure that is one digit
         boolean hasPermission = canInput();
         if (hasPermission) {
             if (isPointSet) {

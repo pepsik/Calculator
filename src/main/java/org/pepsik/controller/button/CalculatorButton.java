@@ -1,6 +1,10 @@
 package org.pepsik.controller.button;
 
 import javafx.scene.control.Button;
+import org.pepsik.controller.exception.ButtonNotExistException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This enum represents calculator button. Each constant consist string representation and button node which used in Controller class
@@ -52,6 +56,11 @@ public enum CalculatorButton {
      */
     private Button button;
 
+    /**
+     * Map contains Javafx Button mapping on CalculatorButton
+     */
+    private static Map<Button, CalculatorButton> buttonMap = new HashMap<>();
+
     CalculatorButton(String value) {
         this.value = value;
     }
@@ -63,17 +72,17 @@ public enum CalculatorButton {
      * @return String represents correspond button
      * @throws IllegalArgumentException in case button not found
      */
-    public static CalculatorButton valueOf(Button button) {
-        for (CalculatorButton cb : values()) { //todo map
-            if (cb.button.equals(button)) {
-                return cb;
-            }
+    public static CalculatorButton valueOf(Button button) {//todo map
+        CalculatorButton cb = buttonMap.get(button);
+        if (cb != null) {
+            return cb;
         }
-        throw new IllegalArgumentException("No match button found to " + button);
+        throw new ButtonNotExistException("No match button found to " + button);
     }
 
     public void setButton(Button button) {
         this.button = button;
+        buttonMap.put(button, this);
     }
 
     public Button getButton() {

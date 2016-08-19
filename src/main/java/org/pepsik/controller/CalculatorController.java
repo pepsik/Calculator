@@ -8,6 +8,9 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
+import org.pepsik.controller.exception.ButtonNotExistException;
+import org.pepsik.controller.exception.LimitException;
+import org.pepsik.controller.exception.OperationNotExistException;
 import org.pepsik.model.Model;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -84,6 +87,34 @@ public class CalculatorController {
      * Error message occurs when limit is reached
      */
     private static final String LIMIT_MSG = "Limit reached!";
+
+    /**
+     * Maps CalculatorButtons to Binary operation
+     */
+    private static Map<CalculatorButton, BinaryOperation> binaryMapping = new HashMap<>();
+
+    /**
+     * Maps CalculatorButtons to Unary operation
+     */
+    private static Map<CalculatorButton, UnaryOperation> unaryMapping = new HashMap<>();
+
+    /**
+     * Mapping Calculator buttons to Binary and Unary operations
+     */
+    static {
+        binaryMapping.put(ADD, BinaryOperation.ADD);
+        binaryMapping.put(SUBTRACT, BinaryOperation.SUBTRACT);
+        binaryMapping.put(MULTIPLY, BinaryOperation.MULTIPLY);
+        binaryMapping.put(DIVIDE, BinaryOperation.DIVIDE);
+        binaryMapping.put(EQUAL, BinaryOperation.EQUAL);
+
+        unaryMapping.put(SQUARE, UnaryOperation.SQUARE);
+        unaryMapping.put(SQUARE_ROOT, UnaryOperation.SQUARE_ROOT);
+        unaryMapping.put(NEGATE, UnaryOperation.NEGATE);
+        unaryMapping.put(PERCENT, UnaryOperation.PERCENT);
+        unaryMapping.put(FRACTION, UnaryOperation.FRACTION);
+    }
+
 
     /**
      * Calculator display field
@@ -165,23 +196,6 @@ public class CalculatorController {
         }
     }
 
-    private static Map<CalculatorButton, BinaryOperation> binaryMapping = new HashMap<>();
-    private static Map<CalculatorButton, UnaryOperation> unaryMapping = new HashMap<>();
-
-    static {
-        binaryMapping.put(ADD, BinaryOperation.ADD);
-        binaryMapping.put(SUBTRACT, BinaryOperation.SUBTRACT);
-        binaryMapping.put(MULTIPLY, BinaryOperation.MULTIPLY);
-        binaryMapping.put(DIVIDE, BinaryOperation.DIVIDE);
-        binaryMapping.put(EQUAL, BinaryOperation.EQUAL);
-
-        unaryMapping.put(SQUARE, UnaryOperation.SQUARE);
-        unaryMapping.put(SQUARE_ROOT, UnaryOperation.SQUARE_ROOT);
-        unaryMapping.put(NEGATE, UnaryOperation.NEGATE);
-        unaryMapping.put(PERCENT, UnaryOperation.PERCENT);
-        unaryMapping.put(FRACTION, UnaryOperation.FRACTION);
-    }
-
     /**
      * Handles binary operation event
      *
@@ -195,39 +209,45 @@ public class CalculatorController {
         if (noError) {
             try {
                 clearInput();
-                BinaryOperation bo = binaryMapping.get(cb);
+                BinaryOperation binaryOperation = binaryMapping.get(cb);
                 BigDecimal modelValue;
 
-                if (bo != null) {
-                    model.addBinaryOperator(bo); //todo mapping operators
+                if (binaryOperation != null) {
+                    model.addBinaryOperator(binaryOperation);        //todo mapping operators
                     modelValue = model.getResult();
 
                     checksLimit(modelValue);
                     toDisplay = display(modelValue, SCALE);
                 } else {
-                    UnaryOperation uo = unaryMapping.get(cb);
-                    if (uo != null) {
-                        model.addUnaryOperator(uo);
+                    UnaryOperation unaryOperation = unaryMapping.get(cb);
+                    if (unaryOperation != null) {
+                        model.addUnaryOperator(unaryOperation);
                         modelValue = model.getOperand();
 
                         checksLimit(modelValue);
                         toDisplay = display(modelValue, SCALE - 1); //unary scale less then binary by 1
                     } else {
-                        throw new RuntimeException("No such operation found by button - " + cb); //todo custom except
+                        throw new OperationNotExistException("No such operation found - " + cb.name()); //todo custom except
                     }
                 }
 
                 displayHistory.setText(history(model.getCurrentExpression(), model.getOperand(), SCALE));
-            } catch (ArithmeticException e) {
-                noError = false;
-                toDisplay = DIVIDE_ZERO_MSG;
-            } catch (RuntimeException ex) { //todo handle custom
+            } catch (LimitException ex) { //todo handle custom
                 noError = false;
                 toDisplay = LIMIT_MSG;
+            } catch (ArithmeticException ex) {
+                if (ex.getMessage().equals("BigInteger divide by zero")) {
+                    noError = false;
+                    toDisplay = DIVIDE_ZERO_MSG;
+                } else {
+                    throw ex;
+                }
+
             }
 
             displayField.setText(toDisplay);
         }
+
     }
 
     /**
@@ -245,9 +265,9 @@ public class CalculatorController {
         String result = EMPTY;
         if (noError) {
             result = history(model.getCurrentExpression(), model.getOperand(), SCALE);
-        } else {
-            noError = true; /// TODO: 8/18/2016
         }
+        noError = true; /// TODO: 8/18/2016
+
 
         displayField.setText(ZERO);
         displayHistory.setText(result);
@@ -336,13 +356,13 @@ public class CalculatorController {
 
     private void checksLimit(BigDecimal bg) {
         if (bg.compareTo(BigDecimal.ZERO) != 0) {
-            //lower limit
+            //lower limit by checking digits count to the right of decimal point
             if (bg.movePointRight(Model.SCALE).abs().compareTo(ONE) < 0) {
-                throw new RuntimeException(LIMIT_MSG); //// TODO: 8/18/2016  more info
+                throw new LimitException("Lower limit reached - " + display(bg, SCALE) + " but scale is " + Model.SCALE); //// TODO: 8/18/2016  more info
             }
-            //upper limit
+            //upper limit by checking digits count to the left of decimal point
             if (bg.precision() - bg.scale() > Model.SCALE) {
-                throw new RuntimeException(LIMIT_MSG);
+                throw new LimitException("Upper limit reached - " + display(bg, SCALE) + " but scale is " + Model.SCALE);
             }
         }
     }
@@ -375,7 +395,7 @@ public class CalculatorController {
         for (CalculatorButton cb : CalculatorButton.values()) {
             cb.setButton((Button) scene.lookup("#" + cb.name().toLowerCase()));
             if (cb.getButton() == null) {
-                throw new RuntimeException("Button NOT FOUND! - " + cb.name());
+                throw new ButtonNotExistException("Button NOT FOUND! - " + cb.name());
             }
         }
     }

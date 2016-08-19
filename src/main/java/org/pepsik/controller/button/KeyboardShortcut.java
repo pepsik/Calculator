@@ -90,17 +90,19 @@ public class KeyboardShortcut {
     public static void findAncExecuteKey(KeyEvent event) {
         KeyCode keyCode = event.getCode();
 
-        if (ctrlCombinationMap.containsKey(keyCode)) {
+        CalculatorButton cb = ctrlCombinationMap.get(keyCode);
+        if (cb != null) {
             KeyCodeCombination combination = new KeyCodeCombination(keyCode, KeyCombination.CONTROL_DOWN);
             if (combination.match(event)) {
-                CalculatorButton cb = ctrlCombinationMap.get(keyCode);
+                cb = ctrlCombinationMap.get(keyCode);
                 cb.getButton().fire();
                 return;
             }
         }
 
-        if (buttonMap.containsKey(keyCode)) { //todo map contains
-            CalculatorButton cb = buttonMap.get(keyCode);
+        cb = buttonMap.get(keyCode);
+        if (cb != null) { //todo map contains
+            cb = buttonMap.get(keyCode);
             cb.getButton().fire();
         }
     }

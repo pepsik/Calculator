@@ -4,6 +4,10 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import org.pepsik.controller.button.CalculatorButton;
+import org.pepsik.controller.exception.ButtonNotExistException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Helper class represents calculator button with logic to emulate push button in JavaFX Thread to avoid exceptions. Used only in tests
@@ -44,26 +48,30 @@ public enum UITestButton {
     MEMORY_SUBTRACT("M-"),
     MEMORY_SAVE("MS");
 
-    private String shortName;
+    private static Map<String, UITestButton> buttonMap = new HashMap<>();
+
+    private String value;
     private Button button;
 
     UITestButton(String value) {
-        this.shortName = value;
+        this.value = value;
     }
 
     public static void setUIButtons() {
         for (UITestButton button : values()) {
-            button.button = CalculatorButton.valueOf(button.name()).getButton();
+            String buttonName = button.name();
+
+            button.button = CalculatorButton.valueOf(buttonName).getButton();
+            buttonMap.put(button.value, button);
         }
     }
 
     public static UITestButton getUIButton(String input) {
-        for (UITestButton button : values()) {
-            if (button.shortName.equals(input)) {
-                return button;
-            }
+        UITestButton button = buttonMap.get(input);
+        if (button != null) {
+            return button;
         }
-        throw new IllegalArgumentException("No match button found to " + input);
+        throw new ButtonNotExistException("No match button found to " + input);
     }
 
     /**
