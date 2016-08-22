@@ -1,4 +1,4 @@
-package org.pepsik.view;
+package org.pepsik.controller;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -131,8 +131,8 @@ public class UIChanger {
 
         //define text font size to fill display when big number is displayed
         double d = width / textLength * MULTIPLIER;
-        if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
 
+        if (compare(width, BOUNDARY_WIDTH) > 0 && compare(height, BOUNDARY_HEIGHT) > 0) {
             //set max display font size if width > 270 and height > 450
             if (d > maxDisplayFont) {
                 d = maxDisplayFont;
@@ -163,18 +163,32 @@ public class UIChanger {
     private static void getMinMaxDisplaySizes() {
         //get css max display font
         ObservableList<String> styleClass = display.getStyleClass();
-        Font font = display.getFont();
 
         String maxFont = "display_max_font";
-        styleClass.add(maxFont);
-        maxDisplayFont = (int) font.getSize();
-        styleClass.remove(maxFont);
+        String minFont = "display_min_font";
+
+        if (!styleClass.contains(maxFont)) {
+            styleClass.add(maxFont);
+        }
+        if (styleClass.contains(minFont)) {
+            styleClass.remove(minFont);
+        }
+        display.applyCss();
+        maxDisplayFont = (int) display.getFont().getSize();
 
         //get css min display font
-        String minFont = "display_min_font";
-        styleClass.add(minFont);
-        minDisplayFont = (int) font.getSize();
-        styleClass.remove(minFont);
+        if (!styleClass.contains(minFont)) {
+            styleClass.add(minFont);
+        }
+        if (styleClass.contains(maxFont)) {
+            styleClass.remove(maxFont);
+        }
+        display.applyCss();
+        minDisplayFont = (int) display.getFont().getSize();
+
+//        if (styleClass.contains(minFont)) {
+//            styleClass.remove(minFont);
+//        }
     }
 
     /**

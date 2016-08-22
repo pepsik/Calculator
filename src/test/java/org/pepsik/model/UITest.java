@@ -23,14 +23,15 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Double.compare;
 import static java.lang.Integer.MAX_VALUE;
 import static javafx.scene.input.KeyCode.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pepsik.model.helper.UITestButton.*;
-import static org.pepsik.view.UIChanger.BOUNDARY_HEIGHT;
-import static org.pepsik.view.UIChanger.BOUNDARY_WIDTH;
-import static org.pepsik.view.UIChanger.MULTIPLIER;
+import static org.pepsik.controller.UIChanger.BOUNDARY_HEIGHT;
+import static org.pepsik.controller.UIChanger.BOUNDARY_WIDTH;
+import static org.pepsik.controller.UIChanger.MULTIPLIER;
 
 public class UITest {
 
@@ -1179,19 +1180,21 @@ public class UITest {
         ObservableList<String> styleClass = display.getStyleClass();
         Font font = display.getFont();
 
-        styleClass.add("display_max_font");
+        String maxFont = "display_max_font";
+        styleClass.add(maxFont);
         int maxDisplayFont = (int) font.getSize();
-        styleClass.remove("display_max_font");
+        styleClass.remove(maxFont);
 
         //get css min display font
-        styleClass.add("display_min_font");
+        String minFont = "display_min_font";
+        styleClass.add(minFont);
         int minDisplayFont = (int) font.getSize();
-        styleClass.remove("display_min_font");
+        styleClass.remove(minFont);
 
         double d = display.getWidth() / display.getText().length() * MULTIPLIER;
 
         Scene scene = display.getScene();
-        if (Double.compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && Double.compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
+        if (compare(scene.getWidth(), BOUNDARY_WIDTH) > 0 && compare(scene.getHeight(), BOUNDARY_HEIGHT) > 0) {
             if (d > maxDisplayFont) {
                 d = maxDisplayFont;
             }

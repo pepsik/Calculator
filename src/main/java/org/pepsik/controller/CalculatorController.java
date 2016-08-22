@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.controller.exception.*;
@@ -14,7 +15,6 @@ import org.pepsik.model.exception.DivideByZeroException;
 import org.pepsik.model.exception.IllegalOperandException;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
-import org.pepsik.view.UIChanger;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -27,7 +27,7 @@ import static org.pepsik.controller.util.InputNumber.*;
 import static org.pepsik.controller.util.TextFormatter.display;
 import static org.pepsik.controller.util.TextFormatter.formatInput;
 import static org.pepsik.controller.util.TextFormatter.history;
-import static org.pepsik.view.UIChanger.disableMemoryClearAndRecallButton;
+import static org.pepsik.controller.UIChanger.disableMemoryClearAndRecallButton;
 
 /**
  * Controller for handle calculator events and display calculation results and history
@@ -147,6 +147,8 @@ public class CalculatorController {
 
     public void setStageAndSetupListeners(Stage stage) {
         stage.setTitle("Calculator");
+        stage.initStyle(StageStyle.UNDECORATED);
+
         Scene scene = displayField.getScene();
 
         //Init max, min, pref sizes

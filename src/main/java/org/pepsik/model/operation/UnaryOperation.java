@@ -25,15 +25,17 @@ public enum UnaryOperation {
             return value.multiply(value).setScale(Model.SCALE * 2, RoundingMode.HALF_UP);
         }
     },
+
     /**
      * Square root operation
      */
     SQUARE_ROOT {
         @Override
         public BigDecimal execute(BigDecimal value) throws IllegalOperandException {
-            if (value.compareTo(ZERO) == -1) {
+            if (value.compareTo(ZERO) < 0) {
                 throw new IllegalOperandException("Operand must be positive for sqrt operation but was " + value);
-            } else if (value.compareTo(ZERO) == 0) {
+            }
+            if (value.compareTo(ZERO) == 0) {
                 return ZERO;
             }
             return sqrt(value, MathContext.DECIMAL128);
