@@ -23,7 +23,7 @@ public class InputNumber {
     private static short scale;
 
     /**
-     * Show if point set
+     * Shows if point set
      */
     private static boolean isPointSet = false;
 
@@ -52,7 +52,7 @@ public class InputNumber {
     /**
      * Returns input number
      *
-     * @return actual input number
+     * @return input number
      */
     public static BigDecimal getInput() {
         return input.movePointLeft(scale);
@@ -68,7 +68,7 @@ public class InputNumber {
     /**
      * Verify is point set
      *
-     * @return bool SCALE if was set
+     * @return bool point set
      */
     public static boolean isInputPointSet() {
         return isPointSet;
@@ -109,9 +109,9 @@ public class InputNumber {
     }
 
     /**
-     * Checks input number reach limit
+     * Checks if input number reach limit
      *
-     * @return bool
+     * @return permission for input
      */
     private static boolean canInput() {
         boolean isNotUpperLimit = input.precision() < MAX_DIGITS;

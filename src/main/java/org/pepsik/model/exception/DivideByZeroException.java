@@ -1,7 +1,7 @@
-package org.pepsik.controller.exception;
+package org.pepsik.model.exception;
 
 /**
- * Created by admin on 8/19/2016.
+ * Thrown when an application attempts to use an operation divide by zero.
  */
 public class DivideByZeroException extends Exception {
     public DivideByZeroException(String message) {

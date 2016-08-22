@@ -1,5 +1,7 @@
 package org.pepsik.controller.util;
 
+import org.pepsik.controller.CalculatorController;
+import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.model.Stage;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
@@ -7,10 +9,12 @@ import org.pepsik.model.operation.UnaryOperation;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
-import static org.pepsik.controller.button.CalculatorButton.valueOf;
+import static org.pepsik.controller.CalculatorController.*;
 import static org.pepsik.model.operation.UnaryOperation.PERCENT;
 
 /**
@@ -42,11 +46,21 @@ public class TextFormatter {
      * Input formatter
      */
     private static final DecimalFormat f = new DecimalFormat();
-    
+
+    /**
+     * Mapping Unary operation to CalculatorButton
+     */
+    private static Map<UnaryOperation, CalculatorButton> unaryMapping = new HashMap<>();
+
+    /**
+     * Mapping Binary operation to CalculatorButton
+     */
+    private static Map<BinaryOperation, CalculatorButton> binaryMapping = new HashMap<>();
+
     /**
      * Formats history
      *
-     * @param expression     list of stages to format
+     * @param expression  list of stages to format
      * @param currentOperand current input operand in expression
      * @return String represents expression
      */
@@ -56,12 +70,26 @@ public class TextFormatter {
         //iterate though expression stages and assemble string to show on display
         for (Stage stage : expression) {
             BigDecimal stageOperand = stage.getOperand();
-            BinaryOperation operator = stage.getBinaryOperator();
+            BinaryOperation binary = stage.getBinaryOperator();
 
             //adds binary operation if exist
-            if (operator != null) {
+            if (binary != null) {
                 sb.append(SPACE);
-                sb.append(valueOf(operator.name()).getValue());
+                CalculatorButton cb = binaryMapping.get(binary); //gets binary operation from cache
+                //if not found search in Controller mapping
+                if (cb == null) {
+                    getBinaryMapping().entrySet().stream()
+                            .filter(entry -> entry.getValue().equals(binary))
+                            .forEach(entry -> {
+                                CalculatorButton temp = entry.getKey();
+                                sb.append(temp.getValue());
+                                binaryMapping.put(binary, temp); //and add to cache
+                            });
+
+                } //or if find in cache, do it
+                else {
+                    sb.append(cb.getValue());
+                }
             }
 
             //if we get first stage without operator add space
@@ -88,14 +116,29 @@ public class TextFormatter {
                             unarySb.append(display(currentOperand, scale));
                         } else {
                             isPercent = false;
-                            String unaryName = unary.name();
-                            unarySb.append(valueOf(unaryName).getValue());
+                            //finds CalculatorButton by Operation
+                            CalculatorButton cb = unaryMapping.get(unary); //gets unary operation from cache
+                            //if not found search in Controller mapping
+                            if (cb == null) {
+                                getUnaryMapping().entrySet().stream()
+                                        .filter(entry -> entry.getValue().equals(unary))
+                                        .forEach(entry -> {
+                                            CalculatorButton temp = entry.getKey();
+                                            unarySb.append(temp.getValue());
+                                            unaryMapping.put(unary, temp); //and add to cache
+                                        });
+                            } //or if find in cache, do it
+                            else {
+                                unarySb.append(cb.getValue());
+                            }
+
                             unarySb.append(LEFT_BRACKET);
                         }
                     }
-                    //checks if we get percent as last unary
+
                     sb.append(unarySb);
 
+                    //checks if we get percent as last unary operation
                     if (!isPercent) {
                         sb.append(display(stageOperand, scale));
                         sb.append(RIGHT_BRACKET);
@@ -109,8 +152,8 @@ public class TextFormatter {
     /**
      * Format display output
      *
-     * @param input        SCALE to display
-     * @param displayScale SCALE scale
+     * @param input value to display
+     * @param displayScale input scale for display
      * @return formatted string
      */
     public static String display(BigDecimal input, int displayScale) {

@@ -14,7 +14,7 @@ import static javafx.scene.text.Font.font;
 import static org.pepsik.controller.button.CalculatorButton.*;
 
 /**
- * Class responsible for change buttons, display font size
+ * Class responsible for change buttons and display font size
  */
 public class UIChanger {
 
@@ -58,7 +58,10 @@ public class UIChanger {
      */
     private static CalculatorButton button;
 
+
+    // Init mapping CalculatorButton to css class prefix
     static {
+        //number buttons
         cssMap.put(NUMBER_0, "number");
         cssMap.put(NUMBER_1, "number");
         cssMap.put(NUMBER_2, "number");
@@ -71,20 +74,24 @@ public class UIChanger {
         cssMap.put(NUMBER_9, "number");
         cssMap.put(NUMBER_0, "number");
 
+        //binary operation
         cssMap.put(ADD, "binary");
         cssMap.put(SUBTRACT, "binary");
         cssMap.put(MULTIPLY, "binary");
         cssMap.put(DIVIDE, "binary");
         cssMap.put(EQUAL, "binary");
 
+        //unary operation
         cssMap.put(SQUARE, "unary");
         cssMap.put(SQUARE_ROOT, "unary");
         cssMap.put(FRACTION, "unary");
         cssMap.put(NEGATE, "unary");
         cssMap.put(PERCENT, "unary");
 
+        //decimal point
         cssMap.put(POINT, "point");
 
+        //clear operations
         cssMap.put(CLEAR_ALL, "clear");
         cssMap.put(CLEAR_ENTRY, "clear");
         cssMap.put(BACKSPACE, "clear");

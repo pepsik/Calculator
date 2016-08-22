@@ -2,7 +2,6 @@ package org.pepsik.controller.button;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 
 import java.util.HashMap;
@@ -15,19 +14,21 @@ import static org.pepsik.controller.button.CalculatorButton.*;
  * Class represents keyboard shortcuts and simply fires correspond calculator button
  */
 public class KeyboardShortcut {
+
     /**
      * Map contains single keyboard button shortcut maps to calculator button
      */
     private static Map<KeyCode, CalculatorButton> buttonMap = new HashMap<>();
+
     /**
      * Map contains combination keyboard buttons shortcut maps to calculator button
      */
-    private static Map<KeyCode, CalculatorButton> ctrlCombinationMap = new HashMap<>();
+    private static Map<KeyCode, CalculatorButton> ctrlComboMap = new HashMap<>();
 
-    /**
-     * Shortcut to calculator button mapping
-     */
+
+    // Maps keyboard button to calculator button mapping
     static {
+        //number buttons
         buttonMap.put(KeyCode.DIGIT0, NUMBER_0);
         buttonMap.put(KeyCode.DIGIT1, NUMBER_1);
         buttonMap.put(KeyCode.DIGIT2, NUMBER_2);
@@ -39,6 +40,7 @@ public class KeyboardShortcut {
         buttonMap.put(KeyCode.DIGIT8, NUMBER_8);
         buttonMap.put(KeyCode.DIGIT9, NUMBER_9);
 
+        //number numpad buttons
         buttonMap.put(KeyCode.NUMPAD0, NUMBER_0);
         buttonMap.put(KeyCode.NUMPAD1, NUMBER_1);
         buttonMap.put(KeyCode.NUMPAD2, NUMBER_2);
@@ -50,12 +52,16 @@ public class KeyboardShortcut {
         buttonMap.put(KeyCode.NUMPAD8, NUMBER_8);
         buttonMap.put(KeyCode.NUMPAD9, NUMBER_9);
 
+        //decimal point buttons
         buttonMap.put(KeyCode.PERIOD, POINT);
         buttonMap.put(KeyCode.DECIMAL, POINT);
+
+        //clear buttons
         buttonMap.put(KeyCode.BACK_SPACE, BACKSPACE);
         buttonMap.put(KeyCode.ESCAPE, CLEAR_ALL);
         buttonMap.put(KeyCode.DELETE, CLEAR_ENTRY);
 
+        //binary operation buttons
         buttonMap.put(KeyCode.ENTER, EQUAL);
         buttonMap.put(KeyCode.EQUALS, EQUAL);
         buttonMap.put(KeyCode.PLUS, ADD);
@@ -67,20 +73,24 @@ public class KeyboardShortcut {
         buttonMap.put(KeyCode.MULTIPLY, MULTIPLY);
         buttonMap.put(KeyCode.STAR, MULTIPLY);
 
-        buttonMap.put(KeyCode.AT, SQUARE);
+        //unary buttons
+        buttonMap.put(KeyCode.AT, SQUARE); //keyboard @
         buttonMap.put(KeyCode.F9, NEGATE);
         buttonMap.put(KeyCode.R, FRACTION);
 
-        ctrlCombinationMap.put(KeyCode.DIGIT2, SQUARE_ROOT);
-        ctrlCombinationMap.put(KeyCode.DIGIT5, PERCENT);
-        ctrlCombinationMap.put(KeyCode.DIGIT8, MULTIPLY);
-        ctrlCombinationMap.put(KeyCode.EQUALS, ADD);
+        //with ctrl pressed
+        //binary operation buttons
+        ctrlComboMap.put(KeyCode.DIGIT2, SQUARE_ROOT);
+        ctrlComboMap.put(KeyCode.DIGIT5, PERCENT);
+        ctrlComboMap.put(KeyCode.DIGIT8, MULTIPLY);
+        ctrlComboMap.put(KeyCode.EQUALS, ADD);
 
-        ctrlCombinationMap.put(KeyCode.P, MEMORY_ADD);
-        ctrlCombinationMap.put(KeyCode.Q, MEMORY_SUBTRACT);
-        ctrlCombinationMap.put(KeyCode.M, MEMORY_SAVE);
-        ctrlCombinationMap.put(KeyCode.R, MEMORY_RECALL);
-        ctrlCombinationMap.put(KeyCode.L, MEMORY_CLEAR);
+        //memory operation buttons
+        ctrlComboMap.put(KeyCode.P, MEMORY_ADD);
+        ctrlComboMap.put(KeyCode.Q, MEMORY_SUBTRACT);
+        ctrlComboMap.put(KeyCode.M, MEMORY_SAVE);
+        ctrlComboMap.put(KeyCode.R, MEMORY_RECALL);
+        ctrlComboMap.put(KeyCode.L, MEMORY_CLEAR);
     }
 
     /**
@@ -91,16 +101,19 @@ public class KeyboardShortcut {
     public static void findAncExecuteKey(KeyEvent event) {
         KeyCode keyCode = event.getCode();
 
-        CalculatorButton cb = ctrlCombinationMap.get(keyCode);
+        //finds combination using combination map
+        CalculatorButton cb = ctrlComboMap.get(keyCode);
+        //if exist fires correspond button
         if (cb != null) {
             KeyCodeCombination combination = new KeyCodeCombination(keyCode, CONTROL_DOWN);
             if (combination.match(event)) {
-                cb = ctrlCombinationMap.get(keyCode);
+                cb = ctrlComboMap.get(keyCode);
                 cb.getButton().fire();
                 return;
             }
         }
 
+        //if no combinations found use single button mapping
         cb = buttonMap.get(keyCode);
         if (cb != null) {
             cb = buttonMap.get(keyCode);

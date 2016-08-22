@@ -1,6 +1,7 @@
 package org.pepsik.model;
 
-import org.pepsik.controller.exception.DivideByZeroException;
+import org.pepsik.model.exception.DivideByZeroException;
+import org.pepsik.model.exception.IllegalOperandException;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
 
@@ -13,7 +14,7 @@ import static org.pepsik.model.operation.UnaryOperation.PERCENT;
 
 /**
  * This class represents a calculator logic. It consist and operate with Stage class. Model creates chain of stages where
- * result of first stage used in second stage and last stage represent result of current expression.
+ * result of first stage used in second stage. Last stage represent result of current expression.
  */
 public class Model {
 
@@ -84,7 +85,7 @@ public class Model {
      *
      * @param inputOperator input binary operator
      */
-    public void addBinaryOperator(BinaryOperation inputOperator) throws DivideByZeroException {
+    public void addBinaryOperator(BinaryOperation inputOperator) throws DivideByZeroException, IllegalOperandException {
         //EQUAL operator is unique and calculated separately
         if (inputOperator.equals(EQUAL)) {
             calculateEqual();
@@ -129,7 +130,7 @@ public class Model {
      *
      * @param operator unary operator
      */
-    public void addUnaryOperator(UnaryOperation operator) throws DivideByZeroException {
+    public void addUnaryOperator(UnaryOperation operator) throws DivideByZeroException, IllegalOperandException {
         currentStage.addUnaryOperator(operator);
         BigDecimal operand = currentStage.getOperand();
 
@@ -261,7 +262,7 @@ public class Model {
     /**
      * Calculates result of active stage and adds to expression history
      */
-    private void calculateBinary() throws DivideByZeroException {
+    private void calculateBinary() throws DivideByZeroException, IllegalOperandException {
         BigDecimal operand = calculateUnary();
         BinaryOperation binaryOperator = currentStage.getBinaryOperator();
 
@@ -284,14 +285,16 @@ public class Model {
     /**
      * Calculates unary operation in active stage
      */
-    private BigDecimal calculateUnary() throws DivideByZeroException {
+    private BigDecimal calculateUnary() throws DivideByZeroException, IllegalOperandException {
         BigDecimal temp = currentStage.getOperand();
 
         try {
             for (UnaryOperation unary : currentStage.getUnaryOperators()) {
+                //if get percent then calculate separately
                 if (unary.equals(PERCENT)) {
                     temp = result.multiply(temp.divide(DIVISOR, Model.SCALE * 2, BigDecimal.ROUND_HALF_UP));
                 } else {
+                    //if no percent lets enum UnaryOperation do work
                     temp = unary.execute(temp);
                 }
             }
@@ -310,7 +313,7 @@ public class Model {
     /**
      * Calculates EQUAL operation and adds to expression history.
      */
-    private void calculateEqual() throws DivideByZeroException {
+    private void calculateEqual() throws DivideByZeroException, IllegalOperandException {
         final BigDecimal operand = currentStage.getOperand();
         final BinaryOperation binaryOperator = currentStage.getBinaryOperator();
 

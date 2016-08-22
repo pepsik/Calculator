@@ -8,16 +8,16 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
-import org.pepsik.controller.exception.ButtonNotExistException;
-import org.pepsik.controller.exception.DivideByZeroException;
-import org.pepsik.controller.exception.LimitException;
-import org.pepsik.controller.exception.OperationNotExistException;
+import org.pepsik.controller.exception.*;
 import org.pepsik.model.Model;
+import org.pepsik.model.exception.DivideByZeroException;
+import org.pepsik.model.exception.IllegalOperandException;
 import org.pepsik.model.operation.BinaryOperation;
 import org.pepsik.model.operation.UnaryOperation;
 import org.pepsik.view.UIChanger;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,6 +90,11 @@ public class CalculatorController {
     private static final String LIMIT_MSG = "Limit reached!";
 
     /**
+     * Error message occurs when calculate sqrt with negate operand
+     */
+    private static final String ILLEGAL_OPERAND_MSG = "Illegal operand";
+
+    /**
      * Maps CalculatorButtons to Binary operation
      */
     private static Map<CalculatorButton, BinaryOperation> binaryMapping = new HashMap<>();
@@ -99,23 +104,23 @@ public class CalculatorController {
      */
     private static Map<CalculatorButton, UnaryOperation> unaryMapping = new HashMap<>();
 
-    /**
-     * Mapping Calculator buttons to Binary and Unary operations
-     */
+
+    //Mapping Calculator buttons to Binary and Unary operations
     static {
         binaryMapping.put(ADD, BinaryOperation.ADD);
         binaryMapping.put(SUBTRACT, BinaryOperation.SUBTRACT);
         binaryMapping.put(MULTIPLY, BinaryOperation.MULTIPLY);
         binaryMapping.put(DIVIDE, BinaryOperation.DIVIDE);
         binaryMapping.put(EQUAL, BinaryOperation.EQUAL);
+        binaryMapping = Collections.unmodifiableMap(binaryMapping);
 
         unaryMapping.put(SQUARE, UnaryOperation.SQUARE);
         unaryMapping.put(SQUARE_ROOT, UnaryOperation.SQUARE_ROOT);
         unaryMapping.put(NEGATE, UnaryOperation.NEGATE);
         unaryMapping.put(PERCENT, UnaryOperation.PERCENT);
         unaryMapping.put(FRACTION, UnaryOperation.FRACTION);
+        unaryMapping = Collections.unmodifiableMap(unaryMapping);
     }
-
 
     /**
      * Calculator display field
@@ -157,6 +162,14 @@ public class CalculatorController {
         initResizeListeners(scene);
 
         displayField.setText(formatInput());
+    }
+
+    public static Map<CalculatorButton, BinaryOperation> getBinaryMapping() {
+        return binaryMapping;
+    }
+
+    public static Map<CalculatorButton, UnaryOperation> getUnaryMapping() {
+        return unaryMapping;
     }
 
     /**
@@ -201,7 +214,7 @@ public class CalculatorController {
      * Handles binary operation event
      *
      * @param event binary event
-     * @throws OperationNotExistException in cases if operation not found
+     * @throws IllegalStateException in cases if operation not found
      */
     @FXML
     private void handleOperationAction(ActionEvent event) {
@@ -231,7 +244,7 @@ public class CalculatorController {
                         checksLimit(modelValue);
                         toDisplay = display(modelValue, SCALE - 1); //unary scale less then binary by 1
                     } else {
-                        throw new OperationNotExistException("No such operation found - " + cb.name());
+                        throw new IllegalStateException("No such operation found - " + cb.name());
                     }
                 }
 
@@ -242,6 +255,9 @@ public class CalculatorController {
             } catch (DivideByZeroException ex) {
                 noError = false;
                 toDisplay = DIVIDE_ZERO_MSG;
+            } catch (IllegalOperandException ex) {
+                noError = false;
+                toDisplay = ILLEGAL_OPERAND_MSG;
             }
 
             displayField.setText(toDisplay);
@@ -340,7 +356,7 @@ public class CalculatorController {
                 model.saveMemory();
                 disableMemoryClearAndRecallButton(false);
             } else {
-                throw new OperationNotExistException("No such operation found - " + cb.name());
+                throw new IllegalStateException("No such operation found - " + cb.name());
             }
         }
 

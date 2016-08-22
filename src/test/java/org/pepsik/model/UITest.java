@@ -549,6 +549,20 @@ public class UITest {
         assertExpression(5, "sqrt(sqrt(81) + sqrt(4) = ");
         assertExpression(5, " + sqrt(sqrt(81) + sqrt(4) = ");
         assertExpression("1.000677130693066", "sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(4)");
+
+        assertExpression("Illegal operand", "negate(sqrt(5)");
+        assertExpression("Illegal operand", "5 - 10 = sqrt()");
+
+        assertExpression("Illegal operand", "5 - 10 * 2 = sqrt()");
+        assertExpression("Illegal operand", "5 - 10 / 2 = sqrt()");
+
+        assertExpression("Illegal operand", "5 - 10 * 2 = * 1 = sqrt()");
+        assertExpression("Illegal operand", "5 - 10 * 2 = / 1 = sqrt()");
+
+        assertExpression("Illegal operand", "5 - 10 + negate(sqrt(5)");
+        assertExpression("Illegal operand", "5 - 10 - negate(sqrt(5)");
+        assertExpression("Illegal operand", "5 - 10 * negate(sqrt(5)");
+        assertExpression("Illegal operand", "5 - 10 / negate(sqrt(5)");
     }
 
     @Test
@@ -585,6 +599,11 @@ public class UITest {
         assertExpression(18, "square(square(2) + 2 = ");
 
         assertExpression(9, "square(56)square(9)square(3)=");
+
+        assertExpression("-0.5", "negate(fraction(2)");
+        assertExpression("-2", "negate(fraction(fraction(2)");
+        assertExpression("-0.5", "10 - 12 = fraction()");
+        assertExpression("-2", "10 - 12 = fraction(fraction()");
     }
 
     @Test

@@ -1,7 +1,7 @@
 package org.pepsik.controller.exception;
 
 /**
- * Created by admin on 8/19/2016.
+ * Thrown when an application uses binary or unary calculation and reaches limit values.
  */
 public class LimitException extends Exception {
     public LimitException(String s) {

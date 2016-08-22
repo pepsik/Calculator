@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import org.pepsik.controller.button.CalculatorButton;
-import org.pepsik.controller.exception.ButtonNotExistException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +70,7 @@ public enum UITestButton {
         if (button != null) {
             return button;
         }
-        throw new ButtonNotExistException("No match button found to map to" + input);
+        throw new IllegalStateException("No match button found to map to" + input);
     }
 
     /**

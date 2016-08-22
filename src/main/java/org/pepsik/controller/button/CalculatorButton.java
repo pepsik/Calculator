@@ -1,7 +1,6 @@
 package org.pepsik.controller.button;
 
 import javafx.scene.control.Button;
-import org.pepsik.controller.exception.ButtonNotExistException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +10,8 @@ import java.util.Map;
  * to handle button events
  */
 public enum CalculatorButton {
+
+    //Digit number buttons
     NUMBER_1("1"),
     NUMBER_2("2"),
     NUMBER_3("3"),
@@ -22,24 +23,31 @@ public enum CalculatorButton {
     NUMBER_9("9"),
     NUMBER_0("0"),
 
+    //binary operation buttons
     ADD("+"),
     SUBTRACT("−"),
     DIVIDE("÷"),
     MULTIPLY("×"),
     EQUAL("="),
 
+    //unary operation buttons
     SQUARE("sqr"),
     SQUARE_ROOT("√"),
     FRACTION("1/"),
     NEGATE("negate"),
     PERCENT("%"),
 
+    //decimal point button
     POINT("."),
 
+    //clear buttons
     CLEAR_ENTRY("CE"),
     CLEAR_ALL("C"),
+
+    //backspace button
     BACKSPACE("<"),
 
+    //memory buttons
     MEMORY_CLEAR("MC"),
     MEMORY_RECALL("MR"),
     MEMORY_ADD("M+"),
@@ -52,7 +60,7 @@ public enum CalculatorButton {
     private String value;
 
     /**
-     * Button presentation operation
+     * Javafx Button corresponds calculator button
      */
     private Button button;
 
@@ -66,18 +74,18 @@ public enum CalculatorButton {
     }
 
     /**
-     * Return CalculatorButton presentation for JavaFx Button
+     * Return CalculatorButton corresponds to JavaFx Button
      *
      * @param button FXML Node Button
      * @return String represents correspond button
-     * @throws ButtonNotExistException in case button not found
+     * @throws RuntimeException in case button not found
      */
     public static CalculatorButton valueOf(Button button) {
         CalculatorButton cb = buttonMap.get(button);
         if (cb != null) {
             return cb;
         }
-        throw new ButtonNotExistException("No match CalculatorButton found to map to" + button);
+        throw new RuntimeException("No match CalculatorButton found to map to" + button);
     }
 
     public void setButton(Button button) {
@@ -90,8 +98,9 @@ public enum CalculatorButton {
     }
 
     /**
-     * Returns button name
-     * @return button name
+     * Returns String represents Calculator button name
+     *
+     * @return name
      */
     public String getValue() {
         return value;
