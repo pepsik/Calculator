@@ -38,6 +38,11 @@ public class Model {
     private Stage lastBinaryStage;
 
     /**
+     * Operand after calculation unary operation
+     */
+    private BigDecimal calculatedOperand;
+
+    /**
      * Calculator memory
      */
     private BigDecimal memory;
@@ -68,7 +73,7 @@ public class Model {
      */
     public void addNumber(BigDecimal number) {
         if (!currentStage.getUnaryOperators().isEmpty()) {
-            calculateEqual();
+            currentStage.clearUnaryOperators();
         }
 
         currentStage.setOperand(number);
@@ -136,7 +141,7 @@ public class Model {
 
         // operator - empty ; operand - exist
         //operator - exist;  operand - exist
-        calculateUnary();
+        calculatedOperand = calculateUnary();
     }
 
     /**
@@ -204,7 +209,7 @@ public class Model {
      * @return current stage operand
      */
     public BigDecimal getOperand() {
-        return calculateUnary();
+        return calculatedOperand;
     }
 
     /**
@@ -262,11 +267,15 @@ public class Model {
 
         try {
             result = binaryOperator.execute(result, operand);
-        } catch (ArithmeticException e) {
-            //clear stage and expression if get error and rethrow exception
-            currentExpression = new ArrayDeque<>();
-            currentStage = new Stage();
-            throw e;
+        } catch (ArithmeticException ex) {
+            if (ex.getMessage().equals("BigInteger divide by zero")) {
+                currentExpression = new ArrayDeque<>();
+                currentStage = new Stage();
+                throw new DivideByZeroException(ex.getMessage());
+            } else {
+                throw ex;
+            }
+
         }
 
         lastBinaryStage = currentStage;

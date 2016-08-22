@@ -440,6 +440,22 @@ public class UITest {
         assertExpressionWithoutClear(3, "square() = ");
 
         assertExpression("0.000099", "99/1000000=");
+
+
+        assertExpression("-1", "10 - square(5) 11 =");
+        assertExpression("-10", "10 - square(0) 20 =");
+
+        assertExpression("0", "10 - sqrt(5) 10 =");
+        assertExpression("-10", "10 - sqrt(0) 20 =");
+
+        assertExpression("-10", "10 - negate(0) 20 =");
+        assertExpression("0", "10 - negate(5) 10 =");
+
+        assertExpression("0", "10 - fraction(5) 10 =");
+        assertExpression("Cannot divide by zero", "10 - fraction(0) 20 =");
+
+        assertExpression("-10", "10 - percent(50) 20 =");
+        assertExpression("-10", "10 - percent(0) 20 =");
     }
 
     @Test

@@ -8,6 +8,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ZERO;
 
 /**
  * This enum represents unary operation. Each constant consist correspond string presentation and logic to operate.
@@ -58,6 +59,10 @@ public enum UnaryOperation {
      * @return operation result
      */
     private static BigDecimal sqrt(BigDecimal x, MathContext mc) {
+        if (x.equals(ZERO)) {
+            return ZERO;
+        }
+
         BigDecimal g = x.divide(TWO, mc);
         boolean done = false;
         final int maxIterations = mc.getPrecision() + 1;
