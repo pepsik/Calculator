@@ -1176,20 +1176,33 @@ public class UITest {
     }
 
     private void assertResizeFontDisplay(Label display) {
-        //get css max display font
         ObservableList<String> styleClass = display.getStyleClass();
-        Font font = display.getFont();
 
         String maxFont = "display_max_font";
-        styleClass.add(maxFont);
-        int maxDisplayFont = (int) font.getSize();
-        styleClass.remove(maxFont);
+        String minFont = "display_min_font";
+
+        if (!styleClass.contains(maxFont)) {
+            styleClass.add(maxFont);
+        }
+        if (styleClass.contains(minFont)) {
+            styleClass.remove(minFont);
+        }
+        display.applyCss();
+        int maxDisplayFont = (int) display.getFont().getSize();
 
         //get css min display font
-        String minFont = "display_min_font";
-        styleClass.add(minFont);
-        int minDisplayFont = (int) font.getSize();
-        styleClass.remove(minFont);
+        if (!styleClass.contains(minFont)) {
+            styleClass.add(minFont);
+        }
+        if (styleClass.contains(maxFont)) {
+            styleClass.remove(maxFont);
+        }
+        display.applyCss();
+        int minDisplayFont = (int) display.getFont().getSize();
+
+        if (styleClass.contains(minFont)) {
+            styleClass.remove(minFont);
+        }
 
         double d = display.getWidth() / display.getText().length() * MULTIPLIER;
 
@@ -1203,8 +1216,7 @@ public class UITest {
                 d = minDisplayFont;
             }
         }
-
-        assertEquals((int) d, (int) display.getFont().getSize());
+        assertEquals((int) d, (int) Integer.valueOf(display.getStyle().replace("-fx-font-size:", "")));
     }
 
     private void assertHistoryExpressionDisplayWithoutClear(String expect, String input) {

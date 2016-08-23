@@ -58,11 +58,11 @@
 }
 
 .unary_small_font {
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
 }
 
 .unary_big_font {
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
 }
 
 .clear_small_font {
@@ -135,6 +135,9 @@
 
 /*-------------Display END-------------*/
 
-
+.system_exit:hover{
+    -fx-background-color: red;
+    -fx-text-fill: white;
+}
 
 

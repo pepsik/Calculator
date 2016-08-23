@@ -143,8 +143,7 @@ public class UIChanger {
                 d = minDisplayFont;
             }
         }
-
-        display.setFont(font(d));
+        display.setStyle("-fx-font-size:" + (int) d);
     }
 
     /**
@@ -186,9 +185,9 @@ public class UIChanger {
         display.applyCss();
         minDisplayFont = (int) display.getFont().getSize();
 
-//        if (styleClass.contains(minFont)) {
-//            styleClass.remove(minFont);
-//        }
+        if (styleClass.contains(minFont)) {
+            styleClass.remove(minFont);
+        }
     }
 
     /**

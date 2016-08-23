@@ -52,7 +52,11 @@ public enum CalculatorButton {
     MEMORY_RECALL("MR"),
     MEMORY_ADD("M+"),
     MEMORY_SUBTRACT("M-"),
-    MEMORY_SAVE("MS");
+    MEMORY_SAVE("MS"),
+
+    MINIMIZE_APP(""),
+    MAXIMIZE_APP(""),
+    CLOSE_APP("");
 
     /**
      * String presentation operation
