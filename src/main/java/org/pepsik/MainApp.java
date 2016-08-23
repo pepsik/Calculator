@@ -8,6 +8,8 @@ import org.pepsik.controller.CalculatorController;
 
 import java.io.IOException;
 
+import static javafx.scene.text.Font.loadFont;
+
 public class MainApp extends Application {
 
     @Override

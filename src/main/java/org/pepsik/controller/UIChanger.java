@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
+import org.pepsik.MainApp;
 import org.pepsik.controller.button.CalculatorButton;
 
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class UIChanger {
     /**
      * Multiplier to fill display
      */
-    public static final double MULTIPLIER = 1.6;
+    public static final double MULTIPLIER = 1.5;
 
     /**
      * Display for resize

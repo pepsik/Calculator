@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="main_grid" minHeight="200.0" minWidth="325.0" prefHeight="500.0" prefWidth="300.0" style="-fx-background-color: #f2f2f2;" styleClass="body" stylesheets="@Metro.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pepsik.controller.CalculatorController">
+<GridPane fx:id="main_grid" minHeight="200.0" minWidth="325.0" prefHeight="500.0" prefWidth="300.0" style="-fx-background-color: #f2f2f2;" styleClass="body" stylesheets="@Metro.css" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pepsik.controller.CalculatorController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="100.0" />
     </columnConstraints>
@@ -47,12 +47,12 @@
                         <Font size="24.0" />
                     </font>
                 </Button>
-                <Button id="square" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" style="-fx-font-style: italic;" styleClass="top-button" text="x²" textAlignment="CENTER" GridPane.columnIndex="2">
+                <Button id="square" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" style="-fx-font-family: Lucida;" styleClass="top-button" text="x²" textAlignment="CENTER" GridPane.columnIndex="2">
                     <font>
                         <Font size="24.0" />
                     </font>
                 </Button>
-                <Button id="fraction" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" style="-fx-font-style: italic;" styleClass="top-button" text="¹/x" textAlignment="CENTER" GridPane.columnIndex="3">
+                <Button id="fraction" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOperationAction" style="-fx-font-family: Lucida;" styleClass="top-button" text="¹/x" textAlignment="CENTER" GridPane.columnIndex="3">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -215,17 +215,17 @@
         </GridPane>
         <Label id="display" fx:id="displayField" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="display" GridPane.rowIndex="2">
         </Label>
-      <HBox alignment="TOP_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-         <children>
-            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="2000.0" style="-fx-padding: 0 0 0 10;" text="Calculator" />
-             <Button id="minimize_app" maxWidth="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#handleSystemAction" prefWidth="40.0" style="-fx-font-size: 20; -fx-padding: 0 0 0 0;" styleClass="top-button" text="_" />
-             <Button id="maximize_app" maxWidth="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#handleSystemAction" prefWidth="40.0" style="-fx-font-size: 20; -fx-padding: 0 0 0 0;" styleClass="top-button" text="□" />
-             <Button id="close_app" maxWidth="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#handleSystemAction" prefWidth="40.0" style="-fx-font-size: 20; -fx-padding: 0 0 0 0;" text="×">
-               <styleClass>
-                  <String fx:value="top-button" />
-                  <String fx:value="system_exit" />
-               </styleClass></Button>
-         </children>
-      </HBox>
+        <HBox alignment="TOP_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <children>
+                <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="2000.0" style="-fx-padding: 0 0 0 10;" text="Calculator" />
+                <Button id="minimize_app" maxWidth="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#handleSystemAction" prefWidth="40.0" style="-fx-font-size: 20; -fx-padding: 0 0 0 0;" styleClass="top-button" text="_" />
+                <Button id="maximize_app" maxWidth="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#handleSystemAction" prefWidth="40.0" style="-fx-font-size: 20; -fx-padding: 0 0 0 0;" styleClass="top-button" text="□" />
+                <Button id="close_app" maxWidth="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#handleSystemAction" prefWidth="40.0" style="-fx-font-size: 20; -fx-padding: 0 0 0 0;" text="×">
+                    <styleClass>
+                        <String fx:value="top-button" />
+                        <String fx:value="system_exit" />
+                    </styleClass></Button>
+            </children>
+        </HBox>
     </children>
 </GridPane>

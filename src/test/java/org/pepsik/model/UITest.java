@@ -3,10 +3,13 @@ package org.pepsik.model;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.commons.lang.StringUtils;
@@ -516,7 +519,7 @@ public class UITest {
         assertExpression(0, "negate(negate(2) + negate(negate(negate(2) = ");
         assertExpression(-7, "negate(9) + 2 =");
 
-        assertExpression("-1,234,567,890,123,456","negate(1234567890123456)");
+        assertExpression("-1,234,567,890,123,456", "negate(1234567890123456)");
     }
 
     @Test
@@ -668,6 +671,18 @@ public class UITest {
         assertExpression("1.1E16", "9999999999999999 * 1.1=");
         assertExpressionWithoutClear("9,999,999,999,999,999", "/ 1.1=");
 
+        assertExpression("9,999,999,999,999,999", "9999999999999999 + 0.0000000000000001 ==");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "-0.0000000000000001==");
+
+        assertExpression("9,999,999,999,999,999", "9999999999999999 - 0.0000000000000001 ==");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "+0.0000000000000001==");
+
+        assertExpression("9.999999999999999E-17", "9999999999999999 * 0.0000000000000001 ==");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "/0.0000000000000001==");
+
+        assertExpression("9.999999999999999E47", "9999999999999999 / 0.0000000000000001 ==");
+        assertExpressionWithoutClear("9,999,999,999,999,999", "*0.0000000000000001==");
+
         assertExpression("9.866666666666666E17", "8888888888888888 * 111=");
         assertExpressionWithoutClear("8,888,888,888,888,888", "/ 111=");
 
@@ -694,6 +709,16 @@ public class UITest {
         assertExpression("Limit reached!", "square(square(square(square(square(square(square(9999999999999999)");
         assertExpression("Limit reached!", "1/9999999999999999========MS/MR==========");
         assertExpression("Limit reached!", "1*9999999999999999========MS*MR==========");
+
+        StringBuilder expression = new StringBuilder();
+        for (int i = 0; i < 3321; i++) {
+            expression.append("+=");
+        }
+        assertExpression("5.255518873824417E999", "1" + expression.toString()); //checks limit not reached
+
+        //after doubled value limit is reached
+        expression.append("+=");
+        assertExpression("Limit reached!", "1" + expression.toString());
 
         assertExpression("9.999999999999968E511", "1*9999999999999999================================");
         assertExpression("9.999999999999938E991", "1*9999999999999999==============================================================");
@@ -935,7 +960,7 @@ public class UITest {
         MINIMIZE_APP.push();
         waitForCompleteExecution();
 
-        assertEquals(true, stage.isIconified());
+        assertTrue(stage.isIconified());
 
         //maximize button
         MAXIMIZE_APP.push();
@@ -947,6 +972,11 @@ public class UITest {
         waitForCompleteExecution();
 
         assertEquals(false, stage.isMaximized());
+    }
+
+    @Test
+    public void testDraggableWindow() throws InterruptedException {
+        assertDraggable(200, 200);
     }
 
     @Test
@@ -1225,7 +1255,7 @@ public class UITest {
         assertTrue(cssClasses.contains(expected));
     }
 
-    private void setMinMaxDisplayFont(){
+    private void setMinMaxDisplayFont() {
         ObservableList<String> styleClass = display.getStyleClass();
 
         String maxFont = "display_max_font";
@@ -1265,6 +1295,26 @@ public class UITest {
             }
         }
         assertEquals((int) d, (int) Integer.valueOf(display.getStyle().replace("-fx-font-size:", "")));
+    }
+
+    private void assertDraggable(int dragX, int dragY) {
+        MouseEvent mousePressed = new MouseEvent(MouseEvent.MOUSE_PRESSED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true, true, true, true, true, true, true, null);
+        Event.fireEvent(stage.getScene(), mousePressed);
+        double startX = mousePressed.getScreenX();
+        double startY = mousePressed.getScreenY();
+
+        MouseEvent mouseDrag = new MouseEvent(MouseEvent.MOUSE_DRAGGED, 0, 0, dragX, dragY, MouseButton.PRIMARY, 1, true, true, true, true, true, true, true, true, true, true, null);
+        Event.fireEvent(stage.getScene(), mouseDrag);
+        double endX = mouseDrag.getScreenX();
+        double endY = mouseDrag.getScreenY();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(Math.abs(startX - endX), dragX, 0.1);
+        assertEquals(Math.abs(startY - endY), dragY, 0.1);
     }
 
     private void assertHistoryExpressionDisplayWithoutClear(String expect, String input) {

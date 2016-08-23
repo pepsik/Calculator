@@ -6,8 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.pepsik.MainApp;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.controller.exception.*;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.math.BigDecimal.ONE;
+import static javafx.scene.text.Font.loadFont;
 import static org.pepsik.controller.button.CalculatorButton.*;
 import static org.pepsik.controller.util.InputNumber.*;
 import static org.pepsik.controller.util.ResizeHelper.addResizeListener;
@@ -152,6 +155,9 @@ public class CalculatorController {
 
     public void setStageAndSetupListeners(Stage stage) {
         stage.setTitle("Calculator");
+        loadFont(MainApp.class.getResource("/font/Lucida.ttf").toExternalForm(), 10);
+        stage.getIcons().add(new Image("/view/calc.png"));
+
         this.stage = stage;
         stage.initStyle(StageStyle.UNDECORATED);
         Scene scene = displayField.getScene();
@@ -167,6 +173,8 @@ public class CalculatorController {
 
         //Init listeners for resizing button
         initResizeListeners(scene);
+
+        initDraggableListeners(scene);
 
         addResizeListener(stage);
 
@@ -455,22 +463,30 @@ public class CalculatorController {
     }
 
     /**
+     * Draggable calculator window
+     *
+     * @param scene current scene
+     */
+    private void initDraggableListeners(Scene scene) {
+        scene.setOnMousePressed(event ->
+        {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        scene.setOnMouseDragged(event ->
+        {
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
+    }
+
+    /**
      * Resize button font
      *
      * @param scene current scene
      */
     private void initResizeListeners(Scene scene) {
         UIChanger.setDisplay(displayField);
-
-        //Init draggable listeners
-        scene.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        scene.setOnMouseDragged(event -> {
-            stage.setX(event.getScreenX() - xOffset);
-            stage.setY(event.getScreenY() - yOffset);
-        });
 
         //displayField font resize listener
         displayField.textProperty().addListener((observable, oldValue, newValue) -> UIChanger.resizeDisplay());
