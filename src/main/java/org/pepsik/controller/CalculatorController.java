@@ -1,20 +1,16 @@
 package org.pepsik.controller;
 
-import com.sun.javafx.Utils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.pepsik.controller.button.CalculatorButton;
 import org.pepsik.controller.button.KeyboardShortcut;
 import org.pepsik.controller.exception.*;
-import org.pepsik.controller.util.ResizeHelper;
 import org.pepsik.model.Model;
 import org.pepsik.model.exception.DivideByZeroException;
 import org.pepsik.model.exception.IllegalOperandException;
@@ -29,6 +25,7 @@ import java.util.Map;
 import static java.math.BigDecimal.ONE;
 import static org.pepsik.controller.button.CalculatorButton.*;
 import static org.pepsik.controller.util.InputNumber.*;
+import static org.pepsik.controller.util.ResizeHelper.addResizeListener;
 import static org.pepsik.controller.util.TextFormatter.display;
 import static org.pepsik.controller.util.TextFormatter.formatInput;
 import static org.pepsik.controller.util.TextFormatter.history;
@@ -159,15 +156,6 @@ public class CalculatorController {
         stage.initStyle(StageStyle.UNDECORATED);
         Scene scene = displayField.getScene();
 
-        scene.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        scene.setOnMouseDragged(event -> {
-            stage.setX(event.getScreenX() - xOffset);
-            stage.setY(event.getScreenY() - yOffset);
-        });
-
         //Init max, min, pref sizes
         setUpApplicationSizes(stage);
 
@@ -180,7 +168,7 @@ public class CalculatorController {
         //Init listeners for resizing button
         initResizeListeners(scene);
 
-        ResizeHelper.addResizeListener(stage);
+        addResizeListener(stage);
 
         displayField.setText(formatInput());
     }
@@ -263,7 +251,12 @@ public class CalculatorController {
                         modelValue = model.getOperand();
 
                         checksLimit(modelValue);
-                        toDisplay = display(modelValue, SCALE - 1); //unary scale less then binary by 1
+
+                        int scale = SCALE - 1;//unary scale less then binary by 1
+                        if (unaryOperation.equals(UnaryOperation.NEGATE)) { //but negate is exception
+                            scale = SCALE;
+                        }
+                        toDisplay = display(modelValue, scale);
                     } else {
                         throw new IllegalStateException("No such operation found - " + cb.name());
                     }
@@ -384,8 +377,6 @@ public class CalculatorController {
         clearInput();
     }
 
-    private Rectangle2D backupWindowBounds;
-
     @FXML
     private void handleSystemAction(ActionEvent event) {
         CalculatorButton cb = valueOf((Button) event.getSource());
@@ -398,26 +389,12 @@ public class CalculatorController {
             stage.setIconified(true);
         }
 
+        boolean setMaximized = false;
         if (cb.equals(MAXIMIZE_APP)) {
-            final double stageY = Utils.isMac() ? stage.getY() - 22 : stage.getY();
-            final Screen screen = Screen.getScreensForRectangle(stage.getX(), stageY, 1, 1).get(0);      // line 42
-            Rectangle2D bounds = screen.getVisualBounds();
-            if (bounds.getMinX() == stage.getX() && bounds.getMinY() == stageY &&
-                    bounds.getWidth() == stage.getWidth() && bounds.getHeight() == stage.getHeight()) {
-                if (backupWindowBounds != null) {
-                    stage.setX(backupWindowBounds.getMinX());
-                    stage.setY(backupWindowBounds.getMinY());
-                    stage.setWidth(backupWindowBounds.getWidth());
-                    stage.setHeight(backupWindowBounds.getHeight());
-                }
-            } else {
-                backupWindowBounds = new Rectangle2D(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
-                final double newStageY = Utils.isMac() ? screen.getVisualBounds().getMinY() + 22 : screen.getVisualBounds().getMinY();
-                stage.setX(screen.getVisualBounds().getMinX());
-                stage.setY(newStageY);
-                stage.setWidth(screen.getVisualBounds().getWidth());
-                stage.setHeight(screen.getVisualBounds().getHeight());
+            if (!stage.isMaximized()) {
+                setMaximized = true;
             }
+            stage.setMaximized(setMaximized);
         }
 
     }
@@ -484,6 +461,16 @@ public class CalculatorController {
      */
     private void initResizeListeners(Scene scene) {
         UIChanger.setDisplay(displayField);
+
+        //Init draggable listeners
+        scene.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        scene.setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
 
         //displayField font resize listener
         displayField.textProperty().addListener((observable, oldValue, newValue) -> UIChanger.resizeDisplay());

@@ -45,7 +45,10 @@ public enum UITestButton {
     MEMORY_RECALL("MR"),
     MEMORY_ADD("M+"),
     MEMORY_SUBTRACT("M-"),
-    MEMORY_SAVE("MS");
+    MEMORY_SAVE("MS"),
+
+    MINIMIZE_APP("app_min"),
+    MAXIMIZE_APP("app_max");
 
     private static Map<String, UITestButton> buttonMap = new HashMap<>();
 

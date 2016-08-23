@@ -52,6 +52,8 @@ public class UITest {
      * Used for format expected double SCALE in asserts
      */
     private NumberFormat formatter = new DecimalFormat("###,###.################");
+    private int maxDisplayFont;
+    private int minDisplayFont;
 
     @BeforeClass
     public static void initJFX() throws InterruptedException {
@@ -513,6 +515,8 @@ public class UITest {
         assertExpression(0, "negate(negate(4) + negate(negate(negate(4) = ");
         assertExpression(0, "negate(negate(2) + negate(negate(negate(2) = ");
         assertExpression(-7, "negate(9) + 2 =");
+
+        assertExpression("-1,234,567,890,123,456","negate(1234567890123456)");
     }
 
     @Test
@@ -792,11 +796,27 @@ public class UITest {
     public void testResizeDisplayFont() {
         waitForCompleteExecution();
 
+        setMinMaxDisplayFont();
+
         stage.setHeight(350);
         stage.setWidth(250);
 
+        parseAndExecute("CE 1");
         assertResizeFontDisplay(display);
-        parseAndExecute("1239084723179");
+        parseAndExecute("CE 123456");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE 1234567890");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE 1239084723179");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE 1234567890123456");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE 0.123456789012345");
+        assertResizeFontDisplay(display);
+
+        parseAndExecute("CE square(1239084723179)");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE sqrt(1239084723179)");
         assertResizeFontDisplay(display);
 
         stage.setHeight(550);
@@ -808,6 +828,16 @@ public class UITest {
             e.printStackTrace();
         }
 
+        parseAndExecute("CE 1239084723179");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE 1234567890123456");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE 0.1234567890123456");
+        assertResizeFontDisplay(display);
+
+        parseAndExecute("CE square(1239084723179)");
+        assertResizeFontDisplay(display);
+        parseAndExecute("CE sqrt(1239084723179)");
         assertResizeFontDisplay(display);
     }
 
@@ -897,6 +927,26 @@ public class UITest {
         assertBackspace("0.", "0.1<");
         assertBackspace("0.1", "0.12<");
         assertBackspace("1", "1.12<<<");
+    }
+
+    @Test
+    public void testSystemButton() {
+        //minimize button
+        MINIMIZE_APP.push();
+        waitForCompleteExecution();
+
+        assertEquals(true, stage.isIconified());
+
+        //maximize button
+        MAXIMIZE_APP.push();
+        waitForCompleteExecution();
+
+        assertEquals(true, stage.isMaximized());
+
+        MAXIMIZE_APP.push();
+        waitForCompleteExecution();
+
+        assertEquals(false, stage.isMaximized());
     }
 
     @Test
@@ -1175,7 +1225,7 @@ public class UITest {
         assertTrue(cssClasses.contains(expected));
     }
 
-    private void assertResizeFontDisplay(Label display) {
+    private void setMinMaxDisplayFont(){
         ObservableList<String> styleClass = display.getStyleClass();
 
         String maxFont = "display_max_font";
@@ -1184,26 +1234,24 @@ public class UITest {
         if (!styleClass.contains(maxFont)) {
             styleClass.add(maxFont);
         }
-        if (styleClass.contains(minFont)) {
-            styleClass.remove(minFont);
-        }
+        styleClass.remove(minFont);
+
         display.applyCss();
-        int maxDisplayFont = (int) display.getFont().getSize();
+        maxDisplayFont = (int) display.getFont().getSize();
 
         //get css min display font
         if (!styleClass.contains(minFont)) {
             styleClass.add(minFont);
         }
-        if (styleClass.contains(maxFont)) {
-            styleClass.remove(maxFont);
-        }
+        styleClass.remove(maxFont);
+
         display.applyCss();
-        int minDisplayFont = (int) display.getFont().getSize();
+        minDisplayFont = (int) display.getFont().getSize();
 
-        if (styleClass.contains(minFont)) {
-            styleClass.remove(minFont);
-        }
+        styleClass.remove(minFont);
+    }
 
+    private void assertResizeFontDisplay(Label display) {
         double d = display.getWidth() / display.getText().length() * MULTIPLIER;
 
         Scene scene = display.getScene();
